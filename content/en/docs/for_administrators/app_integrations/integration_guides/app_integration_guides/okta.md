@@ -15,7 +15,23 @@ toc: true
 
 In this document you are going to set up `IDmelon` as an external IdP to the `Okta`.
 
-## Login to Okta administration panel
+## Initialize IDmelon Configuration as IDP
+
+---
+
+Log in to the IDmelon panel, navigate to the **App Integration > Single Sign-On** section, and click **New Application**:
+
+![IDmelon 1](/images/vendor/sso/okta_sp/okta_idmelon_panel_1.png)
+
+Then select `Okta` as service provider:
+
+![IDmelon 2](/images/vendor/sso/okta_sp/okta_idmelon_panel_2.png)
+
+You will need the values provided in the newly opened window to set up `Okta` as SP:
+
+![IDmelon 3](/images/vendor/sso/okta_sp/okta_idmelon_panel_3.png)
+
+## Configuring Okta as SP
 
 ---
 
@@ -23,29 +39,29 @@ In order to set up the connection, you will need to log into your `Okta administ
 
 To login to the `Okta administration panel`, click the `Admin` button on the top right corner of OKTA user panel page.
 
-![alt](/images/vendor/sso/okta_dashboard_01.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_01.png)
 
-## Add Identity Provider
+### Add Identity Provider
 
 ---
 
 In the `Okta administration panel`, from the side menu, navigate to the `Security` menu.
 
-![alt](/images/vendor/sso/okta_dashboard_02.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_02.png)
 
 Then from the `Security` menu, select the `Identity Providers` sub-menu.
 
-![alt](/images/vendor/sso/okta_dashboard_03.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_03.png)
 
 Then press `Add Identity Provider` button from the main panel.
 
-![alt](/images/vendor/sso/okta_dashboard_04.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_04.png)
 
 Then select the `SAML 2.0 IdP` from available options, and then press `Next` button.
 
-![alt](/images/vendor/sso/okta_dashboard_05.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_05.png)
 
-## Configure SAML 2.0 IdP
+### Configure SAML 2.0 IdP
 
 ---
 
@@ -64,8 +80,8 @@ In the `Account matching with Idp Username` section:
 
 - **Account link policy:** Authomatic.
 
-![alt](/images/vendor/sso/okta_sso_only.png)
-![alt](/images/vendor/sso/okta_sso_only_2.png)
+![alt](/images/vendor/sso/okta_sp/okta_sso_only.png)
+![alt](/images/vendor/sso/okta_sp/okta_sso_only_2.png)
 
 In the `SAML Protocol Settings` section:
 
@@ -77,7 +93,7 @@ In the `SAML Protocol Settings` section:
 - **IdP Signature Certificate:** idp_certificate_download_url
 - **Request Binding:** HTTP POST
 
-![alt](/images/vendor/sso/okta_dashboard_08.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_08.png)
 
 In the continuation of `SAML Protocol Settings` section:
 
@@ -94,7 +110,7 @@ In the continuation of `SAML Protocol Settings` section:
 
 And at the end click the `Finish` button.
 
-![alt](/images/vendor/sso/okta_dashboard_09.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_09.png)
 
 ### Setup IdP Routing rules
 
@@ -102,7 +118,7 @@ And at the end click the `Finish` button.
 
 After completing `Identity providers` section, click on `Routing rules` and then Add a new rule by clicking `Add Routing Rule` Button.
 
-![alt](/images/vendor/sso/okta_rules_01.png)
+![alt](/images/vendor/sso/okta_sp/okta_rules_01.png)
 
 Then configs are:
 
@@ -110,13 +126,13 @@ Then configs are:
 - **Use This identity provider:** `Use specific IdP(s)`.
 - **Idp(s):** `Enter your custom name of idp`.
 
-![alt](/images/vendor/sso/okta_rules_02.png)
+![alt](/images/vendor/sso/okta_sp/okta_rules_02.png)
 
 - **Click on Update rule**.
 
 Activate your new idp rule by clicking on `Active` button.
 
-## IDmelon SAML configuration
+### IDmelon SAML configuration
 
 ---
 
@@ -130,7 +146,15 @@ You should copy values of below fields from the `Okta` panel to the `IDmelon` Pa
 - **Assertion Consumer Service URL**.
 - **Audience URI**.
 
-![alt](/images/vendor/sso/okta_dashboard_10.png)
+![alt](/images/vendor/sso/okta_sp/okta_dashboard_10.png)
+
+## Finishing IDmelon Configuration as IDP
+
+---
+
+Provide required information in the `IDmelon` panel which was provided in the previous step.
+
+![IDmelon 3](/images/vendor/sso/okta_sp/okta_idmelon_panel_4.png)
 
 ## Passwordless
 
@@ -138,15 +162,15 @@ You should copy values of below fields from the `Okta` panel to the `IDmelon` Pa
 
 For active `Passwordless` or `one Factor access`, from the side menu, navigate to the `Security` menu and select the `Authentication Policies` sub-menu.
 
-![alt](/images/vendor/sso/okta_passwordless_01.png)
+![alt](/images/vendor/sso/okta_sp/okta_passwordless_01.png)
 
 Then click on any application you wanted to use as `one Factor access`.
 
-![alt](/images/vendor/sso/okta_policy_01.png)
+![alt](/images/vendor/sso/okta_sp/okta_policy_01.png)
 
 Then click on `Actions` button and then click the `Edit` option.
 
-![alt](/images/vendor/sso/okta_policy_03.png)
+![alt](/images/vendor/sso/okta_sp/okta_policy_03.png)
 
 In the `THEN` section of `Edit Rule` set values as below:
 
@@ -154,9 +178,9 @@ In the `THEN` section of `Edit Rule` set values as below:
 
 And then click `Save` button.
 
-![alt](/images/vendor/sso/okta_policy_02.png)
+![alt](/images/vendor/sso/okta_sp/okta_policy_02.png)
 
-## API Token
+<!-- ## API Token
 
 ---
 
@@ -164,18 +188,18 @@ From the side menu, navigate to the `Security` menu and select the `API` sub-men
 
 And then click the `Token` tab from main page, and then click the `Create token` button.
 
-![alt](/images/vendor/sso/okta_api_01.png)
+![alt](/images/vendor/sso/okta_sp/okta_api_01.png)
 
 Enter the desired name for your API token.
 
-![alt](/images/vendor/sso/okta_api_02.png)
+![alt](/images/vendor/sso/okta_sp/okta_api_02.png)
 
 And then copy the value of the created API token.
 
-![alt](/images/vendor/sso/okta_api_03.png)
+![alt](/images/vendor/sso/okta_sp/okta_api_03.png)
 
 > **Note:** please paste this option to IDmelon okta Integration on `Check Connection` field.
 
 The created `Token` will be shown in the token list.
 
-![alt](/images/vendor/sso/okta_api_04.png)
+![alt](/images/vendor/sso/okta_sp/okta_api_04.png) -->

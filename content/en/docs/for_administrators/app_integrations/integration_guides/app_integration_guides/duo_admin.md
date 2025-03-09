@@ -15,20 +15,38 @@ toc: true
 
 In this document you are going to set up `IDmelon` as an external IdP to the `Duo Admin`.
 
-## Login to Duo Admin administration panel
+## Initialize IDmelon Configuration as IDP
 
 ---
 
-To enable administrator SSO:
+Log in to the IDmelon panel, navigate to the **App Integration > Single Sign-On** section, and click **New Application**:
+
+![IDmelon 1](/images/vendor/sso/duo_admin_sp/duo_admin_idmelon_panel_1.png)
+
+Then select `Duo Admin` as service provider:
+
+![IDmelon 2](/images/vendor/sso/duo_admin_sp/duo_admin_idmelon_panel_2.png)
+
+You will need the values provided in the newly opened window to set up `Duo Admin` as SP:
+
+![IDmelon 3](/images/vendor/sso/duo_admin_sp/duo_admin_idmelon_panel_3.png)
+
+## Configuring Duo Admin as SP
+
+---
+
+To enable administrator SSO, you will need to log into your `Duo Admin panel`.
 
 *Role required* : Owner
 
 1. Log in to the [Duo Admin Panel](https://admin.duosecurity.com).
-2. Click **Administrators** in the left sidebar, and then click **Admin Login Settings**.
+2. Click **Users** in the left sidebar, then click **Administrators**, finally click **Admin Login Settings**.
 
-![alt](/images/vendor/sso/duo_idp_01.png)
+![alt](/images/vendor/sso/duo_admin_sp/duo_sp_01.png)
 
-## Add Identity Provider
+![alt](/images/vendor/sso/duo_admin_sp/duo_sp_02.png)
+
+### Add Identity Provider
 
 ---
 
@@ -38,7 +56,7 @@ To enable administrator SSO:
   - **Optional**
   - **Required**
 
-![alt](/images/vendor/sso/duo_idp_02.png)
+![alt](/images/vendor/sso/duo_admin_sp/duo_sp_03.png)
 
 Selecting the **Optional** or **Required** SAML authentication option exposes the rest of the SSO configuration form. You'll need to enter below information about **IDmelon identity provider** in the **SAML Identity Provider Settings** section:
 
@@ -46,7 +64,7 @@ Identity provider: Custom Identity Provider
 
 Configuration method: **Manual entry**
 
-## Configure SAML 2.0 IdP
+### Configure SAML 2.0 IdP
 
 ---
 
@@ -60,22 +78,30 @@ Configuration method: **Manual entry**
 - Encrypt assertions: Require unencrypted assertions
 - Request signing: sign messages from Duo
 
-![alt](/images/vendor/sso/duo_idp_03.png)
+![alt](/images/vendor/sso/duo_admin_sp/duo_sp_04.png)
 
 - SHA-1 signatures: Uncheck
 - Signed elements: Everything must be signed
 - Click Save
 
-![alt](/images/vendor/sso/duo_idp_04.png)
+![alt](/images/vendor/sso/duo_admin_sp/duo_sp_05.png)
 
-## IDmelon SAML configuration
+### IDmelon SAML configuration
 
 ---
 
 - You should Download **`metadata`** file (XML file) and **`copy values`** of below fields from this **Duo panel** to **IDmelon Panel**.
 
-![alt](/images/vendor/sso/duo_idp_05.png)
+![alt](/images/vendor/sso/duo_admin_sp/duo_sp_06.png)
 
 - Copy **Entity ID or Issuer ID**
 - Copy **Assertion consumer service or single sign-on URL**
 - You should copy values of above fields from **Duo panel** to **IDmelon Panel**.
+
+## Finishing IDmelon Configuration as IDP
+
+---
+
+Provide required information in the `IDmelon` panel which was provided in the previous step.
+
+![IDmelon 3](/images/vendor/sso/duo_admin_sp/duo_admin_idmelon_panel_1.png)
