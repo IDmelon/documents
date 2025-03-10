@@ -209,3 +209,14 @@ accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u htt
 ```
 
 *Note: Because of the login_hint attribute being passed as param so this command needs to be run via Command Prompt. ${} has its special meaning in Powershell.*
+
+## Step 5: Set the Self-Service URL (Optional)
+
+If you have set up **Self-Service** settings in the **IDmelon Admin Panel**, enter the following command in a PowerShell:
+
+```shell
+accesskeycli self-service-link -s [Self-Service URL]
+```
+
+By executing this command, the system will automatically handle specific user scenarios.<br>
+If the user’s badge is **not enrolled**, they will be redirected to the designated enrollment page. Similarly, if the user exceeds the allowed number of incorrect PIN attempts, they will be automatically directed to the specified address for a **PIN reset**.

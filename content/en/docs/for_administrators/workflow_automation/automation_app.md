@@ -50,6 +50,11 @@ C:\Program Files (x86)\IDmelon\Accesskey\Extensions\WorkflowAutomation\configs.j
 - **template_matching_confidence**: The level of accuracy (a number between 0 and 1) in matching the templates for the points that should be clicked.
 - **logout_on_tap_if_not_on_the_first_page** *(app version 1.2.1 and later)*: If the value is set to **true**, the user will log out every time the card taps on the reader, except on the first (login) page.
 - **logout_method** *(app version 1.2.1 and later)*: The program uses two methods(default is **0**) to close the kiosk window. If this does not happen correctly on some systems, set its value to **1**.
+- **support_email** *(app version 1.3.0 and later)*: The default email address to which reports are sent when an issue occurs within the app.
+
+**Deploy App Configuration File:**
+
+To deploy the configuration, copy the file **configs.json** in the path **C:\Program Files (x86)\IDmelon\Accesskey\Extensions\WorkflowAutomation** and deploy it to the desired systems in the same path.
 
 ### Kiosk
 
@@ -175,3 +180,11 @@ To disable the Workflow Automation, enter the following command in PowerShell.
 ```shell
 accesskeycli workflow-automation -r -t automation-app
 ```
+
+## Report Issue
+
+If the user's badge is not registered in the system, or if the number of incorrect PIN attempts has been reached, or if the automation is not performed correctly, the user will be prompted to report the issue. By clicking the **Send Report** button, the report will be sent to the support email along with the application logs and user information.<br>
+***Note:** To change the default support email, see the **[Configuring a workflow](#configuring-a-workflow) > App Configuration File** section.*
+
+![Report issue not enrolled](/images/vendor/workflow_automation/automation_app/report_issue_not_enrolled.png)
+![Report issue PIN locked](/images/vendor/workflow_automation/automation_app/report_issue_pin_locked.png)
