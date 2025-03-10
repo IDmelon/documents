@@ -1,5 +1,5 @@
 ---
-title: "Automation Extension"
+title: "Tap to action with WebLogin"
 description: ""
 lead: ""
 date: 2024-07-17T10:30:55+03:30
