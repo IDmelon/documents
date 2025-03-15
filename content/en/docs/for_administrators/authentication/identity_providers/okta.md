@@ -37,7 +37,7 @@ You will need the values provided in the newly opened window to set up **Okta** 
 
 In order to set up the connection, you will need to log into your `Okta administration panel`.
 
-To login to the `Okta administration panel`, click the `Admin` button on the top right corner of OKTA user panel page.
+To login to the `Okta administration panel`, click the `Admin` button on the top right corner of **Okta** user panel page.
 
 ![alt](/images/vendor/sso/okta_external_idp/okta_dashboard_01.png)
 

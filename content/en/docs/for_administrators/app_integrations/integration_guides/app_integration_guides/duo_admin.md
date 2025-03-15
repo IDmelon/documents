@@ -104,4 +104,4 @@ Configuration method: **Manual entry**
 
 Provide required information in the `IDmelon` panel which was provided in the previous step.
 
-![IDmelon 3](/images/vendor/sso/duo_admin_sp/duo_admin_idmelon_panel_1.png)
+![IDmelon 3](/images/vendor/sso/duo_admin_sp/duo_admin_idmelon_panel_4.png)
