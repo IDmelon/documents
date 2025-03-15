@@ -17,6 +17,8 @@ In this document, you are going to set up `Okta` as an external IdP to IDmelon.
 
 ## Initialize IDmelon Configuration as SP
 
+---
+
 Log in to the IDmelon panel, navigate to the **Authentication** section, and click **Integrate with a New Identity Provider**:
 
 ![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_01.png)
@@ -31,11 +33,25 @@ You will need the values provided in the newly opened window to set up **Okta** 
 
 ## Configuring Okta as external IDP
 
-Find `Add an app to use Single Sign-On` and click on `Add App` in the Okta admin panel.
+---
+
+In order to set up the connection, you will need to log into your `Okta administration panel`.
+
+To login to the `Okta administration panel`, click the `Admin` button on the top right corner of OKTA user panel page.
+
+![alt](/images/vendor/sso/okta_external_idp/okta_dashboard_01.png)
+
+### Add Service Provider
+
+---
+
+In the `Okta administration panel`, from the side menu, navigate to the `Applications` menu.
+
+Then from the `Applications` menu, select the `Applications` sub-menu.
 
 ![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_04.png)
 
-Then click on `Create New App` to have a custom configuration.
+Then click on `Create App Integration` to have a custom configuration.
 
 ![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_05.png)
 
@@ -58,10 +74,30 @@ Finally, scroll down and click on `Next`.  On the final page, click on `Finish` 
 
 ![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_08.png)
 
-After creating the configuration, you need the following fields for IDmelon, so click on `More Detail` to see them.
+### Finalizing IDmelon Configuration as SP
+
+---
+
+After creating the configuration, navigate to the `Applications` menu and the `Applications` sub-menu once more and select your app.
+
+![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_09a.png)
+
+Click on the `Sign On` sub-menu.
+
+![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_09b.png)
+
+you need the following fields for IDmelon, so scroll down and click on `More Detail` to see them.
 Copy `Sign on URL`, `Sign out URL`, and `Issuer` to the IDmelon panel, and download the Signing Certificate and upload it to IDmelon. Then click on confirm.
 
-![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_09.png)
+![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_09c.png)
 ![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_10.png)
+
+### Assigning Users and Groups
+
+---
+
+Now click on the `Assignments` sub-menu and from People or Groups section, click the `assign` button and assign users or groups that are able to log in to IDmelon.
+
+![Okta IDmelon 1](/images/vendor/sso/okta_external_idp/okta_11.png)
 
 Now both applications are connected. You can assign a group of users or all users of Okta to log in to IDmelon.
