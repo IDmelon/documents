@@ -125,7 +125,7 @@ The IDmelon Kiosk app allows you to specify the target server address using the 
 <ServerAddress env="onpremise" base-api="https://sub.domain.com/api/url" />
 ```
 
-### Configuring App via Command-Line Arguments
+### Manually using Command-Line Arguments
 
 Follow these steps to modify the app's settings directly through the command prompt.
 
@@ -155,7 +155,7 @@ The IDmelon Kiosk app accepts several command-line arguments that allow you to c
     - **-serveraddress:** Target server address for dedicated environments.
         - Usage: -serveraddress https://sub.domain.com/api/url
 
-### Configure via Intune
+### Automatic by Intune using Configurator.exe
 
 Follow these steps to deploy the **configs.xml** file on devices.
 
@@ -202,6 +202,42 @@ Follow these steps to deploy the **configs.xml** file on devices.
     - Click **Next** to review and create the deployment.
 
     ***Note** After the Configurator app is successfully deployed, you may still need to restart your PC to apply the changes. This is because the IDmelon Kiosk App loads the new configuration only when it runs for the first time.*
+
+### Automatic using script
+
+Below script can be used to copy the config.xml files to any Kiosk user profile.
+
+```bash
+# Define the source file to copy
+$sourceFile = "C:\KioskProfile\configs.xml"  # Update this to the path of the file you want to copy
+
+# Define the base path for user profiles & get all user directories that start with "kioskUser0"
+$profilesPath = "C:\Users"
+$kioskUserDirectories = Get-ChildItem -Path $profilesPath -Directory -Filter "kioskUser0*"
+
+# Loop through each kioskUser0 directory
+foreach ($userDir in $kioskUserDirectories) {
+    # Define the target directory for this user
+    $targetDirectory = Join-Path -Path $userDir.FullName -ChildPath "AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState"
+
+    # Create the target directory if it doesn't exist
+    if (-not (Test-Path -Path $targetDirectory)) {
+        New-Item -Path $targetDirectory -ItemType Directory | Out-Null
+        Write-Host "Created directory for user $($userDir.Name) at: $targetDirectory"
+    }
+
+    # Define the target file path
+    $targetFile = Join-Path -Path $targetDirectory -ChildPath (Split-Path -Path $sourceFile -Leaf)
+
+    # Copy the file
+    try {
+        Copy-Item -Path $sourceFile -Destination $targetFile -Force
+        Write-Host "File copied successfully for user $($userDir.Name) to: $targetFile"
+    } catch {
+        Write-Host "Failed to copy file for user $($userDir.Name): $_"
+    }
+}
+```
 
 ## Step 4: Configure the Automation Workflow (Optional)
 
