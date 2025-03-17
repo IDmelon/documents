@@ -16,6 +16,7 @@ toc: true
 This document is about SSO SCIM synchronization with Okta.
 
 ## Setup IDmelon For Provisioning
+
 ---
 
 Log in to the IDmelon panel, go to **Users > All Users**, click **Import Users**, and select **SCIM Connector**.
@@ -32,7 +33,6 @@ Click `Generate New Token`.
 
 > The newly generated token will be shown only once. Make sure to copy and save it.
 
-
 Finally click `Active` button.
 
 ![alt](/images/vendor/scim/okta/panel_04.png)
@@ -42,6 +42,7 @@ Now IDmelon is ready for provisioning.
 ![alt](/images/vendor/scim/okta/panel_05.png)
 
 ## Setup Okta For Provisioning
+
 ---
 
 From the Okta admin panel, click on the `Applications` menu. And then click on the `Browse App catalog`
