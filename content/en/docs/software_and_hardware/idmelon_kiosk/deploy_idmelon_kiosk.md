@@ -199,7 +199,7 @@ Follow these steps to deploy the **configs.xml** file on devices.
     - Click **Next** now and move to the **Assignments** tab.
     - Assign the app to same groups of users or devices that the IDmelon Kiosk App has been deployed to.
     ![DetectScript](/images/vendor/idmelon_kiosk/kiosk-configuration-04.png)
-    - Click **Next** to review and create the deployment. 
+    - Click **Next** to review and create the deployment.
 
     ***Note** After the Configurator app is successfully deployed, you may still need to restart your PC to apply the changes. This is because the IDmelon Kiosk App loads the new configuration only when it runs for the first time.*
 
