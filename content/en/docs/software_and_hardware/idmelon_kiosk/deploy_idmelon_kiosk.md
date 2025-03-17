@@ -176,27 +176,32 @@ Follow these steps to deploy the **configs.xml** file on devices.
     - Click on **+ Create** at the top of the screen.
     - From the dropdown, select **Windows app (Win32)**.
     - Click on **select app package file** and upload the **configurator.intunewin** file.
-    - After the file is uploaded, fill in the required fields.
-    - Click **Next**.
-    - Enter this command in **Install command** field:
+    - Set publisher to "IDmelon" and then Next.
+    - Enter the command below for both **Install command** and **Uninstall command**:
 
         ```shell
         configurator.exe /S
         ```
 
-    - For the **Uninstall command** you can enter the previous command.
     - Set the **Allow available uninstall** to **No**.
     - Set the **Install behavior** to **System**.
     - Set the **Device restart behavior** to **No specific action**.
-    - Click **Next**.
+    ![Configurator - Program Settings](/images/vendor/idmelon_kiosk/kiosk-configuration-01.png)
+    - Click **Next** to see the **Requirements** tab.
     - Choose both architectures for the **Operating system architecture**.
     - Select the minimum Windows version required for the app to run.
-    - Click **Next**.
-    - Select the **Use a custom detection script** for the **Rules format** in the **Detection rules** section.
-    - Upload the **detect.ps1** script.
+    ![Configurator - Program Settings](/images/vendor/idmelon_kiosk/kiosk-configuration-02.png)
+    - Use **Next** to see the **Detection rules** tab.
+    - Select the **Use a custom detection script** for the **Rules format**.
+    - Click the upload button to choose **detect.ps1** script file.
     ![DetectScript](/images/vendor/idmelon_kiosk/idmelon_kiosk_detect.png)
-    - Assign the app to specific groups of users or devices where the configs will be automatically added.
-    - If everything looks correct, click **Create** to finalize the app deployment.
+    ![DetectScript](/images/vendor/idmelon_kiosk/kiosk-configuration-03.png)
+    - Click **Next** now and move to the **Assignments** tab.
+    - Assign the app to same groups of users or devices that the IDmelon Kiosk App has been deployed to.
+    ![DetectScript](/images/vendor/idmelon_kiosk/kiosk-configuration-04.png)
+    - Click **Next** to review and create the deployment. 
+
+    ***Note** After the Configurator app is successfully deployed, you may still need to restart your PC to apply the changes. This is because the IDmelon Kiosk App loads the new configuration only when it runs for the first time.*
 
 ## Step 4: Configure the Automation Workflow (Optional)
 
