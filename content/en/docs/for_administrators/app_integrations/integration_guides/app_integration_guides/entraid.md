@@ -13,9 +13,27 @@ weight: 72100
 toc: true
 ---
 
-In this document you are going to set up `IDmelon` as an external IdP to the `Office`.
+In this document you are going to set up `IDmelon` as an external IdP to the `EntraID`.
 
-## Execute these commands in the Windows Power Shell
+## IDmelon Configuration as IDP
+
+Log in to the IDmelon panel, navigate to the **App Integration > Single Sign-On** section, and click **New Application**:
+
+![IDmelon 1](/images/vendor/sso/entra_id_sp/entra_id_idmelon_1.png)
+
+Then select `Okta` as service provider:
+
+![IDmelon 2](/images/vendor/sso/entra_id_sp/entra_id_idmelon_2.png)
+
+You will need the values provided in the newly opened window to set up `EntraID` as SP:
+
+![IDmelon 3](/images/vendor/sso/entra_id_sp/entra_id_idmelon_3.png)
+
+---
+
+## Configuring EntraID as SP
+
+The following commands need to be executed in **Windows PowerShell**:
 
 ---
 
@@ -122,11 +140,11 @@ Get-MsolUser -all | Select-Object UserprincipalName,objectID,ImmutableID
 
 - **Open** Azure directory admin.
 
-![alt](/images/vendor/sso/office_passless.png)
+![alt](/images/vendor/sso/entra_id_sp/office_passless.png)
 
 - **Click on** users.
 
-![alt](/images/vendor/sso/office_passless1.png)
+![alt](/images/vendor/sso/entra_id_sp/office_passless1.png)
 
 - **Choose** a user.
 
@@ -134,13 +152,13 @@ Get-MsolUser -all | Select-Object UserprincipalName,objectID,ImmutableID
 
 - **Delete** Authentication method option.
 
-![alt](/images/vendor/sso/office_passless2.png)
+![alt](/images/vendor/sso/entra_id_sp/office_passless2.png)
 
-## API Token
+<!-- ## API Token
 
 From the side menu, navigate to the `App registrations` menu and click `New registrations`.
 
-![alt](/images/vendor/sso/office_token_01.png)
+![alt](/images/vendor/sso/entra_id_sp/office_token_01.png)
 
 - Enter the desired name for your Application.
 
@@ -150,7 +168,7 @@ From the side menu, navigate to the `App registrations` menu and click `New regi
 
 - Click Register.
 
-![alt](/images/vendor/sso/office_token_02.png)
+![alt](/images/vendor/sso/entra_id_sp/office_token_02.png)
 
 Then you can see your API information, which you have Copy and send these informations to idmelon.
 
@@ -160,7 +178,7 @@ Then you can see your API information, which you have Copy and send these inform
 
 Then please for accessing to Client Secret click Add a certificate or secret in Client credentials field.
 
-![alt](/images/vendor/sso/office_token_03.png)
+![alt](/images/vendor/sso/entra_id_sp/office_token_03.png)
 
 From **Certificate & secrets** panel please click on **New client secret** :
 
@@ -168,10 +186,10 @@ From **Certificate & secrets** panel please click on **New client secret** :
 
 - Click `Add`.
 
-![alt](/images/vendor/sso/office_token_04.png)
+![alt](/images/vendor/sso/entra_id_sp/office_token_04.png)
 
 Finally, you can Copy your **client secret** from Client credentials field.
 
-![alt](/images/vendor/sso/office_token_05.png)
+![alt](/images/vendor/sso/entra_id_sp/office_token_05.png)
 
-> **Please send these information to IDmelon, in order to get your users from office panel.**
+> **Please send these information to IDmelon, in order to get your users from office panel.** -->
