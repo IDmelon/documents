@@ -15,6 +15,36 @@ toc: true
 
 This document is about SSO SCIM synchronization with Azure Active Directory.
 
+## Setup IDmelon For Provisioning
+
+---
+
+Log in to the IDmelon panel, go to **Users > All Users**, click **Import Users**, and select **SCIM Connector**.
+
+![alt](/images/vendor/scim/azure/panel_01.png)
+
+Select `Microsoft Entra ID` as identity provider, then click `Next`.
+
+![alt](/images/vendor/scim/azure/panel_02.png)
+
+Click `Generate New Token`.
+
+![alt](/images/vendor/scim/azure/panel_03.png)
+
+> The newly generated token will be shown only once. Make sure to copy and save it.
+
+Finally click `Active` button.
+
+![alt](/images/vendor/scim/azure/panel_04.png)
+
+Now IDmelon is ready for provisioning.
+
+![alt](/images/vendor/scim/azure/panel_05.png)
+
+## Setup Azure For Provisioning
+
+---
+
 ### Step 1 - Login to azure
 
 Login to the admin azure panel from here:  https://portal.azure.com/#home ,
