@@ -241,15 +241,21 @@ foreach ($userDir in $kioskUserDirectories) {
 
 ## Step 4: Configure the Automation Workflow (Optional)
 
-Run the below command in Command Prompt to configure login-logout flow for Microsoft.
+Run the below command in either Command Prompt or PowerShell to configure login-logout flow for Microsoft.
 
-*Note: Make sure that IDmelon Accesskey is installed on the system.*
+With Command Prompt:
 
-```shell
+```cmd
 accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u https://myapps.microsoft.com?login_hint=${UserId} -m passkey
 ```
 
-*Note: Because of the login_hint attribute being passed as param so this command needs to be run via Command Prompt. ${} has its special meaning in Powershell.*
+With PowerShell:
+
+```powershell
+accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u https://myapps.microsoft.com?login_hint='${UserId}' -m passkey
+```
+
+*Note: Since the login_hint attribute is passed as a parameter, PowerShell requires the ${} syntax to be enclosed in single quotes, like '${UserId}'.*
 
 ## Step 5: Set the Self-Service URL (Optional)
 
