@@ -8,7 +8,7 @@ draft: false
 images: []
 menu:
   docs:
-    parent: "idmelon_pairing_tool"
+    parent: "idmelon_kiosk"
 weight: 20
 toc: true
 ---
