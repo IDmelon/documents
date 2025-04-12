@@ -52,13 +52,11 @@ answer=`
 `>}}
 
 {{< faq question=`After the automation steps, I encountered a Microsoft login error.`
-answer=`
-Make sure the server addresses are set correctly if you are using a dedicated system (on-premises):<br>
+answer=`Make sure the server addresses are set correctly if you are using a dedicated system (on-premises):<br>
 **accesskeycli server-address**<br>
 By checking the server address set in the kiosk app configuration:
 **C:\Users\kioskUser0\AppData\Local\Packages**
-**\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\configs.xml**
-` >}}
+**\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\configs.xml**` >}}
 
 {{< faq question=`Is it possible to enroll unregistered cards in the Kiosk app?`
 answer=`To enable this feature:
