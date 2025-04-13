@@ -39,7 +39,8 @@ answer=`
 **accesskeycli status**
 - Make sure the workflow is configured correctly with the following command:<br>
 **accesskeycli workflow-automation**
-- Make sure the card is registered in the admin panel.
+- Make sure the card is assigned to the user with the following command:<br>
+**accesskeycli health-check**
 - Make sure the Web Login Extension is enabled by checking the app configuration at the following path:<br>
 **C:\Users\kioskUser0\AppData\Local\Packages**
 **\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\configs.xml**
