@@ -30,7 +30,7 @@ C:\ProgramData\IDmelon\Accesskey\service_logs.log
 answer=`Windows 10 and 11 x64 (Build number 1809) and later.` >}}
 
 {{< faq question=`What is the minimum required version of Microsoft Edge?`
-answer=`Microsoft Edge WebViewCore 131.0.0.0 and later. (Located on C:\Program Files (x86)\Microsoft\EdgeCore)` >}}
+answer=`Microsoft Edge WebViewCore 131.0.0.0 and later. (Located on C:\Program Files (x86)\Microsoft\EdgeWebView)` >}}
 
 {{< faq question=`Nothing happens when I tap the card on the reader.`
 answer=`
