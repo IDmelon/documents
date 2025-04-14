@@ -84,6 +84,12 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     %LOCALAPPDATA%\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState
     ```
 
+    For kiosk users, the path is:
+
+    ```shell
+    C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState
+    ```
+
     - This path directs you to the **LocalState** folder where the **configs.xml** file is stored.
 2. Configuration Parameters:
     - The file contains the following parameters:
@@ -94,6 +100,7 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     <MultiTabMode>true</MultiTabMode>
     <ExtensionEnabled>true</ExtensionEnabled>
     <EndSessionConfirmation>false</EndSessionConfirmation>
+    <RestartAppOnEndSession>false</RestartAppOnEndSession>
     <ShowURLBar>false</ShowURLBar>
     <ShowEndSessionButton>true</ShowEndSessionButton>
     <ServerAddress env="prod" />
@@ -105,6 +112,7 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     - **ExtensionEnabled:** Toggles browser extensions on (true) or off (false).
         Note: The Browser extension is required for the automation process. (When a card taps on the reader, the login automation will start).
     - **EndSessionConfirmation:** Prompts users for confirmation when ending a session if set to true.
+    - **RestartAppOnEndSession:** Restarts the Kiosk app on each end session to reload the app configs.
     - **ShowURLBar:** Displays (true) or hides (false) the browser's URL bar.
     - **ShowEndSessionButton:** Display (true) or hides (false) the end session button.
     - **ServerAddress:** Target server address (for dedicated environments).
@@ -123,6 +131,36 @@ The IDmelon Kiosk app allows you to specify the target server address using the 
 
 ```xml
 <ServerAddress env="onpremise" base-api="https://sub.domain.com/api/url" />
+```
+
+**Weblogin Extension Configuration:**
+
+If the **Weblogin Extension** is enabled in the kiosk configuration, you can also save the extension configuration as a **JSON** file next to the **configs.xml**.
+
+```json
+{
+    "handlePasskeyRequests": {
+        "value": true
+    },
+    "allowAddingNewPasswords": {
+        "value": true
+    },
+    "allowPasswordUpdatePrompts": {
+        "value": true
+    },
+    "useEmbeddedNumpad": {
+        "value": false
+    },
+    "keystroking": {
+        "value": true
+    }
+}
+```
+
+Save this JSON string as **extension_configs.json** in the following path:
+
+```shell
+    C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState
 ```
 
 ### Manually using Command-Line Arguments
@@ -237,6 +275,32 @@ foreach ($userDir in $kioskUserDirectories) {
         Write-Host "Failed to copy file for user $($userDir.Name): $_"
     }
 }
+```
+
+### Automatic using IDmelon Accesskey
+
+Starting with Accesskey version 3.9.0, you can set the kiosk configuration in base64 format:
+
+To convert the **configs.xml** to a base64 string, enter the following command in a PowerShell:
+
+```shell
+[Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((Get-Content -Raw -Path "configs.xml"))) > "output.txt"
+```
+
+Replace the content of the file **output.txt** in the following command:
+
+```shell
+accesskeycli kiosk -s -c [Base64-String]
+```
+
+You can also do the above steps for the **Weblogin Extension** configs:
+
+```shell
+[Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes((Get-Content -Raw -Path "configs.json"))) > "output.txt"
+```
+
+```shell
+accesskeycli kiosk -s -c [Kiosk-Configs-Base64-String] -e [Extension-Configs-Base64-String]
 ```
 
 ## Step 4: Configure the Automation Workflow (Optional)
