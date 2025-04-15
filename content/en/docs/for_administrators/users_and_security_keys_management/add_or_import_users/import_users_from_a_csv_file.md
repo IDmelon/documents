@@ -3,13 +3,13 @@ title: "Import Users from a CSV File"
 description: ""
 lead: ""
 date: 2023-09-20T13:34:17+03:30
-lastmod: 2023-09-20T13:34:17+03:30
+lastmod: 2025-04-15T15:00:00+03:30
 draft: false
 images: []
 menu:
   docs:
     parent: "add_or_import_users"
-weight: 31200
+weight: 31500
 toc: true
 ---
 
