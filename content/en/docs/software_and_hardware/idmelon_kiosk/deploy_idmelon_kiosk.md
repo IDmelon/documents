@@ -104,6 +104,10 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     <ShowURLBar>false</ShowURLBar>
     <ShowEndSessionButton>true</ShowEndSessionButton>
     <ServerAddress env="prod" />
+    <ShowFeedbackButton>false</ShowFeedbackButton>
+    <ExtensionAutoUpdate>true</ExtensionAutoUpdate>
+    <ExtensionUpdateChannel>stable</ExtensionUpdateChannel>
+    <AppAutoUpdate silent="false">true</AppAutoUpdate>
     ```
 
     - **KioskURL:** The default webpage the kiosk app loads upon startup.
@@ -114,8 +118,12 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     - **EndSessionConfirmation:** Prompts users for confirmation when ending a session if set to true.
     - **RestartAppOnEndSession:** Restarts the Kiosk app on each end session to reload the app configs.
     - **ShowURLBar:** Displays (true) or hides (false) the browser's URL bar.
-    - **ShowEndSessionButton:** Display (true) or hides (false) the end session button.
+    - **ShowEndSessionButton:** Displays (true) or hides (false) the end session button.
     - **ServerAddress:** Target server address (for dedicated environments).
+    - **ShowFeedbackButton:** Displays (true) or hides (false) the feedback (report issue) button next to the end session button.
+    - **ExtensionAutoUpdate:** Enables (true) or disables (false) Weblogin extension auto updates.
+    - **ExtensionUpdateChannel:** The update channel of the Weblogin extension (e.g., stable or latest).
+    - **AppAutoUpdate:** Enables (true) or disables (false) app updates. (silent=true -> Updates without displaying a notification UI to the user).
 
 **Configuring Server Address:**
 
@@ -132,6 +140,26 @@ The IDmelon Kiosk app allows you to specify the target server address using the 
 ```xml
 <ServerAddress env="onpremise" base-api="https://sub.domain.com/api/url" />
 ```
+
+**Weblogin Extension Auto Update:**
+
+Automatic extension update is enabled by default. To **disable** it, set the following config to **false**:
+
+```shell
+<ExtensionAutoUpdate>false</ExtensionAutoUpdate>
+```
+
+**Note:** Disabling automatic updates may prevent the application of important bug fixes and new feature enhancements.
+
+**Weblogin Extension Update Channel:**
+
+The default extension update channel is set to **Stable**. To receive newer versions, such as **Latest**, update the following config in the app configs:
+
+```shell
+<ExtensionUpdateChannel>stable</ExtensionUpdateChannel>
+```
+
+The available channels are **Stable** and **Latest**.
 
 **Weblogin Extension Configuration:**
 

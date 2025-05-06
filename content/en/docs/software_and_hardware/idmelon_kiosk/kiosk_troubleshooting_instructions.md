@@ -13,9 +13,31 @@ weight: 30
 toc: true
 ---
 
+## Kiosk Feedback
+
+Starting with version **1.4.0** of the **Kiosk** app and **Accesskey 3.8.0**, you can report the issues to IDmelon support by enabling the Kiosk feedback button.
+
+To enable the feedback button in the app configurations:
+
+```shell
+C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\configs.xml
+```
+
+Set the configuration below to **true**:
+
+```shell
+<ShowFeedbackButton>true</ShowFeedbackButton>
+```
+
+After restarting the app, the **Feedback** button (**?**) will be available next to the **End Session** button.
+
+![Feedback button](/images/vendor/idmelon_kiosk/idmelon_kiosk_feedback_button.png)
+
+![Feedback button](/images/vendor/idmelon_kiosk/idmelon_kiosk_feedback_dialog.png)
+
 ## Collect App Logs
 
-If the Kiosk app is not working correctly, share the files below with IDmelon support:
+If the **Feedback** feature is unavailable in your Kiosk version and the app doesn't work correctly, please share the following files with IDmelon support:
 
 ```shell
 C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\app_logs.log
