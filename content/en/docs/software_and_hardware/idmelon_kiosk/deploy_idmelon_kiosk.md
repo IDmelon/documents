@@ -107,6 +107,7 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     <ShowFeedbackButton>false</ShowFeedbackButton>
     <ExtensionAutoUpdate>true</ExtensionAutoUpdate>
     <ExtensionUpdateChannel>stable</ExtensionUpdateChannel>
+    <AppAutoUpdate silent="false">true</AppAutoUpdate>
     ```
 
     - **KioskURL:** The default webpage the kiosk app loads upon startup.
@@ -122,6 +123,7 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     - **ShowFeedbackButton:** Displays (true) or hides (false) the feedback (report issue) button next to the end session button.
     - **ExtensionAutoUpdate:** Enables (true) or disables (false) Weblogin extension auto updates.
     - **ExtensionUpdateChannel:** The update channel of the Weblogin extension (e.g., stable or latest).
+    - **AppAutoUpdate:** Enables (true) or disables (false) app updates. (silent=true -> Updates without displaying a notification UI to the user).
 
 **Configuring Server Address:**
 
