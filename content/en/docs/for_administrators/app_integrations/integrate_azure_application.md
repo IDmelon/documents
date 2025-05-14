@@ -95,7 +95,9 @@ $pfxPath = "C:\Path\To\Output\File\mycert.pfx"
 $securePwd = ConvertTo-SecureString -String "MyStrongPassword123!" -Force -AsPlainText
 Export-PfxCertificate -Cert $cert -FilePath $pfxPath -Password $securePwd
 ```
+
 Now extract both Private Key and Certificate files using the following OpenSSL commands:
+
 ```powershell
 # Convert private key to PEM (.key)
 openssl pkcs12 -in C:\Path\To\Output\File\mycert.pfx -nocerts -out C:\Path\To\Output\File\private.key -nodes -passin pass:MyStrongPassword123!
@@ -107,6 +109,7 @@ openssl pkcs12 -in C:\Path\To\Output\File\mycert.pfx -clcerts -nokeys -out C:\Pa
 ***Linux Shell Script***
 
 The following script creates `Private Key` and `Certificate` files using the `OpenSSL` library. It can install OpenSSL on a Debian-based environment if not already installed.
+
 ```bash
 #!/bin/bash
 
@@ -145,7 +148,7 @@ openssl x509 -req -days 3650 -in certificate.csr -signkey private.key -sha256 -o
 echo "COMPLETED ;)"
 ```
 
-**Upload Certificate**
+#### Upload Certificate
 
 After creation of `Private Key` and `Certificate` files, upload the `Certificate` in `Azure Portal`. From the `Certificates & Secrets` blade, click the `Certificate` tab, then click on `Upload certificate`. Select the certificate file, add a description (optional), then click Add and copy the `Thumbprint` (expand the column to see it completely).
 
