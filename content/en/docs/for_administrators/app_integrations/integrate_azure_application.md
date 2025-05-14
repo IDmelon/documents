@@ -38,7 +38,7 @@ IDmelon always requests the least privileged permissions. However, if you are re
 
 You can either grant permissions to the predefined IDmelon app registration with predefined permissions or define your own app registration manually and pass the required information to us.
 
-### Using IDMelon’s App Registration
+### Using IDMelon's App Registration
 
 To approve these permissions, initiate any Entra ID-related feature within IDmelon. This action will redirect you to the admin consent flow. According to Microsoft, you need to sign in as at least a Privileged Role Administrator to consent to application permissions to Microsoft Graph.
 
@@ -180,6 +180,29 @@ After adding all permissions, click `Grant admin consent for <domain>` and accep
 Finally, you should see the following state in your Azure Application:
 
 ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_14.png)
+
+#### Scoped Permissions Using Administrative Units
+
+For organizations that want to restrict the `UserAuthenticationMethod.ReadWrite.All` permission to specific groups of users, you can use Administrative Units to scope the permissions. This provides more granular control over which users IDmelon can manage authentication methods for.
+
+To set up scoped permissions:
+
+1. Navigate to [Entra ID](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/Overview)
+2. Go to **Roles and Administrators**
+3. Search for and select the **Authentication Administrator** role
+4. Click **Add Assignments**
+5. In the assignment configuration:
+   - Set **Scope type** to "Administrative unit"
+   - Select your administrative unit for the **Selected Scope**
+   - Under **Selected member(s)**, choose the IDmelon application you created in Enterprise Applications
+![Entra ID - Authentication Administrator Assignment](/images/vendor/app_integration/azure_application/azure_app_scoped_assign_1.png)
+6. Click **Next**
+7. Provide a detailed justification, for example: "Granting permanent Authentication Administrator role to IDmelon to manage Passkey rollout for targeted users and groups defined within the administrative units"
+8. Complete the assignment
+
+This configuration allows IDmelon to manage MFA authentication methods only for users within the specified administrative unit, rather than all users in your organization.
+
+For detailed instructions on creating and managing Administrative Units, refer to the [Microsoft documentation](https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/admin-units-manage?tabs=admin-center#create-an-administrative-unit).
 
 ### Configure Redirect URL
 
