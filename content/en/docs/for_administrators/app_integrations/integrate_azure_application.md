@@ -206,7 +206,7 @@ For detailed instructions on creating and managing Administrative Units, refer t
 
 ### Configure Redirect URL
 
-Go to the `Authentication` blade. Click `Add a platform` > `Web`. Enter `https://skm.idmelon.com/aad/redirect-azure` as the Redirect URI, then click Configure. Click `Add URI`, enter `https://panel.idmelon.com`, and click Save.
+Go to the `Authentication` blade. Click `Add a platform` > `Web`. Enter `https://skm.idmelon.com/aad/redirect-azure` as the Redirect URI, then click Configure. Click `Add URI`, enter `https://panel.idmelon.com` and `https://panel.idmelon.com/msal/result`, and click Save.
 
 ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_15.png)
 
