@@ -110,7 +110,67 @@ Once training is complete, the system is ready to use. Here’s how it behaves:
 ### Report Issue
 
 If the user's badge is not registered in the system, or if the number of incorrect PIN attempts has been reached, or if the automation is not performed correctly, the user will be prompted to report the issue. By clicking the **Send Report** button, the report will be sent to the support email along with the application logs and user information.<br>
-***Note:** To change the default support email, see the **[optional settings for configs.json](#configure-the-settings-optional).**
+**Note:** To change the default support email, see the **[optional settings for configs.json](#configure-the-settings-optional).**
 
 ![Report issue not enrolled](/images/vendor/workflow_automation/automation_app/report_issue_not_enrolled.png)
 ![Report issue PIN locked](/images/vendor/workflow_automation/automation_app/report_issue_pin_locked.png)
+![Report issue PIN locked](/images/vendor/workflow_automation/automation_app/report_issue_automation_failed.png)
+
+### Language Support
+
+The Workflow Automation app (version 1.4.0 and later) supports multiple languages for the report issue window. The app automatically detects the system locale and displays the appropriate content based on the user's language settings.
+
+Language-specific content is stored in JSON files located at:
+
+```shell
+C:/Program Files (x86)/IDmelon/Accesskey/Extensions/WorkflowAutomation/support/{locale}/report-issue.json
+```
+
+For example:
+
+- English (US): `/support/en-us/report-issue.json`
+- Spanish: `/support/es-es/report-issue.json`
+- French: `/support/fr-fr/report-issue.json`
+
+**Note:** For locales other than English (en-us), you must manually create the `report-issue.json` file in the corresponding locale folder with translated content.
+
+The `report-issue.json` file should contain the following structure with localized strings:
+
+```json
+{
+    "not_enrolled_title": "Your card is not enrolled. Please contact your administrator.",
+    "pin_locked_title": "Your card is locked. Please contact your administrator.",
+    "automation_failed_title": "Automation failed. Please contact your administrator.",
+    "subtitle": "A log of this error has been created. Please complete the form below and click Send Report to submit this error to the HelpDesk.",
+    "not_enrolled_note": "",
+    "pin_locked_note": "",
+    "automation_failed_note": "",
+    "fullname_label": "Your Full Name*",
+    "badge_number_label": "Your Badge Number*",
+    "user_email_label": "User Id",
+    "note_label": "Note (optional)",
+    "submit_button": "Send Report"
+}
+```
+
+The empty note fields (`not_enrolled_note`, `pin_locked_note`, `automation_failed_note`) can be used to provide additional context or instructions specific to each error type.
+
+![Report issue not enrolled](/images/vendor/workflow_automation/automation_app/report_issue_not_enrolled_guide.png)
+![Report issue not enrolled](/images/vendor/workflow_automation/automation_app/report_issue_pin_locked_guide.png)
+
+For the "Not Enrolled" issue type, you can add a custom image named `badge-info.png` in the corresponding locale folder. This image will be displayed on the right side of the report issue window, providing visual guidance to users.
+
+Example structure:
+
+```shell
+/support/
+├── en-us/
+│   ├── report-issue.json
+│   └── badge-info.png
+├── es-es/
+│   ├── report-issue.json
+│   └── badge-info.png
+└── fr-fr/
+    ├── report-issue.json
+    └── badge-info.png
+```
