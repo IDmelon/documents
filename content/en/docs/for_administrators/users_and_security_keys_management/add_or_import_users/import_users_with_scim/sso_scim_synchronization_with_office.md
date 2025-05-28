@@ -206,7 +206,6 @@ and then click on the `Edit attribute list for customappsso`:
 
 Add new custom fields as shown in picture and then click the `Save`.
 
-
 ![alt](/images/vendor/scim/azure/23.png)
 
 Add new custom fields as shown in picture and below table and then click the `Save`.
