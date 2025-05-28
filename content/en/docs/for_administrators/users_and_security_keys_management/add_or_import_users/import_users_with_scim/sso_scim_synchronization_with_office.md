@@ -83,7 +83,7 @@ In the opened page, click the `Get started` of the `Provision User Accounts` sec
 
 ![alt](/images/vendor/scim/azure/05.png)
 
-### Step 6- Provisioning
+### Step 6 - Provisioning
 
 And then in the next page, click the `Get started` from main again.
 
@@ -110,19 +110,19 @@ Then click `Save`.
 
 ![alt](/images/vendor/scim/azure/07.png)
 
-### Step 7 - Update Settings
+### Step 8 - Update Settings
 
 Based on your situation, change the Scope to `Sync all users and groups`
 
 ![alt](/images/vendor/scim/azure/08.png)
 
-### Step 8 - User Attribute mapping
+### Step 9 - User Attribute mapping
 
 Expand the `Mapping` section and click on `Provision Microsoft Entra ID Users`
 
 ![alt](/images/vendor/scim/azure/09.png)
 
-### Step 9 - User attribute mapping - advance options
+### Step 10 - User attribute mapping - advance options
 
 In the `Attribute Mappings` section, check the `Show advanced options` option,
 and then click on the `Edit attribute list for customappsso`:
@@ -137,7 +137,7 @@ Add a new `immutableId` field based as picture and below table and then click th
 |----------------------------------------------------------------------|--------|
 | urn:ietf:params:scim:schemas:extension:IDmelon:2.0:User:immutable_id | String |
 
-### Step 10 - User attribute mapping
+### Step 11 - User attribute mapping
 
 Back to the `Attribute Mappings` section, and from the default list, apply these two changes and then click the `Save`.
 
@@ -154,13 +154,13 @@ Back to the `Attribute Mappings` section, and from the default list, apply these
 ![alt](/images/vendor/scim/azure/14.png)
 ![alt](/images/vendor/scim/azure/15.png)
 
-### Step 11 - Group Attribute mapping
+### Step 12 - Group Attribute mapping
 
 Expand the `Mapping` section and click on `Provision Microsoft Entra ID Group`
 
 ![alt](/images/vendor/scim/azure/16.png)
 
-### Step 12 - Group attribute mapping - advance options
+### Step 13 - Group attribute mapping - advance options
 
 In the `Attribute Mappings` section, check the `Show advanced options` option,
 and then click on the `Edit attribute list for customappsso`:
@@ -175,7 +175,7 @@ Add a new `description` field based as picture and below table and then click th
 |----------------|--------|
 | description    | String |
 
-### Step 13 - Group attribute mapping
+### Step 14 - Group attribute mapping
 
 Back to the `Attribute Mappings` section, and from the default list, apply this change and then click the `Save`.
 
@@ -189,11 +189,59 @@ Back to the `Attribute Mappings` section, and from the default list, apply this 
 ![alt](/images/vendor/scim/azure/20.png)
 ![alt](/images/vendor/scim/azure/21.png)
 
-### Deprovisioning
+---
+
+## Adding Custom Attributes
+
+To configure custom attributes for SCIM provisioning in Microsoft Entra ID, follow these steps:
+
+### Step 1 - User attribute mapping
+
+Back to the `Attribute Mappings` section, check the `Show advanced options` option,
+and then click on the `Edit attribute list for customappsso`:
+
+![alt](/images/vendor/scim/azure/22.png)
+
+### Step 2 - Edit attribute list
+
+Add new custom fields as shown in picture and then click the `Save`.
+
+
+![alt](/images/vendor/scim/azure/23.png)
+
+Add new custom fields as shown in picture and below table and then click the `Save`.
+
+> You can map up to five custom attributes, using the following target fields.
+
+| Name                                                                 | Type   |
+|----------------------------------------------------------------------|--------|
+| urn:ietf:params:scim:schemas:extension:IDmelon:2.0:User:extraAttribute1 | String |
+| urn:ietf:params:scim:schemas:extension:IDmelon:2.0:User:extraAttribute2 | String |
+| urn:ietf:params:scim:schemas:extension:IDmelon:2.0:User:extraAttribute3 | String |
+| urn:ietf:params:scim:schemas:extension:IDmelon:2.0:User:extraAttribute4 | String |
+| urn:ietf:params:scim:schemas:extension:IDmelon:2.0:User:extraAttribute5 | String |
+
+### Step 3 - User attribute mapping
+
+Back to the `Attribute Mappings` section once more and click the `Add New Mapping`
+
+![alt](/images/vendor/scim/azure/24.png)
+
+### Step 4 - Edit attribute
+
+Select the desired EntraID attribute to map in the `Source attribute` field, then choose the corresponding custom IDmelon attribute for the `Target attribute` field. Once both are selected, click `Ok`.
+
+![alt](/images/vendor/scim/azure/25.png)
+
+Finally `save` your changes.
+
+---
+
+## Deprovisioning
 
 The rules of deprovisioning are as follows:
 
-#### Sync Only Assigned Users and Groups
+### Sync Only Assigned Users and Groups
 
 If you have set the SCIM sync to be dependent on specific users and groups (`Sync only assigned users and groups`), removing a user on the IDmelon side can be done in the following ways:
 
@@ -201,7 +249,7 @@ If you have set the SCIM sync to be dependent on specific users and groups (`Syn
 * Method 2: Disable the user on the Entra ID side.
 * Method 3: Delete the user on the Entra ID side.
 
-#### Sync All Users and Groups
+### Sync All Users and Groups
 
 If the SCIM sync is set to include all users and groups (`Sync all users and groups`), removing a user on the IDmelon side can be done as follows:
 
