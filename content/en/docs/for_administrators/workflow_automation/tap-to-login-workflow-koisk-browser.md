@@ -160,6 +160,8 @@ The empty note fields (`not_enrolled_note`, `pin_locked_note`, `automation_faile
 
 For the "Not Enrolled" issue type, you can add a custom image named `badge-info.png` in the corresponding locale folder. This image will be displayed on the right side of the report issue window, providing visual guidance to users.
 
+**Note:** The `badge-info.png` image size must be under **512x512 pixels** for optimal display.
+
 Example structure:
 
 ```shell
