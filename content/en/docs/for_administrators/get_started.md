@@ -1,15 +1,15 @@
 ---
-title: "Create your Administration Panel"
+title: "Get Started"
 description: ""
 lead: ""
-date: 2023-09-11T12:58:04+03:30
-lastmod: 2023-09-11T12:58:04+03:30
+date: 2023-09-11T11:37:06+03:30
+lastmod: 2023-09-11T11:37:06+03:30
 draft: false
 images: []
 menu:
   docs:
-    parent: "get_started"
-weight: 21000
+    parent: "for_administrators"
+weight: 10000
 toc: true
 ---
 
