@@ -48,37 +48,38 @@ This guide explains how to set up `IDmelon` as an external IdP for `Citrix`.
   ![alt](/images/vendor/sso/citrix/citrix_IDP_04.png)
     Sample Entity ID:
 
-    ```
+    ```shell
     https://srv8431835910.idmelon.ctx/Citrix/idmelonAuth
     ```
 
     Sample Assertion Consumer Service URL:
 
-    ```
+    ```shell
     https://srv8431835910.idmelon.ctx/Citrix/idmelonAuth/SamlForms/AssertionConsumerService
     ```
   
-  4. To get the value for the “Assertion Consumer Service URL” field:
-    In Windows `PowerShell ISE`, run:
-    
-      ```shell
-      Get-STFStoreService | Out-String -Stream | Select-String "VirtualPath"
-      ```
-      ![alt](/images/vendor/sso/citrix/citrix_SP_07.png)
-      
-      Then run the following commands, replacing `/Citrix/Store` with the value you obtained above:
-      
-      ```shell
-      Get-STFStoreService | Out-String -Stream | Select-String "VirtualPath"
-      $storeVirtualPath = "/Citrix/Store"
-      $auth = Get-STFAuthenticationService -Store (Get-STFStoreService -VirtualPath $storeVirtualPath)
-      $acs = New-Object System.Uri $auth.Routing.HostbaseUrl, ($auth.VirtualPath + "/SamlForms/AssertionConsumerService")
-      echo $acs
-      ```
+4. To get the value for the “Assertion Consumer Service URL” field:
+  In Windows `PowerShell ISE`, run:
 
-      ![alt](/images/vendor/sso/citrix/citrix_SP_08.png)
+    ```shell
+    Get-STFStoreService | Out-String -Stream | Select-String "VirtualPath"
+    ```
 
-      Use the `AbsoluteUri` as the “Assertion Consumer Service URL” in the IDmelon configuration form.
+    ![alt](/images/vendor/sso/citrix/citrix_SP_07.png)
+
+    Then run the following commands, replacing `/Citrix/Store` with the value you obtained above:
+
+    ```shell
+    Get-STFStoreService | Out-String -Stream | Select-String "VirtualPath"
+    $storeVirtualPath = "/Citrix/Store"
+    $auth = Get-STFAuthenticationService -Store (Get-STFStoreService -VirtualPath $storeVirtualPath)
+    $acs = New-Object System.Uri $auth.Routing.HostbaseUrl, ($auth.VirtualPath + "/SamlForms/AssertionConsumerService")
+    echo $acs
+    ```
+
+    ![alt](/images/vendor/sso/citrix/citrix_SP_08.png)
+
+    Use the `AbsoluteUri` as the “Assertion Consumer Service URL” in the IDmelon configuration form.
 
 5. Convert the “Certificate” file you downloaded to `.cer` format:
 
