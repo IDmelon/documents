@@ -59,6 +59,18 @@ including users, groups, and devices, into the IDmelon panel via LDAP.
    - Run the sync process to synchronize users and devices from the groups defined in the `group_filter.txt` file.
    - Command: `SyncStream.exe sync`
 
+### On Premises
+
+If you are using this tool in an on-premises environment, you need to modify the following values in the `config.json` file:
+
+1. **API URLs Configuration:**
+   - Change `API_GROUP_URL` to your server's group API endpoint
+   - Change `API_DEVICE_URL` to your server's device API endpoint
+
+2. **SSL Certificate Configuration:**
+   - If you are using self-signed certificates, place the certificate file named `cert.crt` next to the executable file (`SyncStream.exe`)
+   - The tool will automatically detect and use this certificate for SSL verification
+
 ### Quick Commands Reference
 
 1. Edit Configuration:
