@@ -1510,3 +1510,11 @@ a.docs-link {
 .content .video {
   width: 100%;
 }
+
+table {
+  margin: 0;
+}
+
+.configuration-tasks table th:first-child {
+  width: 40%;
+}

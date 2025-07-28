@@ -13,30 +13,32 @@ weight: 10000
 toc: true
 ---
 
-IDmelon Admin Panel is a platform where you can manage users, activate users' security keys, instantly grant or restrict access, carefully monitor users' access, and do many more things. To access the IDmelon Admin Panel, click [here](https://panel.idmelon.com). Present your security key to experience a frictionless login or create a workspace on behalf of your organization if it is your first try.
+IDmelon enables organizations to go fully passwordless using smartphones, contactless cards, and biometrics as FIDO2 security keys — without the need to install complex infrastructure. Whether you're deploying IDmelon in a cloud, hybrid, or on-premises environment, this guide walks you through the essential steps to get up and running quickly.
 
-## Create an administration panel
+Follow the configuration tasks below based on your use case. You don’t need to complete every section — just the ones relevant to your authentication environment and goals.
 
-1. Choose Work or School on behalf of your organization.
-2. Fill in all the fields with your information including your email address and phone number  
-3. Enter your company's URL and Name. You can also add your company's logo.  
-4. In this step, choose the device that you like to use as your security key to see a page based on the security key device that you have chosen, or you can **Skip** it for later.
+## Configuration Tasks Overview
 
-To activate your security key, based on your device, please follow one of the bellow sections:
+Follow this sequence of configuration tasks to start using IDmelon:
 
-1. Smartphone  
-    a. Choose **Smartphone** as your security key device.  
-    b. There are different ways to pair your smartphone with PC. You can use the camera on your smartphone to scan the QR code on your PC screen. Also, you can open IDmelon Authenticator on your phone and click on the **three line menu** on the top left of your screen. Then tap on **Scan QR Code** and scan the QR code, or from the same menu, click **Add New Security Key** to be able to go through scanning. You can click the Pairing icon at the top right corner of the homepage of IDmelon Authenticator app as well.  
-    c. Click next and either download **IDmelon Pairing Tool** or use your **IDmelon Reader** to log in to panel by your smartphone as your security key. Click **Login** to move to login page.  
-    For more information about **IDmelon Pairing Tool** refer to [this page](https://idmelon.com/products/pairingtool) and for more information about **IDmelon Reader** refer to [this page](https://idmelon.com/products/reader).  
-2. Contactless Card  
-    a. Choose **Contactless Card** as your security key device.  
-    b. Based on your own card reader model click on rfIDEAS, acs, or HID to download the driver. Install the downloaded driver and click on Next.  
-    c. Enter a name for your security key device and click on Set up your Contactless Card.  
-    d. Touch your device (tap on your Contactless Card) to register your card.  
-    e. Click on Done to receive your PIN via email.  
-    > Note: When you register your Contactless Card, you will receive an email containing a PIN which you need to use when you want to log in with your contactless card.  
-3. FIDO2.0 Hardware Security Key  
-    a. Choose **FIDO2 Hardware** Security Key as your security key device.  
-    b. Enter a name for your hardware security key and click on **Register**.  
-    c. Touch your Hardware Security key.  
+<div class="configuration-tasks">
+
+| **Task**                         | **Description** |
+|----------------------------------|-----------------|
+| Create Your Admin Panel          | [Sign up and set up your IDmelon admin panel to manage users, keys, and settings.](/docs/for_administrators/create_an_administration_panel/) |
+| User Management                  | [Import users from Azure AD, LDAP, or CSV, or add them manually.](/docs/for_administrators/users_and_security_keys_management/add_or_import_users/) |
+| Assign Security Keys             | [Assign smartphones, contactless cards (ID badges), or biometric as a FIDO2 security key to users.](/docs/for_administrators/users_and_security_keys_management/assign_security_keys/) |
+| Provision Passkeys               | [Provision Microsoft and other relying party (RP) passkeys on behalf of users.](/docs/for_administrators/users_and_security_keys_management/manage_passkeys_and_credentials/) |
+| Windows Login (On-Prem)          | [Enable login to on-prem Windows devices using the FIDO Credential Provider (FCP).](/docs/for_administrators/windows_passwordless_deployment/onpremise_domain_logon/) |
+| Password Autofill                | [Use badge tap to autofill credentials on platforms that do not support FIDO2.](/docs/for_administrators/passwords_for_legacy_authentication/) |
+| Security Key Policies            | [Manage PIN behavior, online/offline usage preferences.](/docs/for_administrators/users_and_security_keys_management/manage_additional_security_key_features/) |
+| Shared account setup             | [Configure shared user accounts for environments where multiple users access the same device.](/docs/for_administrators/users_and_security_keys_management/configure_a_shared_user_account/) |
+| Conditional Access               | [Define access policies based on IP address, key type, time, device, and relying party.](/docs/for_administrators/conditional_access_for_security_keys/) |
+| Admin Roles & Delegation         | [Assign admin roles at the workspace or organizational unit (OU) level.](/docs/for_administrators/organization_unit/) |
+| Tap-to-action Workflows          | [Enable tap-to-login and tap-to-logout on shared or kiosk workstations using IDmelon workflows.](/docs/for_administrators/workflow_automation/) |
+| SSO Integration (Single Sign-On) | [Configure IDmelon as your organization's SSO solution to allow passwordless access to multiple applications using a single authentication flow.](/docs/for_administrators/app_integrations/) |
+| Service Provider (SP) Setup      | [Use IDmelon as a SAML Service Provider to authenticate users via your existing Identity Provider (IdP). Ideal for organizations that prefer central IdP control with IDmelon handling authentication workflows.](/docs/for_administrators/authentication/identity_providers/) |
+| Dedicated Deployment Option      | [Deploy IDmelon on a private cloud or on-premises infrastructure based on your organization’s compliance, data residency, or operational requirements. Suitable for enterprises that require a self-hosted or dedicated environment instead of SaaS.](/docs/for_administrators/dedicated-deployment/deployment_options/) |
+| Automatic Software Deployment    | [Deploy IDmelon components (e.g., FIDO Credential Provider, Pairing Tool, Reader Driver) across endpoints using tools like Intune, GPO, or third-party deployment solutions. Ideal for automating installation at scale.](/docs/for_administrators/automatic_software_deployment/) |
+
+</div>
