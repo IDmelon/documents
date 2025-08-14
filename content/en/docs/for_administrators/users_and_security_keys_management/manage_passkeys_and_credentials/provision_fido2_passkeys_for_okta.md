@@ -21,7 +21,7 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
 - Okta users must be available and synchronized in the IDmelon Admin Panel (via group or directory import).
 - You must have an **Okta group** containing users to which the WebAuthn policy will be applied.
 
-#### Generating an Okta API Token
+### Generating an Okta API Token
 
 - Navigate to **Security > API** then select **Tokens** and click on **Create Token**.
 
@@ -34,10 +34,9 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
   ![okta2](/images/vendor/provisioning/okta/02.png)
 
 > Generated API token will be needed in IDmelon app integration.
-
 > The API token will inherit all the privileges of the user who created it.
 
-#### Setting up Okta FIDO2 Authenticator options
+### Setting up Okta FIDO2 Authenticator options
 
 - Navigate to **Security > Authenticators** then select **Setup** options and click **Add authenticator**.
 
@@ -54,9 +53,9 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
 
   ![okta5](/images/vendor/provisioning/okta/05.png)
 
-#### Add Okta Enrollment policy
+### Add Okta Enrollment policy
 
--  Navigate back to **Security > Authenticators** then select **Enrollment** options
+- Navigate back to **Security > Authenticators** then select **Enrollment** options
 - Click **Add a policy**
 
   ![okta6](/images/vendor/provisioning/okta/06.png)
@@ -74,9 +73,9 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
 
   ![okta8](/images/vendor/provisioning/okta/08.png)
 
-#### Setup Okta Authentication policy
+### Setup Okta Authentication policy
 
--  Navigate back to **Security > Authentication Policies** then select **Okta Dashboard** _(Or any application)_
+- Navigate back to **Security > Authentication Policies** then select **Okta Dashboard** _(Or any application)_
 
   ![okta9](/images/vendor/provisioning/okta/09.png)
 
@@ -95,7 +94,7 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
 
   ![okta12](/images/vendor/provisioning/okta/12.png)
 
-#### Integrate IDmelon with Okta
+### Integrate IDmelon with Okta
 
 - Login to IDmelon Admin Panel then navigate to **App Integration > API**
 - Select **Okta API** option
