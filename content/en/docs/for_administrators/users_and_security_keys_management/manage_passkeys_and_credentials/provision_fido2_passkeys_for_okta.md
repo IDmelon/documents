@@ -48,8 +48,6 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
 
 - Select **Preferred** option and then click **add**
 - Click **Add**
-- Fill required fields as described in picture:
-  - Policy name
 
   ![okta5](/images/vendor/provisioning/okta/05.png)
 
@@ -101,6 +99,8 @@ Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrat
 - Fill required fields as described in picture:
   - Origin -> Okta workspace domain
   - Okta API Key
+- Test connection
+- Click **Save**
 
 ![panel1](/images/vendor/provisioning/okta/p01.png)
 
