@@ -83,7 +83,7 @@ idmelonfcp mfa-method -s SMS
 
 After entering their username and password, users will be prompted to enter an MFA code. In this example, the system is configured to automatically send the code via email:
 
-![Windows MFA Email Prompt](/images/vendor/DirectoryServicesIntegration/FCP/mfa-fallback-email-example.png)
+![Windows MFA Email Prompt](/images/vendor/DirectoryServicesIntegration/FCP/mfa-fallback-email-example.gif)
 
 > The user sees a prompt:
 > "Please enter the code sent to [user’s email address]"
