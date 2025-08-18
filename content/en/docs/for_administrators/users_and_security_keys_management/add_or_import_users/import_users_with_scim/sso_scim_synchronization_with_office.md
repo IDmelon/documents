@@ -30,7 +30,6 @@ You can see the **SCIM URL** and **SCIM Token** to use in the Microsoft Entra ID
 ![IDmelon Panel - SCIM Credentials](/images/vendor/scim/azure/panel_03.png)
 
 > The newly generated token will be shown only once. Make sure to copy and save it.
-
 > If you created the first token and want to generate a new token, you can click on the **New SCIM Token** icon.
 
 ## Setup Microsoft Entra ID For Provisioning

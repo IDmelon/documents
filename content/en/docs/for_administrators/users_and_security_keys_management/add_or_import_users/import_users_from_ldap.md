@@ -40,27 +40,35 @@ This guide explains how to import your required resources, including users, grou
 ## Syncing with Filtered Groups
 
 ### Step 1: Configure the config.json File
+
 Ensure that the **config.json** file is correctly configured with the necessary settings.
 
 ### Step 2: Check Connection to Active Directory
+
 Verify the connection to Active Directory by using the `healthcheck` parameter.
-```
+
+``` powershell
 SyncStream.exe healthcheck
 ```
 
 ### Step 3: Retrieve List of Groups
+
 Get the list of groups by using the `group` parameter. The result will be saved to a file named **group_list.txt**.
-```
+
+``` powershell
 SyncStream.exe group
 ```
 
 ### Step 4: Filter Groups for Syncing
+
 1. Open the **group_list.txt** file to review the list of groups.
 2. Based on this list, create and save the groups you want to sync in the **group_filter.txt** file.
 
 ### Step 5: Sync Filtered Groups
+
 Run the sync process to synchronize users and devices from the groups defined in the **group_filter.txt** file.
-```
+
+``` powershell
 SyncStream.exe sync
 ```
 
@@ -92,16 +100,19 @@ If you are using this tool in an on-premises environment, you need to modify the
 ## Troubleshooting
 
 - **Run Health Check**: Ensure this tool can communicate with Active Directory and the remote API:
-  ```
+
+  ``` powershell
   SyncStream.exe healthcheck
   ```
 
 - **Add Debug Logging**: Add `--dump` to each command you run to save logs to a log file:
-  ```
+
+  ``` powershell
   SyncStream.exe sync --dump
   ```
 
 - **Add Verbose Logging**: Add `--log info` to each command you run to see more detailed information:
-  ```
+
+  ``` powershell
   SyncStream.exe sync --log info
   ```

@@ -42,7 +42,6 @@ To integrate IDmelon with Okta, you need to create an API token with appropriate
 
    ![Okta - Token Configuration](/images/vendor/provisioning/okta/02.png)
 
-> **Important**: 
 > - The generated API token will be needed in the IDmelon app integration configuration.
 > - The API token inherits all the privileges of the user who created it, so ensure the creating user has appropriate administrative permissions.
 > - Store the token securely as it will only be displayed once.
@@ -60,6 +59,5 @@ Once you have your Okta API token, follow these steps to configure the integrati
 5. Click **Save** to complete the configuration.
 
 ![IDmelon Panel - Okta API Configuration](/images/vendor/provisioning/okta/p01.png)
-
 
 > **Note**: For complete passkey provisioning setup, you'll also need to configure Okta FIDO2 authenticator settings. See our [Provision FIDO2 Passkeys for Okta](/docs/for_administrators/users_and_security_keys_management/manage_passkeys_and_credentials/provision_fido2_passkeys_for_okta/) guide for detailed instructions.

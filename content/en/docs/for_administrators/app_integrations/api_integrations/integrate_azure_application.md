@@ -63,21 +63,22 @@ If your organization restricts permission approvals from external applications o
 
 6. Select the following permissions:
 
-- `Device.Read.All`
-- `Group.Read.All`
-- `User.Read.All`
-- `UserAuthenticationMethod.ReadWrite.All`
+    - `Device.Read.All`
+    - `Group.Read.All`
+    - `User.Read.All`
+    - `UserAuthenticationMethod.ReadWrite.All`
 
-![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_12.png)
+    ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_12.png)
 
-> You can also substitute all these permissions with the broader <a href="https://learn.microsoft.com/en-us/graph/permissions-reference#directoryreadall" target="_blank">Directory.Read.All</a> permission.
-> If you want to restrict the `UserAuthenticationMethod.ReadWrite.All` permission to a specific subset of users in your organization, you can skip adding this permission at this stage and follow the instructions below to configure it using Administrative Units.
+    > You can also substitute all these permissions with the broader <a href="https://learn.microsoft.com/en-us/graph/permissions-reference#directoryreadall" target="_blank">Directory.Read.All</a> permission.
+    > If you want to restrict the `UserAuthenticationMethod.ReadWrite.All` permission to a specific subset of users in your organization, you can skip adding this permission at this stage and follow the instructions below to configure it using Administrative Units.
 
 7. After adding all permissions, click **Grant admin consent for <domain>** and accept the confirmation.
-![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_13.png)
+
+    ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_13.png)
 
 8. Finally, you should see the following state in your Azure Application:
-![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_14.png)
+    ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_14.png)
 
 If your organization wants to limit the `UserAuthenticationMethod.ReadWrite.All` permission to specific user groups, you can use **Administrative Units** instead of granting this permission globally. This allows you to scope the permission more precisely, giving IDmelon access only to manage authentication methods for users within the defined units. To configure scoped permissions:
 
