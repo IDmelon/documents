@@ -1,6 +1,6 @@
 ---
 title: "Provision FIDO2 Passkeys for Okta"
-description: ""
+description: "Configure Okta FIDO2 authenticator policies and assign passkeys to users"
 lead: ""
 date: 2025-07-31T12:00:00+03:30
 lastmod: 2025-07-31T12:00:00+03:30
@@ -13,104 +13,84 @@ weight: 34110
 toc: true
 ---
 
-Admins can assign Okta passkeys to users via the IDmelon Admin Panel by integrating their Okta environment. Once configured, users can use their security keys to authenticate to Okta-supported applications and services.
+Administrators can assign Okta passkeys to users via the IDmelon Admin Panel by integrating their Okta environment. Once configured, users can use their security keys to authenticate to Okta-supported applications and services.
 
 ## Prerequisites
 
-- Ensure you have an **Okta origin** with access to the **Okta Admin Console**.
-- Okta users must be available and synchronized in the IDmelon Admin Panel (via group or directory import).
-- You must have an **Okta group** containing users to which the WebAuthn policy will be applied.
+Before configuring Okta passkey provisioning, ensure you have:
 
-### Generating an Okta API Token
+- **Okta API Integration**: Complete the [Okta API Integration](/docs/for_administrators/app_integrations/api_integrations/integrate_okta/) setup first.
+- **Okta Admin Console Access**: Ensure you have access to the **Okta Admin Console** with administrative privileges.
+- **User Synchronization**: Okta users must be available and synchronized in the IDmelon Admin Panel (via group or directory import).
+- **User Groups**: You must have an **Okta group** containing users to which the WebAuthn policy will be applied.
 
-- Navigate to **Security > API** then select **Tokens** and click on **Create Token**.
+## Overview
 
-  ![okta1](/images/vendor/provisioning/okta/01.png)
+This guide walks you through configuring Okta FIDO2 authenticator settings and policies to enable passkey authentication for your users. The process involves setting up authenticator options, enrollment policies, and authentication policies in Okta.
 
-- Select a Name for the token
-- Select `Any IP` or any restriction see fits
-- Click **Create Token**
+## Setting up Okta FIDO2 Authenticator Options
 
-  ![okta2](/images/vendor/provisioning/okta/02.png)
+1. Navigate to **Security > Authenticators** in your Okta Admin Console, then select **Setup** options and click **Add authenticator**.
 
-> Generated API token will be needed in IDmelon app integration.
-> The API token will inherit all the privileges of the user who created it.
+   ![Okta - Add Authenticator](/images/vendor/provisioning/okta/03.png)
 
-### Setting up Okta FIDO2 Authenticator options
+2. Select the **FIDO2 (WebAuthn)** authenticator from the list.
 
-- Navigate to **Security > Authenticators** then select **Setup** options and click **Add authenticator**.
+   ![Okta - Select FIDO2 Authenticator](/images/vendor/provisioning/okta/04.png)
 
-  ![okta3](/images/vendor/provisioning/okta/03.png)
+3. Configure the authenticator settings:
+   - Select **Preferred** option for the authenticator
+   - Click **Add** to complete the setup
 
-- Select FIDO2 (WebAuthn) authenticator.
+   ![Okta - Configure FIDO2 Authenticator](/images/vendor/provisioning/okta/05.png)
 
-  ![okta4](/images/vendor/provisioning/okta/04.png)
+## Adding Okta Enrollment Policy
 
-- Select **Preferred** option and then click **add**
-- Click **Add**
+1. Navigate back to **Security > Authenticators** and select **Enrollment** options.
+2. Click **Add a policy**.
 
-  ![okta5](/images/vendor/provisioning/okta/05.png)
+   ![Okta - Add Enrollment Policy](/images/vendor/provisioning/okta/06.png)
 
-### Add Okta Enrollment policy
+3. Fill in the required fields as shown in the image:
+   - **Policy name**: Enter a descriptive name (e.g., "FIDO2 Enrollment Policy")
+   - **Assign to groups**: Select the groups that should use FIDO2 (WebAuthn) authenticator
+   - **Authenticators**: Select authenticator options as appropriate
+   - **Allowed authenticators**: Choose "Any WebAuthn authenticator"
 
-- Navigate back to **Security > Authenticators** then select **Enrollment** options
-- Click **Add a policy**
+   ![Okta - Configure Enrollment Policy](/images/vendor/provisioning/okta/07.png)
 
-  ![okta6](/images/vendor/provisioning/okta/06.png)
+4. In the newly opened **Add Rule** window, provide a rule name and click **Create Rule**.
 
-- Fill required fields as described in picture:
-  - Policy name
-  - Assign to groups -> Groups that wish to use FIDO2 (webAuthn) authenticator
-  - Authenticators -> Select authenticator options as fit
-  - Allowed authenticators -> Any webAuthn authenticator
+   ![Okta - Create Enrollment Rule](/images/vendor/provisioning/okta/08.png)
 
-  ![okta7](/images/vendor/provisioning/okta/07.png)
+## Setting up Okta Authentication Policy
 
-- In newly opened window `Add Rule` provide a rule name
-- Click **Create Rule**
+1. Navigate to **Security > Authentication Policies** and select **Okta Dashboard** (or any application you want to protect).
 
-  ![okta8](/images/vendor/provisioning/okta/08.png)
+   ![Okta - Authentication Policies](/images/vendor/provisioning/okta/09.png)
 
-### Setup Okta Authentication policy
+2. In the **Rule** section, click **Add Rule**.
 
-- Navigate back to **Security > Authentication Policies** then select **Okta Dashboard** _(Or any application)_
+   ![Okta - Add Authentication Rule](/images/vendor/provisioning/okta/10.png)
 
-  ![okta9](/images/vendor/provisioning/okta/09.png)
+3. Configure the authentication rule with the following settings:
+   - **Rule name**: Provide a descriptive name
+   - **Assign to groups**: Select the same groups that have the authenticator policy enabled
+   - **Possession factor**: Select this option
+   - **Phishing resistant**: Select this option
+   - **FIDO2 (WebAuthn) authenticator**: Select this authenticator
 
-- In **Rule** section, Click **Add Rule**
+   ![Okta - Configure Authentication Rule](/images/vendor/provisioning/okta/11.png)
 
-  ![okta10](/images/vendor/provisioning/okta/10.png)
+   ![Okta - Authentication Rule Settings](/images/vendor/provisioning/okta/12.png)
 
-- Fill required fields as described in picture:
-  - provide **Rule name**
-  - Assign this rule to same groups which authenticator policy is enabled
-  - Select Possession factor
-  - Select Phishing resistant option
-  - Select FIDO2 (WebAuthn) authenticator
+> **Important**: Users in the specified groups can only access the specified application when all authentication policies are met.
 
-  ![okta11](/images/vendor/provisioning/okta/11.png)
+## Assigning Okta Passkeys
 
-  ![okta12](/images/vendor/provisioning/okta/12.png)
+### Individual Passkey Assignment
 
-### Integrate IDmelon with Okta
-
-- Login to IDmelon Admin Panel then navigate to **App Integration > API**
-- Select **Okta API** option
-- Fill required fields as described in picture:
-  - Origin -> Okta workspace domain
-  - Okta API Key
-- Test connection
-- Click **Save**
-
-![panel1](/images/vendor/provisioning/okta/p01.png)
-
----
-
-Now Specified group users can only access specified application when all authentication policies met.
-
-## Assign Okta Passkey One by One
-
-Admins can assign Okta passkeys individually through the user profile in the Admin Panel.
+Administrators can assign Okta passkeys individually through the user profile in the Admin Panel:
 
 1. Log in to the **IDmelon Admin Panel**.
 2. Navigate to **Users → All Users**.
@@ -121,17 +101,17 @@ Admins can assign Okta passkeys individually through the user profile in the Adm
 
 The passkey will be assigned to the user and will become active once the security key is initialized by the user.
 
-## Automatic Okta Assignment via Workflows
+### Automatic Passkey Assignment via Workflows
 
-Admins can automate the assignment of Okta passkeys using the workflow feature.
+Administrators can automate the assignment of Okta passkeys using the workflow feature:
 
 1. Navigate to **Workflows → Okta Passkey Provisioning**.
 2. Enter a name for the workflow (e.g., "Auto Okta Provisioning") and click **Next**.
 3. On the configuration page:
    - The **Okta Origin** field will be automatically populated if the Okta integration has already been set up.
 4. Set the **trigger** condition:
-   - **New User Imported:** Assigns the passkey when a user is added to the panel.
-   - **New Security Key Activated (Recommended):** Assigns the passkey once the user activates their security key.
+   - **New User Imported**: Assigns the passkey when a user is added to the panel
+   - **New Security Key Activated (Recommended)**: Assigns the passkey once the user activates their security key
 5. Continue to the next step to **review** and **submit** the workflow.
 
 Once activated, the workflow will automatically assign Okta passkeys to applicable users based on the chosen trigger, requiring no further manual action.
