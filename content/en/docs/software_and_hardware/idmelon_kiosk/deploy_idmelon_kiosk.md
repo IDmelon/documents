@@ -100,14 +100,17 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     <MultiTabMode>true</MultiTabMode>
     <ExtensionEnabled>true</ExtensionEnabled>
     <EndSessionConfirmation>false</EndSessionConfirmation>
-    <RestartAppOnEndSession>false</RestartAppOnEndSession>
+    <RestartAppOnEndSession>true</RestartAppOnEndSession>
     <ShowURLBar>false</ShowURLBar>
     <ShowEndSessionButton>true</ShowEndSessionButton>
     <ServerAddress env="prod" />
-    <ShowFeedbackButton>false</ShowFeedbackButton>
+    <ShowFeedbackButton>true</ShowFeedbackButton>
     <ExtensionAutoUpdate>true</ExtensionAutoUpdate>
     <ExtensionUpdateChannel>stable</ExtensionUpdateChannel>
     <AppAutoUpdate silent="false">true</AppAutoUpdate>
+    <FeedbackEmails from="" to="support@idmelon.com" cc="" />
+    <KioskIdleTimeoutSeconds>0</KioskIdleTimeoutSeconds>
+    <UserInteractionMonitoringAppPath>C:\Program Files (x86)\IDmelon\Accesskey</UserInteractionMonitoringAppPath>
     ```
 
     - **KioskURL:** The default webpage the kiosk app loads upon startup.
@@ -124,6 +127,9 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     - **ExtensionAutoUpdate:** Enables (true) or disables (false) Weblogin extension auto updates.
     - **ExtensionUpdateChannel:** The update channel of the Weblogin extension (e.g., stable or latest).
     - **AppAutoUpdate:** Enables (true) or disables (false) app updates. (silent=true -> Updates without displaying a notification UI to the user).
+    - **FeedbackEmails:** Customizing support emails for issue reporting.
+    - **KioskIdleTimeoutSeconds:** Set the session idle timeout (in seconds). When the timeout occurs, all session information will be cleared, and the kiosk will be ready for the next user to use. set it to 0 to disable it.
+    - **UserInteractionMonitoringAppPath:** The path of the User Interaction Monitoring app. If the value of the `KioskIdleTimeoutSeconds` is set to 0, there is no need to set this address.
 
 **Configuring Server Address:**
 
@@ -220,54 +226,6 @@ The IDmelon Kiosk app accepts several command-line arguments that allow you to c
         - Usage: -endsession <true|false>
     - **-serveraddress:** Target server address for dedicated environments.
         - Usage: -serveraddress https://sub.domain.com/api/url
-
-### Automatic by Intune using Configurator.exe
-
-Follow these steps to deploy the **configs.xml** file on devices.
-
-1. Make **Intune Package** file
-
-    - Download [this zip](https://idmeloncom-my.sharepoint.com/:u:/g/personal/hassan_idmelon_com/ERXDZw6hq7VInOOi-Hffw7IB2kMHr6ZT0sQ9EUpmId6naA?e=NR32Dy) file and extract it.
-    - Go to **IntunePackage** folder, and edit the **configs.xml** file according to your requirements.
-    ![IntunePackage](/images/vendor/idmelon_kiosk/idmelon_kiosk_package_folder.png)
-    ![ConfigsFile](/images/vendor/idmelon_kiosk/idmelon_kiosk_configs_file.png)
-    - In the root path open the **package.bat** file via a Command Line Prompt.
-    ![PackageBat](/images/vendor/idmelon_kiosk/idmelon_kiosk_package_bat.png)
-    - If successful, a file named **configurator.intunewin** will be created in the root path.
-    ![IntuneWinFile](/images/vendor/idmelon_kiosk/idmelon_kiosk_intunewin.png)
-
-2. Deploy Intune Package
-
-    - In the Intune panel, select **Apps > All apps**.
-    - Click on **+ Create** at the top of the screen.
-    - From the dropdown, select **Windows app (Win32)**.
-    - Click on **select app package file** and upload the **configurator.intunewin** file.
-    - Set publisher to "IDmelon" and then Next.
-    - Enter the command below for both **Install command** and **Uninstall command**:
-
-        ```shell
-        configurator.exe /S
-        ```
-
-    - Set the **Allow available uninstall** to **No**.
-    - Set the **Install behavior** to **System**.
-    - Set the **Device restart behavior** to **No specific action**.
-    ![Configurator - Program Settings](/images/vendor/idmelon_kiosk/kiosk-configuration-01.png)
-    - Click **Next** to see the **Requirements** tab.
-    - Choose both architectures for the **Operating system architecture**.
-    - Select the minimum Windows version required for the app to run.
-    ![Configurator - Program Settings](/images/vendor/idmelon_kiosk/kiosk-configuration-02.png)
-    - Use **Next** to see the **Detection rules** tab.
-    - Select the **Use a custom detection script** for the **Rules format**.
-    - Click the upload button to choose **detect.ps1** script file.
-    ![DetectScript](/images/vendor/idmelon_kiosk/idmelon_kiosk_detect.png)
-    ![DetectScript](/images/vendor/idmelon_kiosk/kiosk-configuration-03.png)
-    - Click **Next** now and move to the **Assignments** tab.
-    - Assign the app to same groups of users or devices that the IDmelon Kiosk App has been deployed to.
-    ![DetectScript](/images/vendor/idmelon_kiosk/kiosk-configuration-04.png)
-    - Click **Next** to review and create the deployment.
-
-    ***Note** After the Configurator app is successfully deployed, you may still need to restart your PC to apply the changes. This is because the IDmelon Kiosk App loads the new configuration only when it runs for the first time.*
 
 ### Automatic using script
 
