@@ -14,8 +14,8 @@ toc: true
 ---
 
 **VDI Agent (Virtual Desktop Infrastructure Agent)**<br>
-This software enables organizational users to sign in to their virtual desktops using passwordless authentication through the use of a badge card. Instead of entering a username and password, the user simply taps their card on a badge reader, and authentication is performed through **FIDO Security Keys** (Passkeys).
-Upon login, the user is automatically inserted into their Remote Desktop session. A second tap of the card triggers an automatic log out.
+This software enables organizational users to sign in to their virtual desktops using passwordless authentication with an ID badge. Instead of entering a username and password, the user simply taps their card on a card reader, and authentication is performed through **FIDO Security Keys** (Passkeys).
+On login, the user is automatically connected to their Remote Desktop session. A second tap of the card logs the user out automatically.
 The application supports both **Windows** and **Linux** platforms.
 
 ## Supported Platforms
@@ -94,14 +94,14 @@ When you launch the app, you'll see the IDmelon login page.
 
 ![IDmelon Login Page](/images/vendor/vdi_agent/idmelon_login_page.png)
 
-Tap your card on the reader and enter your PIN (You can also set your card verification method to PinLess or use the Remember PIN feature on the Admin Panel to avoid entering the PIN).
+Tap your card on the reader and enter your PIN (You can also set your card verification method to PinLess or use the Remember PIN feature on the Admin Panel to skip PIN entry).
 
 ![Enter PIN Prompt](/images/vendor/vdi_agent/enter_pin_prompt.png)
 
 ### Tap to Logout
 
-If your reader has not configured as `Keystroking Mode`, you can end the current session and disconnect from the remote desktop by tapping your card on the reader for the second time.
+If your reader is not in `Keystroking Mode`, tap your badge a second time to disconnect from the remote session.
 
-You can also end the current session by clicking `Disconnect` button in the app menu.
+Alternatively, use the `Disconnect` button in the app menu.
 
 ![Disconnect](/images/vendor/vdi_agent/disconnect_menu.png)
