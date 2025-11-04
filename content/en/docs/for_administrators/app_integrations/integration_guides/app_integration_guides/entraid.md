@@ -33,7 +33,6 @@ You will need the values provided in the newly opened window to set up `EntraID`
 
 > **Note:** All following commands are required to run in **Windows PowerShell**.
 
-
 ## Configuring EntraID as SP
 
 To configure `Entra ID`, you need to use the `Connect-MgGraph` command. If it's not installed on your system, use the following instruction as an `Administrator` user:
@@ -48,7 +47,8 @@ Connect to Microsoft Graph using the following command. This command will attemp
 Connect-MgGraph -Scopes "Domain.ReadWrite.All","User.ReadWrite.All","Directory.Read.All"
 ```
 
-Check domains and authentication type using the following command: 
+Check domains and authentication type using the following command:
+
 ```powershell
 Get-MgDomain | Select-Object Id, IsVerified, IsDefault, AuthenticationType
 ```
@@ -117,15 +117,19 @@ Update-MgDomainFederationConfiguration -DomainId $dom -InternalDomainFederationI
 ### Verify Configuration
 
 Now verify the change by executing the following command:
+
 ```powershell
 Get-MgDomain -DomainId $dom | Select-Object Id, AuthenticationType, IsVerified
 ```
+
 You should now see:
+
 ```sql
 Id            AuthenticationType IsVerified
 ------------- ------------------ ----------
 yourdomain.com Federated         True
 ```
+
 You can also confirm the new configuration:
 
 ```powershell
@@ -177,6 +181,7 @@ Get-MgDomain -DomainId $dom | Select-Object Id, AuthenticationType, IsVerified
 ```
 
 You should now see:
+
 ```sql
 Id            AuthenticationType IsVerified
 ------------- ------------------ ----------
@@ -187,19 +192,19 @@ yourdomain.com Managed          True
 
 To configure passwordless authentication:
 
-1. **Open** Azure directory admin.
+- **Open** Azure directory admin.
 
 ![Azure Directory Admin](/images/vendor/sso/entra_id_sp/office_passless.png)
 
-2. **Click on** Users.
+- **Click on** Users.
 
 ![Users Menu](/images/vendor/sso/entra_id_sp/office_passless1.png)
 
-3. **Choose** a user.
+- **Choose** a user.
 
-4. **Click on** Authentication methods.
+- **Click on** Authentication methods.
 
-5. **Delete** the Authentication method option.
+- **Delete** the Authentication method option.
 
 ![Authentication Methods](/images/vendor/sso/entra_id_sp/office_passless2.png)
 
