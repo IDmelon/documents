@@ -114,6 +114,36 @@ By adding this configuration, users will be automatically logged out of the app 
 - Review the configurations you set and click the **Create** button.
 ![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_review.png)
 
+**Shortcuts:**
+
+You can create shortcuts for quick user access from within the app. For example:
+
+    {
+      "shortcuts": [
+      {
+        "title": "My apps",
+        "url": "https://myapps.microsoft.com",
+        "iconName": "microsoft.com"
+      },
+      {
+        "title": "MS Tems",
+        "url": "https://teams.microsoft.com",
+        "iconName": "Teams"
+      }
+      ]
+    }
+
+| Configuration key      | Value type  | Configuration value         |
+|------------------------|-------------|-----------------------------|
+| shortcut_list          | String      | Compact JSON string         |
+
+<br>
+
+> A compact JSON string must be like this:<br>
+> {\\"shortcuts\\":[{\\"title\\":\\"My apps\\",\\"url\\":\\"https://myapps.microsoft.com\\",\\"iconName\\":\\"microsoft.com\\"},{\\"title\\":\\"MS Tems\\",\\"url\\":\\"https://teams.microsoft.com\\",\\"iconName\\":\\"temas.microsoft.com\\"}]}
+
+![Shortcut list](/images/vendor/shared_ipads/shared_ipad_shortcut_list.jpeg)
+
 ### Configure MSAL Login
 
 The configuration below is required to enable login through MSAL.
