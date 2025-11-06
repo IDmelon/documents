@@ -1,5 +1,5 @@
 ---
-title: "Shared iOS/iPadOS Devices"
+title: "Shared Device Mode Configuration Using Intune"
 description: ""
 lead: ""
 date: 2023-09-20T15:19:33+03:30
@@ -15,148 +15,20 @@ toc: true
 
 Shared mobile devices are widely used across many industries, including manufacturing and retail. IDmelon Authenticator can be configured in shared device mode, enabling users to use their badge or biometric factors to load passkeys or passwords into the device instantly. This allows users to access multiple applications with auto-login. The session time-to-live can be configured to support various shift change use cases with auto logout.
 
-**IDmelon Authenticator Shared Configuration Mode Features**<br>
+**IDmelon Authenticator Shared Configuration Mode Features:**
 
-- **Passkeys Autofill** (or passwords for legacy devices)
+- **Passkeys Autofill**
 - **MSAL Configuration** to streamline access to Microsoft apps
 - **SSO Integration**
-- **JAMF Configuration** (can be configured with Jamf Setup and Jamf Reset app)
-
-## Shared Device Mode Configuration Using Jamf
-
-**Jamf** is a trusted solution for managing iPads in various organizations, including businesses, schools, and hospitals. With over 70,000 customers, Jamf provides robust iPad management capabilities.
-
-### Prerequisites
-
-- To use the shared iPad feature, the OS version of iPads must be **17 or later**.
-- IDmelon Authenticator app must be added to **Jamf Pro**. In case you are having issues with that, contact **Jamf Support**.
-
-### How to Configure
-
-1. Configure **General**, **Scope** and **Self-Service** according to your organization's policies.
-2. Select the **App Configuration** tab from the menu, enter the following configuration as shown in the image below, and then click the **Save** button.
-
-```xml
-<dict>
-  <key>shared_device_passkeys</key>
-  <true/>
-  <key>authentication_type</key>
-  <string>onInit</string>
-  <key>device_id</key>
-  <string>$UDID</string>
-  <key>api_key</key>
-  <string>[API_KEY]</string>
-</dict>
-```
-
-**One-Time Use Passkeys:**
-
-Add the following key to the above configurations to automatically log the user out after their first login with the passkey.
-
-```xml
-<key>one_time_use_passkeys</key>
-<true/>
-```
-
-**Dedicated Deployments Base API URL:**
-
-If you are using dedicated deployment, such as on-premises, add the following key-value to the configurations.
-
-```xml
-<key>base_api_url</key>
-<string>https://example.com/api/url</string>
-```
-
-**Self Service URL:**
-
-By adding the self-service URL (available in the [IDmelon Admin Panel](https://panel.idmelon.com) > Security Keys > Workflows > Self-Service Actions) to the configurations, users will be redirected to the enrollment page if their card is not yet registered.
-
-```xml
-<key>self_service_url</key>
-<string>https://panel.idmelon.com/self-service/{UID}</string>
-```
-
-**Auto Logout:**
-
-By adding this configuration, users will be automatically logged out of the app after a specified time or after the first use of the passkey.<br>
-*Allowed values: one-time use, 5m, 60m, 2h, 4h, 6h, 8h*
-
-```xml
-<key>auto_logout</key>
-<string>2h</string>
-```
-
-**Generate a New API Key:**
-
-The API Key is required to activate IDmellon Authenticator automatically when it is run for the first time. Therefore, there would be no need for manual activation to connect to the organization.<br>
-To generate a new API Key, take the following steps:
-
-- Sign in to the [IDmelon Admin Panel](https://panel.idmelon.com).
-- Navigate to **Workspace > Settings > API Key Management**.
-- Select **Create**.
-- Set a name.
-- Set the type to **Shared Mobile**.
-- Copy and replace the generated key with the **API_KEY** value in the app configuration, which can be found in the previous section [How to configure](#how-to-configure).
-
-***Note**: The value of the **authentication_type** depends on the **Card Verification Method** that your organization's admins have set in the IDmelon admin panel.*
-
-**Allowed values for authentication_type:**
-
-- **onInit**: User is required to enter PIN once only after tapping the card on a reader.
-- **onUse**: User is required to enter PIN for each login.
-- **none**: The login process is done without entering any PIN (PINless mode).
-
-![Jamf Panel](/images/vendor/shared_ipads/jamf_panel_app_config.png)
-Finally, you should see the **IDmelon Authenticator** app in the Mobile Device Apps.
-![Jamf Panel](/images/vendor/shared_ipads/jamf_panel_added_app.png)
-
-### Connect to the Organization
-
-After adding the IDmelon Authenticator to the Jamf Pro panel, the application will be available on iPads as shown in the image below (or it can be installed through **Self Service** app).
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_idmelon_app.PNG)
-
-Once the IDmelon Authenticator app opens, the activation process will be completed automatically.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_shared_device_mode.PNG)
-If everything goes well, you will see the following view.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_tap_card.PNG)
-
-### End User Experience
-
-The login steps are as follows: at the beginning of the shift, an employee will first log in with their card, and at the end of the shift, by exiting the application, everything will be ready for the next person.
-
-1. Open the **IDmelon Authenticator**.
-2. Get close to the reader and tap your card on it.
-3. According to the **Card Verification Method** set in the IDmelon admin panel, if PIN is required, enter it. Otherwise, go to the next step.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_enter_pin.PNG)
-4. In case of successful login, user information will be displayed. At this stage, move the app to the background.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_logged_in.PNG)
-5. Open the **Jamf Setup** app and tap on the **Sign In** button.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_jamf_setup.PNG)
-6. Select the **Sign-in options**.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_ms_authenticator1.PNG)
-7. Select the **Face, fingerprint, PIN or security key**.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_ms_authenticator2.PNG)
-8. Tap the **Continue**.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_passkey.PNG)
-9. If the login operation is successful, you will see the following view, which can be different depending on your configuration in Jamf.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_jamf_setup_logged_in.PNG)
-
-**Logout Experience**<br>
-
-At the end of the shift, first, open the **IDmelon Authenticator** and then tap the logout icon on the top right corner of the app. Your user information and existing passkeys will be deleted from the iPad.
-![Shared iPad](/images/vendor/shared_ipads/shared_ipad_logout.PNG)
-
-If **Soft Reset** is enabled in **Jamf Reset**, to completely log out of all your accounts, first open one of the Microsoft applications (for example, MS Teams) and log out of it. After that, all your sessions and cookies will be completely deleted.
-
-## Shared Device Mode Configuration Using Intune
 
 Microsoft Intune is a cloud-based endpoint management solution. It manages user access to organizational resources and simplifies app and device management across your many devices, including mobile devices, desktop computers, and virtual endpoints.
 
-### Prerequisites
+## Prerequisites
 
 - To use the shared iPad feature, the OS version of iPads must be **17 or later**.
+- Microsoft Authenticator (for login via MSAL).
 
-### How to Configure
+## How to Configure
 
 1. Navigate to **Apps > iOS/iPadOS**.
 ![MS Intune](/images/vendor/shared_ipads/intune_panel_apps.png)
@@ -188,6 +60,8 @@ Microsoft Intune is a cloud-based endpoint management solution. It manages user 
 | device_id              | String      | {{deviceid}}         |
 | api_key                | String      | [API_KEY]            |
 
+<br>
+
 **One-Time Use Passkeys:**
 
 Add the following key to the above configurations to automatically log the user out after their first login with the passkey.
@@ -195,6 +69,8 @@ Add the following key to the above configurations to automatically log the user 
 | Configuration key      | Value type  | Configuration value  |
 |------------------------|-------------|----------------------|
 | one_time_use_passkeys  | Boolean     | true                 |
+
+<br>
 
 **Dedicated Deployments Base API URL:**
 
@@ -204,6 +80,8 @@ If you are using dedicated deployment, such as on-premises, add the following ke
 |------------------------|-------------|-----------------------------|
 | base_api_url           | String      | https://example.com/api/url |
 
+<br>
+
 **Self Service URL:**
 
 By adding the self-service URL (available in the [IDmelon Admin Panel](https://panel.idmelon.com) > Security Keys > Workflows > Self-Service Actions) to the configurations, users will be redirected to the enrollment page if their card is not yet registered.
@@ -211,6 +89,8 @@ By adding the self-service URL (available in the [IDmelon Admin Panel](https://p
 | Configuration key      | Value type  | Configuration value                          |
 |------------------------|-------------|----------------------------------------------|
 | self_service_url       | String      | https://panel.idmelon.com/self-service/{UID} |
+
+<br>
 
 **Auto Logout:**
 
@@ -221,43 +101,78 @@ By adding this configuration, users will be automatically logged out of the app 
 |------------------------|-------------|-----------------------------|
 | auto_logout            | String      | 2h                          |
 
-**Generate a New API Key:**
+<br>
+
+**Allowed values for authentication_type:**
+
+    **onInit**: User is required to enter PIN once only after tapping the card on a reader.
+    **onUse**: User is required to enter PIN for each login.
+    **none**: The login process is done without entering any PIN (PINless mode).
+
+- Configure the **Assignments** tab according to your organization's policies, and click the **Next** button.
+![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_assignments.png)
+- Review the configurations you set and click the **Create** button.
+![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_review.png)
+
+**Shortcuts:**
+
+You can create shortcuts for quick user access from within the app. For example:
+
+    {
+      "shortcuts": [
+      {
+        "title": "My apps",
+        "url": "https://myapps.microsoft.com",
+        "iconName": "microsoft.com"
+      },
+      {
+        "title": "MS Tems",
+        "url": "https://teams.microsoft.com",
+        "iconName": "Teams"
+      }
+      ]
+    }
+
+| Configuration key      | Value type  | Configuration value         |
+|------------------------|-------------|-----------------------------|
+| shortcut_list          | String      | Compact JSON string         |
+
+<br>
+
+> A compact JSON string must be like this:<br>
+> {\\"shortcuts\\":[{\\"title\\":\\"My apps\\",\\"url\\":\\"https://myapps.microsoft.com\\",\\"iconName\\":\\"microsoft.com\\"},{\\"title\\":\\"MS Tems\\",\\"url\\":\\"https://teams.microsoft.com\\",\\"iconName\\":\\"temas.microsoft.com\\"}]}
+
+![Shortcut list](/images/vendor/shared_ipads/shared_ipad_shortcut_list.jpeg)
+
+### Configure MSAL Login
+
+The configuration below is required to enable login through MSAL.
+
+Refer to [How to configure](#how-to-configure) - step 9 for instructions on configuring the app.
+
+| Configuration key      | Value type  | Configuration value        |
+|------------------------|-------------|----------------------------|
+| shared_device_passkeys | Boolean     | true                       |
+| shared_device_mode     | Boolean     | true                       |
+| azure_client_id        | String      | [Application (client) ID]  |
+| api_key                | String      | [API_KEY]                  |
+
+### Generate a New API Key
 
 The API Key is required to activate IDmellon Authenticator automatically when it is run for the first time. Therefore, there would be no need for manual activation to connect to the organization.<br>
 To generate a new API Key, take the following steps:
 
 - Sign in to the [IDmelon Admin Panel](https://panel.idmelon.com).
-- Navigate to **Workspace > Settings > API Key Management**.
+- Navigate to **Authentication > API Key Management**.
 - Select **Create**.
 - Set a name.
 - Set the type to **Shared Mobile**.
-- Copy and replace the generated key with the **API_KEY** value in the app configuration, which can be found in the table of the 11th step in the previous section.
+- Copy and replace the generated key with the **API_KEY** value in the app configuration.
 
-**Allowed values for authentication_type:**<br>
-    - **onInit**: User is required to enter PIN once only after tapping the card on a reader.<br>
-    - **onUse**: User is required to enter PIN for each login.<br>
-    - **none**: The login process is done without entering any PIN (PINless mode).<br><br>
-12. Configure the **Assignments** tab according to your organization's policies, and click the **Next** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_assignments.png)
-13. Review the configurations you set and click the **Create** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_review.png)
-
-**Connect to the Organization:**
-
-To set up the IDmelon Authenticator as the organization's shared device, Follow the steps similar to the link below.
-
-[Connect to the Organization](#connect-to-the-organization)
-
-### End User Experience
-
-The login steps are as follows: at the beginning of the shift, an employee will first log in with their card, and at the end of the shift, by exiting the application, everything will be ready for the next person.
-
-*Note: If you use Microsoft applications (MS Teams, PowerBI, etc …), the **Microsoft Authenticator** app must be added and configured as shared device mode*.
-
-[Config MS Authenticator as shared device mode](https://www.petervanderwoude.nl/post/getting-started-with-shared-device-mode-for-ios-devices/#Configuring-the-Microsoft-Authenticator-app-for-iOS-devices-with-shared-device-mode)
+## End User Experience
 
 1. Open the **IDmelon Authenticator**.
-2. Get close to the reader and tap your card on it.
+2. Get close to the reader (or plug the keystroke reader) and tap your card on it.
 3. According to the **Card Verification Method** set in the IDmelon admin panel, if PIN is required, enter it. Otherwise, go to the next step.
 ![Authenticator](/images/vendor/shared_ipads/shared_ipad_enter_pin.PNG)
 4. In case of successful login, user information will be displayed. At this stage, move the app to the background.
@@ -269,7 +184,24 @@ The login steps are as follows: at the beginning of the shift, an employee will 
 7. Tap the **Continue**.
 ![MS Teams](/images/vendor/shared_ipads/shared_ipad_msteams_passkey.PNG)
 
-**Logout Experience**<br>
+### MSAL Login Experience
+
+If you use Microsoft applications (MS Teams, Excel, PowerBI, etc …), the **Microsoft Authenticator** app must be added and configured as shared mode.
+
+[Config MS Authenticator as shared device mode](https://www.petervanderwoude.nl/post/getting-started-with-shared-device-mode-for-ios-devices/#Configuring-the-Microsoft-Authenticator-app-for-iOS-devices-with-shared-device-mode)
+
+- Complete the user login steps (1-4) in the IDmelon Authenticator app according to the previous section.
+- Once the user logs in, go through the MSAL prompts by selecting the Continue and Next buttons.
+![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_1.PNG)
+![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_2.PNG)
+![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_3.PNG)
+![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_4.PNG)
+
+- Move the app to the background.
+- Open any app you want to sign in to (for example, Teams).
+- Paste the email using the paste icon on the keyboard.
+
+### Logout Experience
 
 1. Open the app you logged into, and log out of the account.
 2. Open the **IDmelon Authenticator** and then tap the logout icon on the top right corner of the app. Your user information and existing passkeys will be deleted from the iPad.
