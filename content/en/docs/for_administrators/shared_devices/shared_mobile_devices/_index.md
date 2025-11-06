@@ -1,5 +1,5 @@
 ---
-title: "Shared iOS/iPad Devices"
+title: "Shared Mobile Devices"
 description: ""
 lead: ""
 date: 2024-06-18T15:17:52+03:30
