@@ -1,7 +1,7 @@
 ---
-title: "Shared Mobile Devices"
-description: ""
-lead: ""
+title: "Shared iOS/iPadOS Devices"
+description: "Shared iOS/iPadOS Devices"
+lead: "Shared iOS/iPadOS Devices"
 date: 2024-06-18T15:17:52+03:30
 lastmod: 2024-06-18T15:17:52+03:30
 draft: false
