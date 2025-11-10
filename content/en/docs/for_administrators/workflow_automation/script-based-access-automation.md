@@ -258,7 +258,7 @@ The result JSON:
 }
 ```
 
-The last action can be 'none', `login`, `logout`.
+The last action can be `none`, `login`, `logout`.
 
 ### Get the status of IDmelon WebLogin Extension
 
@@ -273,7 +273,7 @@ The result JSON:
 ```json
 {
   "result": 0,
-  " ": true
+  "webLoginExtensionIsAvailable": true
 }
 ```
 
