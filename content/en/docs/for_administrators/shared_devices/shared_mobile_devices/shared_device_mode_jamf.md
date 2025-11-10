@@ -1,7 +1,7 @@
 ---
-title: "Shared Device Mode Configuration Using Jamf"
-description: ""
-lead: ""
+title: "Jamf Setup and Reset Configuration Guide"
+description: "Shared Device Mode using Jamf"
+lead: "Shared Device Mode using Jamf"
 date: 2023-09-20T15:19:33+03:30
 lastmod: 2023-09-20T15:19:33+03:30
 draft: false
