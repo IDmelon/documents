@@ -52,6 +52,8 @@ Use these managed app configuration keys to set up **IDmelon Authenticator** in 
 | `shortcut_list`          | JSON string |          No | In-app shortcuts (titles, URLs, icons).                                 |
 | `shared_device_mode`     | Boolean     |          No | MSAL shared device mode flag (requires MS Authenticator shared mode).   |
 | `azure_client_id`        | String      |          No | Azure App Registration Client ID for MSAL.                              |
+| `open_url_after_login`   | String      |          No | Launches a specified app or URL immediately after the user signs in.    |
+| `open_url_after_logout`  | String      |          No | Launches a specified app or URL immediately after the user logs out.    |
 
 ### Key Details & Valid Values
 
@@ -133,20 +135,45 @@ Quick-access shortcuts inside the app.
 
 **Pretty:**
 
-```json
+```batch
 {
-  "shortcuts": [
-    { "title": "My Apps",  "url": "https://myapps.microsoft.com", "iconName": "microsoft.com" },
-    { "title": "MS Teams", "url": "https://teams.microsoft.com",   "iconName": "Teams" }
+  \"shortcuts\": [
+    { \"title\": \"My Apps\", \"url\": \"https://myapps.microsoft.com\", \"iconName\": \"microsoft.com\" },
+    { \"title\": \"MS Teams\", \"url\": \"https://teams.microsoft.com\", \"iconName\": \"Teams\" }
   ]
 }
 ```
 
-> Some MDMs require the **value** to be a JSON string. If so, paste the JSON above as the string value of `shortcut_list`.
+> The `\` before the `"` is required.
+
+#### `open_url_after_login`, `open_url_after_logout` (String, Optional)
+
+Immediately after a user successfully signs in (or out), the app launches a specified application or web address.
+
+```json
+"open_url_after_login": "https://..."
+```
+
+> Don't use these configurations if you have configured MSAL
+
+It can be a URL scheme (to open a native app directly) or a regular URL (to open a website in the browser).
+
+**Examples for URL Scheme:**
+
+- Launch Microsoft Teams: `msteams://`
+- Launch Microsoft Excel: `ms-excel://`
+
+```json
+"open_url_after_login": "app-scheme://"
+```
 
 #### `shared_device_mode` (Boolean, Optional)
 
-Enable **MSAL shared device mode**. Must also be enabled in Microsoft Authenticator.
+If you plan to use Microsoft applications (such as Teams, Outlook, and other Office apps) on shared iPads, we recommend using **MSAL**.
+
+This and the next configuration are **required** when enabling MSAL.
+
+> For detailed steps on configuring **MSAL**, please refer to [Configuration for using MSAL](../configuration_for_using_msal).
 
 ```json
 "shared_device_mode": true
@@ -159,14 +186,6 @@ Azure App Registration **Client ID** for MSAL.
 ```json
 "azure_client_id": "YOUR_AZURE_APP_CLIENT_ID"
 ```
-
-### Implementation Notes
-
-- **Booleans:** lowercase (`true`/`false`).
-- **Durations:** strings, not numbers (e.g., `"2h"`, `"60m"`).
-- **URLs:** include scheme (`https://`).
-- If your MDM only supports key–value strings, wrap JSON objects (like `shortcut_list`) as a JSON **string**.
-- If using `shared_device_mode`, also configure **Microsoft Authenticator** for shared mode and supply `azure_client_id`.
 
 ## Configure IDmelon Authenticator using Intune
 
@@ -225,6 +244,8 @@ Use the following configuration object when your MDM asks for app configuration 
 
 ### Example 2: With MSAL Login Experience
 
+Once **MSAL** has been configured (see [configuration guide](../configuration_for_using_msal)), you can leverage the integrated authentication experience across Microsoft applications.
+
 Use the following configuration object when your MDM asks for app configuration (exact UI varies).
 
 ```json
@@ -237,10 +258,6 @@ Use the following configuration object when your MDM asks for app configuration 
   "azure_client_id": "YOUR_AZURE_APP_CLIENT_ID"
 }
 ```
-
-For MSAL integration, Microsoft Authenticator needs to be configured in shared mode. If you use Microsoft applications (MS Teams, Excel, Power BI, etc.), the **Microsoft Authenticator** app must be added and configured for shared mode.
-
-[Config MS Authenticator as shared device mode](https://www.petervanderwoude.nl/post/getting-started-with-shared-device-mode-for-ios-devices/#Configuring-the-Microsoft-Authenticator-app-for-iOS-devices-with-shared-device-mode)
 
 - Complete the user login steps (1-4) in the IDmelon Authenticator app according to the previous section.
 - Once the user logs in, go through the MSAL prompts by selecting the Continue and Next buttons.
