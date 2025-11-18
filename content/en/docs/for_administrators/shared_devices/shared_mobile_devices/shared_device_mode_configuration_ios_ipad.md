@@ -229,6 +229,9 @@ Use the following configuration object when your MDM asks for app configuration 
 }
 ```
 
+> **Note**: If you are using Microsoft products on the shared iPad (such as Microsoft Teams, Outlook, or Microsoft 365), we recommend configuring the **Microsoft Enterprise SSO plug-in**.
+This plug-in simplifies authentication and reduces repeated credential prompts (see [Configuring the Microsoft Enterprise SSO plug-in](../configuration_for_using_msal/#configuring-the-microsoft-enterprise-sso-plug-in)).
+
 1. Open the **IDmelon Authenticator**.
 2. Get close to the reader (or plug the keystroke reader) and tap your card on it.
 3. According to the **Card Verification Method** set in the IDmelon admin panel, if PIN is required, enter it. Otherwise, go to the next step.
