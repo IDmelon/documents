@@ -39,21 +39,23 @@ Use these managed app configuration keys to set up **IDmelon Authenticator** in 
 
 ### Configuration Keys
 
-| Key                      | Type        |    Required | Purpose                                                                 |
-| ------------------------ | ----------- | ----------- | ----------------------------------------------------------------------- |
-| `shared_device_passkeys` | Boolean     |         Yes | Enable shared device mode (`true`).                                     |
-| `authentication_type`    | String      |         Yes | When to prompt for PIN (`onInit`, `onUse`, `none`).                     |
-| `device_id`              | String      |         Yes | MDM device identifier (e.g., Intune `{{deviceid}}`).                    |
-| `api_key`                | String      | Recommended | Auto-activate app (Admin Panel → **Shared Mobile** API key).            |
-| `one_time_use_passkeys`  | Boolean     |          No | Remove/invalidate passkey after first successful login.                 |
-| `base_api_url`           | String      |          No | Target dedicated/on-prem API endpoint.                                  |
-| `self_service_url`       | String      |          No | Redirect to self-service enrollment if card isn’t registered.           |
-| `auto_logout`            | String      |          No | Scheduled logout (`one-time use`, `5m`, `60m`, `2h`, `4h`, `6h`, `8h`). |
-| `shortcut_list`          | JSON string |          No | In-app shortcuts (titles, URLs, icons).                                 |
-| `shared_device_mode`     | Boolean     |          No | MSAL shared device mode flag (requires MS Authenticator shared mode).   |
-| `azure_client_id`        | String      |          No | Azure App Registration Client ID for MSAL.                              |
-| `open_url_after_login`   | String      |          No | Launches a specified app or URL immediately after the user signs in.    |
-| `open_url_after_logout`  | String      |          No | Launches a specified app or URL immediately after the user logs out.    |
+| Key                         | Type        |    Required | Purpose                                                                     |
+| --------------------------- | ----------- | ----------- | --------------------------------------------------------------------------- |
+| `shared_device_passkeys`    | Boolean     |         Yes | Enable shared device mode (`true`).                                         |
+| `authentication_type`       | String      |         Yes | When to prompt for PIN (`onInit`, `onUse`, `none`).                         |
+| `device_id`                 | String      |         Yes | MDM device identifier (e.g., Intune `{{deviceid}}`).                        |
+| `api_key`                   | String      | Recommended | Auto-activate app (Admin Panel → **Shared Mobile** API key).                |
+| `one_time_use_passkeys`     | Boolean     |          No | Remove/invalidate passkey after first successful login.                     |
+| `base_api_url`              | String      |          No | Target dedicated/on-prem API endpoint.                                      |
+| `self_service_url`          | String      |          No | Redirect to self-service enrollment if card isn’t registered.               |
+| `auto_logout`               | String      |          No | Scheduled logout (`one-time use`, `5m`, `60m`, `2h`, `4h`, `6h`, `8h`).     |
+| `shortcut_list`             | JSON string |          No | In-app shortcuts (titles, URLs, icons).                                     |
+| `use_msal`                  | Boolean     |          No | MSAL shared device mode flag (requires MS Authenticator shared mode).       |
+| `azure_client_id`           | String      |          No | Azure App Registration Client ID for MSAL.                                  |
+| `microsoft_sp_name`         | String      |          No | Microsoft's service provider name (SSO)                                     |
+| `default_sp_for_auto_login` | String      |          No | Set a service provider to log in automatically after the user signs in (SSO)|
+| `open_url_after_login`      | String      |          No | Launches a specified app or URL immediately after the user signs in.        |
+| `open_url_after_logout`     | String      |          No | Launches a specified app or URL immediately after the user logs out.        |
 
 ### Key Details & Valid Values
 
@@ -167,7 +169,27 @@ It can be a URL scheme (to open a native app directly) or a regular URL (to open
 "open_url_after_login": "app-scheme://"
 ```
 
-#### `shared_device_mode` (Boolean, Optional)
+#### `microsoft_sp_name` (String, Optional)
+
+Microsoft' service provider name in the IDmelon Admin Panel.
+
+**Default value**: `entra_id`
+
+```json
+"microsoft_sp_name": "entra_id"
+```
+
+#### `default_sp_for_auto_login` (String, Optional)
+
+Set a service provider to log in automatically after the user signs in.
+
+This configuration works for SSO login experience.
+
+```json
+"default_sp_for_auto_login": "entra_id"
+```
+
+#### `use_msal` (Boolean, Optional)
 
 If you plan to use Microsoft applications (such as Teams, Outlook, and other Office apps) on shared iPads, we recommend using **MSAL**.
 
@@ -176,7 +198,7 @@ This and the next configuration are **required** when enabling MSAL.
 > For detailed steps on configuring **MSAL**, please refer to [Configuration for using MSAL](../configuration_for_using_msal).
 
 ```json
-"shared_device_mode": true
+"use_msal": true
 ```
 
 #### `azure_client_id` (String, Optional)
@@ -230,7 +252,7 @@ Use the following configuration object when your MDM asks for app configuration 
 ```
 
 > **Note**: If you are using Microsoft products on the shared iPad (such as Microsoft Teams, Outlook, or Microsoft 365), we recommend configuring the **Microsoft Enterprise SSO plug-in**.
-This plug-in simplifies authentication and reduces repeated credential prompts (see [Configuring the Microsoft Enterprise SSO plug-in](../configuration_for_using_msal/#configuring-the-microsoft-enterprise-sso-plug-in)).
+This plug-in simplifies authentication and reduces repeated credential prompts (see [Configuring the Microsoft Enterprise SSO plug-in](../configuration_for_microsoft_enterprise_sso)).
 
 1. Open the **IDmelon Authenticator**.
 2. Get close to the reader (or plug the keystroke reader) and tap your card on it.
@@ -245,9 +267,11 @@ This plug-in simplifies authentication and reduces repeated credential prompts (
 7. Tap the **Continue**.
 ![MS Teams](/images/vendor/shared_ipads/shared_ipad_msteams_passkey.PNG)
 
-### Example 2: With MSAL Login Experience
+### Example 2: SSO Login Experience
 
-Once **MSAL** has been configured (see [configuration guide](../configuration_for_using_msal)), you can leverage the integrated authentication experience across Microsoft applications.
+If you plan to use Microsoft applications (such as Teams, Outlook, and other Office apps) on shared iPads, we recommend using **MSAL** (see [configuration guide](../configuration_for_using_msal)).
+
+Once MSAL has been configured, you can leverage the integrated authentication experience across Microsoft applications.
 
 Use the following configuration object when your MDM asks for app configuration (exact UI varies).
 
@@ -257,21 +281,26 @@ Use the following configuration object when your MDM asks for app configuration 
   "authentication_type": "onInit",
   "device_id": "{{deviceid}}",
   "api_key": "YOUR_API_KEY",
-  "shared_device_mode": true,
+  "use_msal": true,
   "azure_client_id": "YOUR_AZURE_APP_CLIENT_ID"
 }
 ```
 
+> **Note**: The `use_msal` and `azure_client_id` configuration keys are required only when enabling the **MSAL** login experience.
+
 - Complete the user login steps (1-4) in the IDmelon Authenticator app according to the previous section.
-- Once the user logs in, go through the MSAL prompts by selecting the Continue and Next buttons.
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_1.PNG)
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_2.PNG)
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_3.PNG)
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_4.PNG)
+- After the user logs in, the MSAL prompt appears. Paste the user's email, click Next, and then select Continue.
+![MSAL login](/images/vendor/shared_ipads/shared_ipads_msal_signin_prompt.png)
+![MSAL login](/images/vendor/shared_ipads/shared_ipads_msal_accept_msal_login.png)
 
 - Move the app to the background.
 - Open any app you want to sign in to (for example, Teams).
 - Paste the email using the paste icon on the keyboard.
+
+#### SSO Login for Non-Microsoft Service Providers
+
+- After the user logs in, a list of available service providers is displayed in the app.
+- By selecting any service provider, the device’s default browser opens and the user is automatically signed in to that provider.
 
 ## Logout Experience
 

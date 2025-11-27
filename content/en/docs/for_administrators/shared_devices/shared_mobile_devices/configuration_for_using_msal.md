@@ -15,42 +15,11 @@ toc: true
 
 Microsoft Authentication Library (MSAL) enables a unified sign‑in experience across Microsoft applications. On shared iPads, MSAL ensures that once a user signs in, the authentication state is seamlessly applied to apps like Teams, Outlook, Word, Excel, etc, eliminating the need for repeated logins. This provides a consistent and secure single sign‑on environment for all Microsoft apps.
 
-## Configuring the Microsoft Enterprise SSO plug-in
+## Integrating with IDmelon SSO
 
-For MSAL integration, the **Microsoft Enterprise SSO plug-in** must be configured on the device.
+To enable **Single Sign‑On (SSO)** login capabilities, your environment must be integrated with **IDmelon**. The IDmelon SSO extension handles authentication flows for users whose identity provider is set to IDmelon.
 
-1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com).
-2. Select **Devices > Manage devices > Configuration > Create > New policy**.
-3. Enter the following properties:
-    - **Platform**: Select `iOS/iPadOS`.
-    - **Profile type**: Select `Templates > Device features`.
-4. Select **Create**:
-5. In Basics, enter the following properties:
-    - **Name**: Enter a descriptive name for the policy.
-    - **Description**: Enter a description for the policy.
-6. Select **Next**.
-7. In Configuration settings, select **Single sign-on app extension**, and configure the following properties:
-    - **SSO app extension type**: `Redirect`.
-    - **Extension ID**: `com.microsoft.azureauthenticator.ssoextension`
-    - **Team ID**: Not required for iOS
-    - **URLs:**
-
-        ```json
-        https://login.microsoftonline.com
-        https://login.microsoft.com
-        https://sts.windows.net
-        https://login.partner.microsoftonline.cn
-        https://login.chinacloudapi.cn
-        https://login.microsoftonline.us
-        https://login-us.microsoftonline.com
-        ```
-
-    - **Additional configuration:**
-    | key                             | type    | value                       |
-    |---------------------------------|---------|-----------------------------|
-    | AppPrefixAllowList              | String  | com.idemlon.,com.microsoft. |
-    | browser_sso_interaction_enabled | Integer | 1                           |
-    | disable_explicit_app_prompt     | Integer | 1                           |
+To configure, see [IDmelon Configuration as IDP](../../../app_integrations/integration_guides/app_integration_guides/entraid/#idmelon-configuration-as-idp).
 
 ## Register an application in Microsoft Entra ID
 
@@ -76,3 +45,33 @@ Follow these steps to create the app registration:
 11. From the **Overview** section, the **Application (client) ID** is available. You can use this value as the configuration for [azure_client_id](../shared_device_mode_configuration_ios_ipad/#azure_client_id-string-optional).
 
 ![Client ID](/images/vendor/shared_ipads/shared_ipads_entra_app_registration_client_id.png)
+
+## Microsoft Enterprise SSO plug-in
+
+For MSAL integration, the [**Microsoft Enterprise SSO plug-in**](../configuration_for_microsoft_enterprise_sso) must be configured on the device.
+
+## Configuring the IDmelon Enterprise SSO plug-in
+
+The IDmelon SSO extension is responsible for authenticating shared users in the IDmelon panel.
+
+To configure, follow the steps below:
+
+1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com).
+2. Select **Devices > Manage devices > Configuration > Create > New policy**.
+3. Enter the following properties:
+    - **Platform**: Select `iOS/iPadOS`.
+    - **Profile type**: Select `Templates > Device features`.
+4. Select **Create**:
+5. In Basics, enter the following properties:
+    - **Name**: Enter a descriptive name for the policy.
+    - **Description**: Enter a description for the policy.
+6. Select **Next**.
+7. In Configuration settings, select **Single sign-on app extension**, and configure the following properties:
+    - **SSO app extension type**: `Redirect`.
+    - **Extension ID**: `com.idmelon.idmelon-2.ssoextension`
+    - **Team ID**: `4A6ZQ29Y2F`
+    - **URLs:**
+
+        ```json
+        https://panel.idmelon.com/auth/sign-in
+        ```
