@@ -40,14 +40,15 @@ In this mode, a user initially signs in to the iPad as a Guest. Once inside the 
 - Enter the PIN.
 ![Shared iPad](/images/vendor/shared_ipads/shared_ipad_enter_pin.PNG)
 
-- If you configured the Authenticator app to log in via MSAL, wait for the MSAL prompt and select the Continue and Next buttons.
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_1.PNG)
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_2.PNG)
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_3.PNG)
-![MSAL login](/images/vendor/shared_ipads/shared_ipad_login_msal_4.PNG)
+- If you configured the Authenticator app to log in via MSAL, the MSAL prompt appears. Paste the user's email, click Next, and then select Continue.
+![MSAL login](/images/vendor/shared_ipads/shared_ipads_msal_signin_prompt.png)
+![MSAL login](/images/vendor/shared_ipads/shared_ipads_msal_accept_msal_login.png)
 
 - Move the app to the background.
 - Open any app you want to sign in to (for example, Teams).
 - Paste the email using the paste icon on the keyboard.
+
+## Logout Experience
+
 - At the end of the shift, log out of the guest user so the iPad is ready for the next user.
 ![Logout guest](/images/vendor/shared_ipads/shared_ipad_temporary_experience_guest_logout.png)
