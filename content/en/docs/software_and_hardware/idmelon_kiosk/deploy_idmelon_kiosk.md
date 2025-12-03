@@ -91,47 +91,55 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     ```
 
     - This path directs you to the **LocalState** folder where the **configs.xml** file is stored.
-2. Configuration Parameters:
-    - The file contains the following parameters:
 
-    ```xml
-    <KioskURL>https://myapps.microsoft.com</KioskURL>
-    <SelfService>false</SelfService>
-    <MultiTabMode>true</MultiTabMode>
-    <ExtensionEnabled>true</ExtensionEnabled>
-    <EndSessionConfirmation>false</EndSessionConfirmation>
-    <RestartAppOnEndSession>true</RestartAppOnEndSession>
-    <ShowURLBar>false</ShowURLBar>
-    <ShowEndSessionButton>true</ShowEndSessionButton>
-    <ServerAddress env="prod" />
-    <ShowFeedbackButton>true</ShowFeedbackButton>
-    <ExtensionAutoUpdate>true</ExtensionAutoUpdate>
-    <ExtensionUpdateChannel>stable</ExtensionUpdateChannel>
-    <AppAutoUpdate silent="false">true</AppAutoUpdate>
-    <FeedbackEmails from="" to="support@idmelon.com" cc="" />
-    <KioskIdleTimeoutSeconds>0</KioskIdleTimeoutSeconds>
-    <UserInteractionMonitoringAppPath>C:\Program Files (x86)\IDmelon\Accesskey</UserInteractionMonitoringAppPath>
-    ```
+### Configuration Keys
 
-    - **KioskURL:** The default webpage the kiosk app loads upon startup.
-    - **SelfService:** Set it true if the **KioskURL** is a custom url (e.g., self-service url).
-    - **MultiTabMode:** Enables (true) or disables (false) multi-tab browsing. Setting this to false activates full-screen mode.
-    - **ExtensionEnabled:** Toggles browser extensions on (true) or off (false).
-        Note: The Browser extension is required for the automation process. (When a card taps on the reader, the login automation will start).
-    - **EndSessionConfirmation:** Prompts users for confirmation when ending a session if set to true.
-    - **RestartAppOnEndSession:** Restarts the Kiosk app on each end session to reload the app configs.
-    - **ShowURLBar:** Displays (true) or hides (false) the browser's URL bar.
-    - **ShowEndSessionButton:** Displays (true) or hides (false) the end session button.
-    - **ServerAddress:** Target server address (for dedicated environments).
-    - **ShowFeedbackButton:** Displays (true) or hides (false) the feedback (report issue) button next to the end session button.
-    - **ExtensionAutoUpdate:** Enables (true) or disables (false) Weblogin extension auto updates.
-    - **ExtensionUpdateChannel:** The update channel of the Weblogin extension (e.g., stable or latest).
-    - **AppAutoUpdate:** Enables (true) or disables (false) app updates. (silent=true -> Updates without displaying a notification UI to the user).
-    - **FeedbackEmails:** Customizing support emails for issue reporting.
-    - **KioskIdleTimeoutSeconds:** Set the session idle timeout (in seconds). When the timeout occurs, all session information will be cleared, and the kiosk will be ready for the next user to use. set it to 0 to disable it.
-    - **UserInteractionMonitoringAppPath:** The path of the User Interaction Monitoring app. If the value of the `KioskIdleTimeoutSeconds` is set to 0, there is no need to set this address.
+```xml
+<KioskURL>https://myapps.microsoft.com</KioskURL>
+<SelfService>false</SelfService>
+<MultiTabMode>true</MultiTabMode>
+<ExtensionEnabled>true</ExtensionEnabled>
+<EndSessionConfirmation>false</EndSessionConfirmation>
+<RestartAppOnEndSession>true</RestartAppOnEndSession>
+<ShowURLBar>false</ShowURLBar>
+<ShowEndSessionButton>true</ShowEndSessionButton>
+<ServerAddress env="prod" />
+<ShowFeedbackButton>true</ShowFeedbackButton>
+<ExtensionAutoUpdate>true</ExtensionAutoUpdate>
+<ExtensionUpdateChannel>stable</ExtensionUpdateChannel>
+<AppAutoUpdate silent="false">true</AppAutoUpdate>
+<FeedbackEmails from="" to="support@idmelon.com" cc="" />
+<KioskIdleTimeoutSeconds>0</KioskIdleTimeoutSeconds>
+<UserInteractionMonitoringAppPath>C:\Program Files (x86)\IDmelon\Accesskey</UserInteractionMonitoringAppPath>
+<KeepDisplayAwake>false</KeepDisplayAwake>
+<Policies>
+    <URLAllowList />
+    <URLBlockList />
+    <URLBarEditingEnabled>false</URLBarEditingEnabled>
+</Policies>
+```
 
-**Configuring Server Address:**
+- **KioskURL:** The default webpage the kiosk app loads upon startup.
+- **SelfService:** Set it true if the **KioskURL** is a custom url (e.g., self-service url).
+- **MultiTabMode:** Enables (true) or disables (false) multi-tab browsing. Setting this to false activates full-screen mode.
+- **ExtensionEnabled:** Toggles browser extensions on (true) or off (false).
+    Note: The Browser extension is required for the automation process. (When a card taps on the reader, the login automation will start).
+- **EndSessionConfirmation:** Prompts users for confirmation when ending a session if set to true.
+- **RestartAppOnEndSession:** Restarts the Kiosk app on each end session to reload the app configs.
+- **ShowURLBar:** Displays (true) or hides (false) the browser's URL bar.
+- **ShowEndSessionButton:** Displays (true) or hides (false) the end session button.
+- **ServerAddress:** Target server address (for dedicated environments).
+- **ShowFeedbackButton:** Displays (true) or hides (false) the feedback (report issue) button next to the end session button.
+- **ExtensionAutoUpdate:** Enables (true) or disables (false) Weblogin extension auto updates.
+- **ExtensionUpdateChannel:** The update channel of the Weblogin extension (e.g., stable or latest).
+- **AppAutoUpdate:** Enables (true) or disables (false) app updates. (silent=true -> Updates without displaying a notification UI to the user).
+- **FeedbackEmails:** Customizing support emails for issue reporting.
+- **KioskIdleTimeoutSeconds:** Set the session idle timeout (in seconds). When the timeout occurs, all session information will be cleared, and the kiosk will be ready for the next user to use. set it to 0 to disable it.
+- **UserInteractionMonitoringAppPath:** The path of the User Interaction Monitoring app. If the value of the `KioskIdleTimeoutSeconds` is set to 0, there is no need to set this address.
+- **KeepDisplayAwake:** Controls whether the system is allowed to follow normal power‑saving rules (default = false) or whether it should keep the display awake at all times.
+- **Policies:** Configurable rules that define the app’s behavior and user experience, such as allowed/blocked URLs, editing permissions, and security limits. (see [Policies](#policies) for more details)
+
+#### Configuring Server Address
 
 The IDmelon Kiosk app allows you to specify the target server address using the ServerAddress tag in the configuration file. By default, it connects to the IDmelon server. If you need to connect to a dedicated environment, follow these steps:
 
@@ -147,7 +155,7 @@ The IDmelon Kiosk app allows you to specify the target server address using the 
 <ServerAddress env="onpremise" base-api="https://sub.domain.com/api/url" />
 ```
 
-**Weblogin Extension Auto Update:**
+#### Weblogin Extension Auto Update
 
 Automatic extension update is enabled by default. To **disable** it, set the following config to **false**:
 
@@ -157,7 +165,7 @@ Automatic extension update is enabled by default. To **disable** it, set the fol
 
 **Note:** Disabling automatic updates may prevent the application of important bug fixes and new feature enhancements.
 
-**Weblogin Extension Update Channel:**
+#### Weblogin Extension Update Channel
 
 The default extension update channel is set to **Stable**. To receive newer versions, such as **Latest**, update the following config in the app configs:
 
@@ -167,7 +175,69 @@ The default extension update channel is set to **Stable**. To receive newer vers
 
 The available channels are **Stable** and **Latest**.
 
-**Weblogin Extension Configuration:**
+#### Policies
+
+Policies includes the following configurations:
+
+- `URLAllowList` → List of allowed URLs
+- `URLBlockList` → List of blocked URLs
+- `URLBarEditingEnabled` → Controls whether users can edit the address bar
+
+Examples for the `URLAllowList` and `URLBlockList`:
+
+> Add each URL between the `<URL></URL>` tags.<br>
+Use `*` as a wildcard to match any sequence of characters, and `?` to match a single character.
+
+- All URLs are allowed:
+
+    ```xml
+    <URLAllowList />
+    <URLBlockList />
+    ```
+
+- All URLs are blocked:
+
+    ```xml
+    <URLAllowList />
+    <URLBlockList>
+        <URL>*</URL>
+    </URLBlockList>
+    ```
+
+- Block all domains except idmelon.com:
+
+    ```xml
+    <URLAllowList>
+        <URL>https://*idmelon.com/*</URL>
+    </URLAllowList>
+    <URLBlockList>
+        <URL>*</URL>
+    </URLBlockList>
+    ```
+
+- All domains are allowed except idmelon.com:
+
+    ```xml
+    <URLAllowList />
+    <URLBlockList>
+        <URL>https://*idmelon.com/*</URL>
+    </URLBlockList>
+    ```
+
+- Only Microsoft and IDmelon domains are allowed:
+
+    ```xml
+    <URLAllowList>
+        <URL>https://*idmelon.com/*</URL>
+        <URL>https://*microsoft.com/*</URL>
+        <URL>https://*microsoftonline.com/*</URL>
+    </URLAllowList>
+    <URLBlockList>
+        <URL>*</URL>
+    </URLBlockList>
+    ```
+
+#### Weblogin Extension Configuration
 
 If the **Weblogin Extension** is enabled in the kiosk configuration, you can also save the extension configuration as a **JSON** file next to the **configs.xml**.
 
@@ -197,39 +267,17 @@ Save this JSON string as **extension_configs.json** in the following path:
     C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState
 ```
 
-### Manually using Command-Line Arguments
+## Step 4: Deploy Configuration
 
-Follow these steps to modify the app's settings directly through the command prompt.
+There are two deployment methods available:
 
-1. Access the Command Prompt
-You can change the app configs by entering this command in a PowerShell:
+- Automatically using script – copies the configs.xml file directly into each kiosk user profile via an MDM provider (e.g., Microsoft Intune).
+- Automatically using IDmelon Accesskey – applies the configuration in Base64 format through the Accesskey CLI.
+    > This method requires the IDmelon Accesskey to be installed on PCs.
 
-    ```shell
-    Start-Process 'shell:appsFolder\Hellokey.45853B8ADE74A_kxcedb3gts26c!App' -ArgumentList '-arg1 value1 -arg2 value2'
-    ```
+### Automatically using script
 
-2. Available Command-Line Arguments
-The IDmelon Kiosk app accepts several command-line arguments that allow you to customize its behavior:
-    - **-url:** Specifies the URL for the kiosk to load on startup.
-        - Usage: -url https://example.com
-    - **-selfservice:** Set it true if the **-url** is a custom url.
-        - Usage: -selfservice <true|false>
-    - **-multitab:** Enables or disables multi-tab mode.
-        - Usage: -multitab <true|false>
-    - **-extension:** Enables or disables browser extensions.
-        - Usage: -extension <true|false>
-    - **-confirm:** Enables or disables the end session confirmation prompt.
-        - Usage: -confirm <true|false>
-    - **-urlbar:** Shows or hides the URL bar in the browser.
-        - Usage: -urlbar <true|false>
-    - **-endsession:** Shows or hides the end session button.
-        - Usage: -endsession <true|false>
-    - **-serveraddress:** Target server address for dedicated environments.
-        - Usage: -serveraddress https://sub.domain.com/api/url
-
-### Automatic using script
-
-Below script can be used to copy the config.xml files to any Kiosk user profile.
+Below script can be used to copy the config.xml files to any Kiosk user profile. Save it as a ps1 (PowerShell script) file.
 
 ```bash
 # Define the source file to copy
@@ -263,7 +311,20 @@ foreach ($userDir in $kioskUserDirectories) {
 }
 ```
 
-### Automatic using IDmelon Accesskey
+#### Create a PowerShell script policy in Intune
+
+- Navigate: **Devices > Windows > Scripts and remediations > Platform Scripts**.
+- Select **Add**.
+- Basics: Name the script (e.g., “Deploy Kiosk configs.xml”).
+- Select **Next**.
+- Upload script: Select your **.ps1** file.
+- Run this script using the logged-on credentials: **No** (run as System).
+- Enforce script signature check: **No**.
+- Run script in 64-bit PowerShell: **Yes** (recommended on Windows 11).
+- Assignments: Assign to desired groups.
+- Review + add: Confirm and create the script deployment.
+
+### Automatically using IDmelon Accesskey
 
 Starting with Accesskey version 3.9.0, you can set the kiosk configuration in base64 format:
 
