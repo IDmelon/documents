@@ -299,7 +299,7 @@ The 'workflowAutomation' can be null or a JSON which shows the parameters of the
 ### Automate user web login
 
 ```shell
-accesskey access-automation weblogin execute automate --action "ACTION_TO_BE_PERFORMED" --window "THE_WINDOW_TO_OPEN_EXECUTE_THE_ACTION_IN" --url "THE_LOGIN_URL" --method "THE_METHOD_OF_LOGIN --timeout "TIMEOUT_IN_MINUTES"
+accesskey access-automation weblogin execute automate --action "ACTION_TO_BE_PERFORMED" --window "THE_WINDOW_TO_OPEN_EXECUTE_THE_ACTION_IN" --url "THE_LOGIN_URL" --method "THE_METHOD_OF_LOGIN --timeout "TIMEOUT_IN_MILLISECONDS"
 ```
 
 Available actions: login, logout, login-logout (The third action performs the login if the user is logged out and vice versa)
@@ -310,18 +310,18 @@ Available methods: password, passkey
 
 The URL format: "https://myapps.microsoft.com?login_hint={UserId}"
 
-Note that the timeout value is in minutes
+Note that the timeout value is in milliseconds
 
 This is a sample command for performing a web login with passkey. For more info about the options of this command.
 
 ```shell
-accesskey access-automation weblogin execute automate --action "login" --window "newTab" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120
+accesskey access-automation weblogin execute automate --action "login" --window "newTab" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120000
 ```
 
 ### Execute pre-trained login workflow (click simulation)
 
 ```shell
-accesskey access-automation automation-app execute automate --action "ACTION_TO_BE_PERFORMED" --environment "THE_WORKING_ENVIRONMENT" --login-max-idle-time "TIME_IN_MINUTES" --timeout "TIMEOUT_IN_MINUTES"
+accesskey access-automation automation-app execute automate --action "ACTION_TO_BE_PERFORMED" --environment "THE_WORKING_ENVIRONMENT" --login-max-idle-time "TIME_IN_MINUTES" --timeout "TIMEOUT_IN_MILLISECONDS"
 ```
 
 Available actions: login, logout, login-logout
@@ -333,7 +333,7 @@ If you wish to perform a training inn case no training data is found, add the `-
 ### Start capturing for a pre-trained login workflow (click simulation)
 
 ```shell
-accesskey access-automation automation-app execute capture --timeout "TIMEOUT_IN_MINUTES"
+accesskey access-automation automation-app execute capture --timeout "TIMEOUT_IN_MILLISECONDS"
 ```
 
 ## How to parse the IDmelon service action responses
@@ -422,11 +422,11 @@ try {
             $jsonResponse.result -eq 0 -and $jsonResponse.PSObject.Properties["lastAction"] -and 
             $jsonResponse.lastAction -eq "login") {
             Write-Host "Logging out the previous user..."
-            $response = & accesskey  access-automation weblogin execute automate --action "logout" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 5
+            $response = & accesskey  access-automation weblogin execute automate --action "logout" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 5000
             $response
         }
         Write-Host "Logging in the user..."
-        $response = & accesskey  access-automation weblogin execute automate --action "login" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120
+        $response = & accesskey  access-automation weblogin execute automate --action "login" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120000
         $response
     }
 } catch {
@@ -504,7 +504,7 @@ Write-Host "Edge maximized and focused."
 
 try {
     Write-Host "Checking the extension's status..."
-    $response = & accesskey access-automation weblogin get status -t 10
+    $response = & accesskey access-automation weblogin get status -t 10000
     $response
     $jsonResponse = $response | ConvertFrom-Json
     if ($jsonResponse.PSObject.Properties["result"] -and 
@@ -528,11 +528,11 @@ try {
                 $jsonResponse.lastAction -eq "login")
                 {
                     Write-Host "Logging out the previous user..."
-                    $response = & accesskey  access-automation weblogin execute automate --action "logout" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 5
+                    $response = & accesskey  access-automation weblogin execute automate --action "logout" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 5000
                     $response
                 }
                 Write-Host "Logging in the new user..."
-                $response = & accesskey  access-automation weblogin execute automate --action "login" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120
+                $response = & accesskey  access-automation weblogin execute automate --action "login" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120000
                 $response
             }
             else {
@@ -544,12 +544,12 @@ try {
                 $jsonResponse.lastAction -eq "login")
                 {
                     Write-Host "Logging out the user..."
-                    $response = & accesskey  access-automation weblogin execute automate --action "logout" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 1
+                    $response = & accesskey  access-automation weblogin execute automate --action "logout" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 1000
                     $response
                 }
                 else {
                     Write-Host "Logging in the user..."
-                    $response = & accesskey  access-automation weblogin execute automate --action "login" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120
+                    $response = & accesskey  access-automation weblogin execute automate --action "login" --window "incognito" --url "https://myapps.microsoft.com?login_hint={UserId}" --method passkey -t 120000
                     $response
                 }
             }
