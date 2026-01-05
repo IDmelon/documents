@@ -12,7 +12,7 @@ weight: 321110
 
 ## Workflow Editor
 
-The Workflow Editor is the central environment for creating, managing, testing, and executing workflows. Within the `IDmelon Workflow Automation` app, you can design and refine workflows, then export them as JSON files for use with the Workflow Runner.
+The Workflow Editor is the central environment for creating, managing, testing, and executing workflows. Within the `Workflow Editor` app, you can design and refine workflows, then export them as JSON files for use with the Workflow Runner.
 
 ### Workflows
 
@@ -20,7 +20,7 @@ A workflow is a structured sequence of actions or tasks that are executed step b
 
 #### Export a Workflow
 
-To export a workflow in the `IDmelon Workflow Automation` app, select it from the list and click the `Export` button. The workflow will be saved as a JSON file, which you can store on your PC or other systems. This file is required for running the workflow via Accesskey scripts.
+To export a workflow in the `Workflow Editor` app, select it from the list and click the `Export` button. The workflow will be saved as a JSON file, which you can store on your PC or other systems. This file is required for running the workflow via Accesskey scripts.
 
 ### Actions
 
@@ -39,6 +39,7 @@ Simulates a mouse click on a specified UI element, allowing the automation proce
 
 | Argument   | Optional | Accepts                               | Default Value | Description                  |
 | ---------- | -------- | ------------------------------------- | ------------- | ---------------------------- |
+| UI element | No       | UI element                            | -             | The UI element to click on   |
 | Click type | No       | Left click, Double click, Right click | Left click    | The kind of click to perform |
 
 #### Hover mouse over UI element
@@ -47,7 +48,9 @@ Moves the cursor over a UI element.
 
 **Input Parameters:**
 
-No Inputs needed.
+| Argument   | Optional | Accepts    | Default Value | Description                          |
+| ---------- | -------- | ---------- | ------------- | ------------------------------------ |
+| UI element | No       | UI element | -             | The UI element to hover the mouse on |
 
 #### Populate text field
 
@@ -55,9 +58,10 @@ Fills a text field with the entered text.
 
 **Input Parameters:**
 
-| Argument        | Optional | Accepts | Default Value | Description                        |
-| --------------- | -------- | ------- | ------------- | ---------------------------------- |
-| Text to fill-in | No       | Strings | Empty         | The text to fill in the text field |
+| Argument        | Optional | Accepts    | Default Value | Description                        |
+| --------------- | -------- | ---------- | ------------- | ---------------------------------- |
+| UI element      | No       | UI element | -             | The text field to populate         |
+| Text to fill-in | No       | Strings    | Empty         | The text to fill in the text field |
 
 > **Note**: This action can be applied only to Inputs.
 >
@@ -69,7 +73,9 @@ Sets the focus on a UI element.
 
 **Input Parameters:**
 
-No Inputs needed.
+| Argument   | Optional | Accepts    | Default Value | Description                        |
+| ---------- | -------- | ---------- | ------------- | ---------------------------------- |
+| UI element | No       | UI element | -             | The UI element to set the focus on |
 
 #### Get details of the UI element
 
@@ -79,6 +85,7 @@ Gets the value of a UI element's attribute.
 
 | Argument         | Optional | Accepts                                               | Default Value | Description                                     |
 | ---------------- | -------- | ----------------------------------------------------- | ------------- | ----------------------------------------------- |
+| UI element       | No       | UI element                                            | -             | The UI element to get details from              |
 | Attribute name   | No       | UI element Attributes (Id, Name, Class, Enabled, ...) | Id            | The attribute name                              |
 | Bind to variable | No       | Variable name (String)                                | Empty         | The variable where the attribute will be stored |
 
@@ -88,9 +95,10 @@ Waits until a UI element appears on screen.
 
 **Input Parameters:**
 
-| Argument | Optional | Accepts         | Default Value | Description                                                 |
-| -------- | -------- | --------------- | ------------- | ----------------------------------------------------------- |
-| Timeout  | No       | Number (Double) | 10            | Maximum number of seconds to wait for the element to appear |
+| Argument   | Optional | Accepts         | Default Value | Description                                                 |
+| ---------- | -------- | --------------- | ------------- | ----------------------------------------------------------- |
+| UI element | No       | UI element      | -             | The UI element to wait for to appear                        |
+| Timeout    | No       | Number (Double) | 10            | Maximum number of seconds to wait for the element to appear |
 
 #### Send mouse click
 
@@ -241,7 +249,7 @@ Executes some custom PowerShell script and retrieves its output into a variable.
 
 Conditional actions are workflow steps that execute only when specific conditions are met. They are useful for tasks like checking the value of a variable, verifying whether an element exists on screen, or controlling the flow of automation based on dynamic criteria.
 
-##### If
+#### If
 
 Check if two values match.
 
@@ -253,7 +261,7 @@ Check if two values match.
 | Operator       | No       | Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty | Equal to (=)  | The relationship of first operand to the second operand      |
 | Second operand | No       | String/Number                                                | Empty         | Enter a value name produced by a previous action, text, number or expression to compare with the first operand |
 
-##### Else if
+#### Else if
 
 Starts a block of actions that run only if earlier `If` or `else if` checks fail, and this condition is true.
 
@@ -265,7 +273,7 @@ Starts a block of actions that run only if earlier `If` or `else if` checks fail
 | Operator       | No       | Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty | Equal to (=)  | The relationship of first operand to the second operand      |
 | Second operand | No       | String/Number                                                | Empty         | Enter a value name produced by a previous action, text, number or expression to compare with the first operand |
 
-##### Else
+#### Else
 
 Starts a block of actions when none of the preceding `if` or `else if` conditions are met.
 
@@ -273,7 +281,7 @@ Starts a block of actions when none of the preceding `if` or `else if` condition
 
 No Inputs needed.
 
-##### If UI element exists
+#### If UI element exists
 
 Checking whether a UI element exists on the screen.
 
@@ -281,6 +289,7 @@ Checking whether a UI element exists on the screen.
 
 | Argument      | Optional | Accepts              | Default Value | Description                                                  |
 | ------------- | -------- | -------------------- | ------------- | ------------------------------------------------------------ |
+| UI element    | No       | UI element           | -             | The UI element to check if it exists                         |
 | If UI element | No       | Exist, Doesn't exist | Exist         | Specifies the condition to check for the UI element’s presence or absence on the screen. |
 | Timeout       | No       | Number (Double)      | 2             | Search timeout in seconds                                    |
 
@@ -476,37 +485,24 @@ To test the selected flow, click on the **Test selected action** button.
 
 Workflow Runner is a tool for running the workflow when the Accesskey Automate Access command triggers.
 
-> The app exists in the installation directory in: **C:\Program Files\IDmelon\Workflow Automation\IDmelonWorkflowRunner.exe**
+> The app exists in the installation directory in: **C:\Program Files\IDmelon\Workflow Automation\WorkflowRunner.exe**
 
-### Using the Workflow Runner in in the Accesskey script
+### Configuring Accesskey
 
 To run a workflow on the security key presence (card tap) trigger, do the following steps:
 
 1. Export the desired workflow from the Workflow Editor.
 
-2. Make a new text file, fill it with the following lines, and save it as a **.ps1** file.
+2. Enter the following command in PowerShell to activate the automation.
 
    ```bash
-   # Launches the workflow runner if it's not running
-   $processName = "idmelonworkflowrunner"
-   if (-not (Get-Process -Name $processName -ErrorAction SilentlyContinue)) {
-       Start-Process $processName
-   }
-   # Runs the workflow on each card tap
-   # Timeout is the maximum time (in milliseconds) that the Accesskey will wait for the automation result
-   accesskey access-automation automation-app execute automate -p "WORKFLOW_JSON_FILE_PATH" -t TIMEOUT_IN_MILLISECONDS
-   ```
-
-3. Enter the following command in PowerShell to activate the automation.
-
-   ```bash
-   accesskey config access-automation set --trigger-condition onSecurityKeyPresence --script-path "PS1_SCRIPT_PATH"
+   accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "PATH_TO_WORKFLOW_FILE"
    ```
 
    > To disable the automation, enter the following command in PowerShell:
    >
    > ```bash
-   > accesskey config access-automation remove all
+   > accesskeycli workflow-automation -t automation-app -r
    > ```
 
 ### Test Workflow
