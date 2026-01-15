@@ -108,4 +108,3 @@ following parameters:
     1. Under the Assignments tab, include the Device Groups that represent your shared hardware.
 
     2. Review and Create.
-

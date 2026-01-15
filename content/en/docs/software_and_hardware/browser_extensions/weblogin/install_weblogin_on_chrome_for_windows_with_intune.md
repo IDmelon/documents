@@ -73,9 +73,10 @@ Microsoft Intune.
 
 6. Under **Extension/App IDs and update URLs to be silently installed**, enter the following string exactly:
 
-   ```
+   ```bash
    eagmgpbjpedchliifpgfgogdknnmkaej;https://clients2.google.com/service/update2/crx
    ```
+
    ![alt](/images/vendor/weblogin/extension_id.jpg)
 
 7. Click **Next**.
