@@ -1,5 +1,5 @@
 ---
-title: "WebLogin Extension"
+title: "Overview"
 description: ""
 lead: ""
 date: 2024-07-20T14:40:56+01:00
@@ -8,7 +8,7 @@ draft: false
 images: [ ]
 menu:
   docs:
-    parent: "browser_extensions"
+    parent: "weblogin"
 type: docs
 weight: 321100
 toc: true
