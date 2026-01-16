@@ -53,6 +53,52 @@ Self-managed deployments cater to organizations that prefer full control over th
 
 ---
 
+## Update and Maintenance Policy
+
+IDmelon keeps all deployments—whether SaaS, on-premises, or private cloud—on the same version with the same features and security updates.
+
+### Update Schedule
+
+| Deployment Type | How Often | How It's Delivered |
+|-----------------|-----------|-------------------|
+| **SaaS** | Ongoing | Automatic updates with no downtime |
+| **Dedicated (On-Prem/Private Cloud)** | Monthly | Scheduled with your team |
+
+IDmelon releases updates **every month** for dedicated deployments. Our support team works with you to schedule updates at a time that works for you and helps with the upgrade process.
+
+### Why Monthly Updates?
+
+As a security product, staying up to date is important to protect your organization. Monthly updates give you:
+
+- **Security fixes** — Get the latest patches delivered on time
+- **New features** — Access to improvements as soon as they're ready
+- **Feature parity** — The same features as the SaaS version
+- **SLA coverage** — Stay eligible for support and SLA terms
+
+### How We Roll Out Updates
+
+IDmelon follows a step-by-step process to make sure updates are reliable:
+
+1. **Internal Testing** — All updates go through thorough testing
+2. **SaaS First** — Updates are deployed to SaaS first
+3. **Waiting Period** — We make sure there are no issues
+4. **Dedicated Release** — Tested updates are packaged for dedicated deployments
+
+This means dedicated deployments get **tried-and-tested updates**, not untested releases—giving enterprise customers extra peace of mind.
+
+### Maintenance and Support
+
+Dedicated deployments need an active **Maintenance and Support agreement**, which includes:
+
+- Access to all updates and new releases
+- Technical support for setup and upgrades
+- Security update notifications
+- Help with upgrades and documentation
+
+> For full details, see the [IDmelon Service Level Agreement](https://idmelon.com/service-level-agreement).
+
+---
+
 ## Third-party Services
 
 The IDmelon platform uses the below services ensuring users can receive notifications, emails, SMS messages, and can communicate with organization's Azure Active Director if needed.
