@@ -95,7 +95,9 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
 ### Configuration Keys
 
 ```xml
-<KioskURL>https://myapps.microsoft.com</KioskURL>
+<KioskURLs>
+    <URL auth_required="true">https://myapps.microsoft.com</URL>
+</KioskURLs>
 <SelfService>false</SelfService>
 <MultiTabMode>true</MultiTabMode>
 <ExtensionEnabled>true</ExtensionEnabled>
@@ -119,8 +121,8 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
 </Policies>
 ```
 
-- **KioskURL:** The default webpage the kiosk app loads upon startup.
-- **SelfService:** Set it true if the **KioskURL** is a custom url (e.g., self-service url).
+- **KioskURLs:** The addresses that must be opened when the kiosk app starts.
+- **SelfService:** Set it true if the **KioskURLs** are anything other than myapps.microsoft.com.
 - **MultiTabMode:** Enables (true) or disables (false) multi-tab browsing. Setting this to false activates full-screen mode.
 - **ExtensionEnabled:** Toggles browser extensions on (true) or off (false).
     Note: The Browser extension is required for the automation process. (When a card taps on the reader, the login automation will start).
@@ -138,6 +140,21 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
 - **UserInteractionMonitoringAppPath:** The path of the User Interaction Monitoring app. If the value of the `KioskIdleTimeoutSeconds` is set to 0, there is no need to set this address.
 - **KeepDisplayAwake:** Controls whether the system is allowed to follow normal power‑saving rules (default = false) or whether it should keep the display awake at all times.
 - **Policies:** Configurable rules that define the app’s behavior and user experience, such as allowed/blocked URLs, editing permissions, and security limits. (see [Policies](#policies) for more details)
+
+#### Kiosk URLs
+
+Add your URLs inside `<KioskURLs>` as `<URL>` elements.
+If the URL requires authentication, set `auth_required="true"`.
+
+If multiple URLs are authenticated by the same platform, set `auth_required="true"` on only one of them. For example:
+
+```xml
+<KioskURLs>
+    <URL auth_required="true">https://myapps.microsoft.com</URL>
+    <URL auth_required="false">https://excel.cloud.microsoft</URL>
+    <URL auth_required="false">https://idmelon.com</URL>
+</KioskURLs>
+```
 
 #### Configuring Server Address
 
