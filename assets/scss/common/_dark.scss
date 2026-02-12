@@ -184,6 +184,10 @@ $navbar-dark-active-color:          $link-color-dark;
   color: $body-color-dark;
 }
 
+[data-dark-mode] body .btn-toggle:hover{
+  background-color: $active-link-background-dark;
+}
+
 [data-dark-mode] body .btn-toggle::before {
   width: 1.25em;
   line-height: 0;
@@ -204,10 +208,12 @@ $navbar-dark-active-color:          $link-color-dark;
 [data-dark-mode] body .btn-toggle-nav a:hover,
 [data-dark-mode] body .btn-toggle-nav a:focus {
   color: $link-color-dark;
+  background-color: $active-link-background-dark;
 }
 
 [data-dark-mode] body .btn-toggle-nav a.active {
   color: $link-color-dark;
+  background-color: $active-link-background-dark;
 }
 
 [data-dark-mode] body .navbar-light .navbar-text a {

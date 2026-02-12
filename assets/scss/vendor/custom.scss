@@ -127,8 +127,9 @@ tr.trV2 {
 }
 
 .home-card-body{
-  width: 20rem;
-  height:21rem;
+  width: 30%;
+  text-align: center;
+  margin: 0.5rem;
 }
 
 .homepage-back{
@@ -547,9 +548,15 @@ tr.trV2 {
   padding-right:24px;
 }
 
+@include media-breakpoint-down(md){
+  .home-card-body{
+    width: 46%;
+  }
+}
+
 @include media-breakpoint-down(sm){
   .home-card-body{
-    width: 100%;
+    width: 95%;
     height: 19rem;
   }
   .homepage-back{
@@ -822,9 +829,7 @@ tr.trV2 {
 }
 
 .home-top-holder {
-  display: grid;
-  grid-template-columns: auto auto;
-  justify-content: space-between;
+
 }
 
 .home-search-svg{
@@ -1145,11 +1150,12 @@ tr.trV2 {
 }
 
 .logo-container{
-  content: url('/images/vendor/Homepage/IDmelonLogo.svg');
+  content: url('/images/vendor/Homepage/Docs_logo.svg');
+  // content: url('/images/vendor/Homepage/IDmelonLogo.svg');
   background-repeat: no-repeat;
-  background-size: 100px 28px;
-  height: 28px;
-  width: 100px;
+  background-size: 150px 42px;
+  height: 42px;
+  width: 150px;
 }
 
 .mobile-app-logo-container{
@@ -1194,15 +1200,10 @@ a {
 .btn-toggle::before,
 [data-dark-mode] .btn-toggle::before {
   width: auto !important;
-  padding-right: 10px;
 }
 
 .docs-links {
   width: 100%;
-}
-
-a.docs-link {
-  padding-left: 20px;
 }
 
 .docs-content a:not(.docs-content .right-side-links a) {

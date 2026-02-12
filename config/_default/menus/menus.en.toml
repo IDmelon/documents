@@ -35,9 +35,13 @@
   url = "/tutorial/lorem/"
 
 [[main]]
-  name = "Docs"
-  url = "/docs/for_administrators/get_started/"
-# url = "/docs/1.0/prologue/introduction/"
+  name = "Get Started"
+  url = "/docs/get_started/overview/"
+  weight = 10
+
+[[main]]
+  name = "Security"
+  url = "/docs/restructure_folder/security"
   weight = 10
 
 # [[main]]

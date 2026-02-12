@@ -129,13 +129,13 @@ pre {
 }
 
 .collapsible-sidebar {
-  margin: 2.125rem 0;
+  margin: 0 0 2.125rem 0;
 }
 
 .btn-toggle {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.5rem 0.25rem 0;
+  padding: 0.25rem 0.5rem;
   font-weight: $headings-font-weight;
   font-size: $font-size-base;
   text-transform: none;
@@ -147,9 +147,12 @@ pre {
 .btn-toggle:hover,
 .btn-toggle:focus {
   color: $body-color;
-  background-color: transparent;
   outline: 0;
   box-shadow: none;
+}
+
+.btn-toggle:hover {
+  background-color: $active-link-background;
 }
 
 .btn-toggle::before {
@@ -171,20 +174,20 @@ pre {
 
 .btn-toggle-nav a {
   display: inline-flex;
-  padding: 0.1875rem 0.5rem;
-  margin-top: 0.125rem;
-  margin-left: 1.25rem;
-  text-decoration: none;
+  padding: 0.1875rem 0.75rem 0.1875rem 0.75rem;
+  margin-top: 0.125rem;  text-decoration: none;
+  width: 100%;
 }
 
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
-  background-color: transparent;
+  background-color: $active-link-background;
   color: $link-color;
 }
 
 .btn-toggle-nav a.active {
   color: $link-color;
+  background-color: $active-link-background;
 }
 
 .doks-navbar .dropdown-menu,

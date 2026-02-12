@@ -5,48 +5,55 @@
   {{ range (where .Site.Sections "Section" "in" $section) }}
     {{ range .Sections.Reverse }}
       {{ $active := in $currentPage.RelPermalink .RelPermalink }}
-      <li class="mb-1">
-        <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#section-{{ md5 .Title }}" aria-expanded="{{ if $active }}true{{ else }}false{{ end }}">
-          {{ .Title }}
-        </button>
+      <li class="mb-1 docs-sidebar-list-item btn-toggle-nav">
+        <div class="toggle-container">
+          <a class="ps-0" href="{{ .RelPermalink }}/overview">
+            {{ .Title }}
+          </a>
+          <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#section-{{ md5 .Title }}" aria-expanded="{{ if $active }}true{{ else }}false{{ end }}"></button>
+        </div>
         <div class="collapse{{ if $active }} show{{ end }}" id="section-{{ md5 .Title }}">
-          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ms-0 small">
             {{ range .Pages }}
               {{ if .IsNode }}
-                {{ $active := in $currentPage.RelPermalink .RelPermalink }}
-                <li class="my-1 ms-3">
-                  <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#section-{{ md5 .Title }}" aria-expanded="{{ if $active }}true{{ else }}false{{ end }}">
-                    {{ .Title }}
-                  </button>
-                  <div class="collapse{{ if $active }} show{{ end }}" id="section-{{ md5 .Title }}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                {{ $isExpanded := in $currentPage.RelPermalink .RelPermalink }}
+                {{ $isActive := eq $currentPage.RelPermalink .RelPermalink }}
+                <li>
+                  <div class=" toggle-container">
+                    <a class="rounded{{ if $isActive }} active{{ end }}" href="{{ .RelPermalink }}">{{ .Title }}</a>
+                    <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#section-{{ md5 .Title }}" aria-expanded="{{ if $isExpanded }}true{{ else }}false{{ end }}"></button>
+                  </div>
+                  <div class="collapse{{ if $isExpanded }} show{{ end }}" id="section-{{ md5 .Title }}">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ms-0 small">
                       {{ range .Pages }}
                         {{ if .IsNode }}
-                          {{ $active := in $currentPage.RelPermalink .RelPermalink }}
-                          <li class="my-1 ms-3">
-                            <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#section-{{ md5 .Title }}" aria-expanded="{{ if $active }}true{{ else }}false{{ end }}">
-                              {{ .Title }}
-                            </button>
-                            <div class="collapse{{ if $active }} show{{ end }}" id="section-{{ md5 .Title }}">
-                              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                          {{ $isExpanded := in $currentPage.RelPermalink .RelPermalink }}
+                          {{ $isActive := eq $currentPage.RelPermalink .RelPermalink }}
+                          <li class="ps-3">
+                            <div class="toggle-container">
+                              <a class="rounded{{ if $isActive }} active{{ end }}" href="{{ .RelPermalink }}">{{ .Title }}</a>
+                              <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#section-{{ md5 .Title }}" aria-expanded="{{ if $isExpanded }}true{{ else }}false{{ end }}"></button>
+                            </div>
+                            <div class="collapse{{ if $isExpanded }} show{{ end }}" id="section-{{ md5 .Title }}">
+                              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ms-0 small">
                                 {{ range .Pages }}
-                                  {{ $active := in $currentPage.RelPermalink .RelPermalink }}
-                                  <li><a class="docs-link rounded{{ if $active }} active{{ end }}" href="{{ .Permalink }}">{{ .Title }}</a></li>
+                                  {{ $isActive := eq $currentPage.RelPermalink .RelPermalink }}
+                                  <li class="ps-3 toggle-container"><a class="docs-link rounded{{ if $isActive }} active{{ end }}" href="{{ .Permalink }}">{{ .Title }}</a></li>
                                 {{ end }}
                               </ul>
                             </div>
                           </li>
                         {{ else }}
-                          {{ $active := in $currentPage.RelPermalink .RelPermalink }}
-                          <li><a class="docs-link rounded{{ if $active }} active{{ end }}" href="{{ .Permalink }}">{{ .Title }}</a></li>
+                          {{ $isActive := eq $currentPage.RelPermalink .RelPermalink }}
+                          <li class="ps-3 toggle-container"><a class="docs-link rounded{{ if $isActive }} active{{ end }}" href="{{ .Permalink }}">{{ .Title }}</a></li>
                         {{ end }}
                       {{ end }}
                     </ul>
                   </div>
                 </li>
               {{ else }}
-                {{ $active := in $currentPage.RelPermalink .RelPermalink }}
-                <li><a class="docs-link rounded{{ if $active }} active{{ end }}" href="{{ .Permalink }}">{{ .Title }}</a></li>
+                {{ $isActive := eq $currentPage.RelPermalink .RelPermalink }}
+                <li class="toggle-container"><a class="docs-link rounded{{ if $isActive }} active{{ end }}" href="{{ .Permalink }}">{{ .Title }}</a></li>
               {{ end }}
             {{ end }}
           </ul>

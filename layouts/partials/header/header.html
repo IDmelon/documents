@@ -11,7 +11,7 @@
 <header class="navbar navbar-expand-md navbar-light doks-navbar sticky-lg-top">
   <nav class="container-{{ if .Site.Params.options.fullWidth }}fluid{{ else }}xxl{{ end }} flex-wrap flex-md-nowrap" aria-label="Main navigation">
     <a href="{{ "/" | relLangURL }}" aria-label="{{ .Site.Params.Title }}">
-      <img class="p-0 logo-container" width="100px" height="25px"/>
+      <img class="p-0 logo-container" width="200px" height="50px" title="IDmelon Docs"/>
     </a>
 
     <button class="btn btn-menu d-block d-md-none order-5" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDoks" aria-controls="offcanvasDoks" aria-label="Open main menu">
@@ -34,7 +34,7 @@
             {{- $active = or $active (and (eq .Name ($section | humanize)) (eq $current.Section $section)) -}}
             {{- $active = or $active (and (eq .Name "Blog") (eq $current.Section "blog" "contributors")) -}}
             {{ if .HasChildren }}
-              <li class="nav-item dropdown">
+              <!-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle ps-0 py-1" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   {{ .Name }}
                   <span class="dropdown-caret"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down"><polyline points="6 9 12 15 18 9"></polyline></svg></span>
@@ -47,7 +47,7 @@
                     </li>
                   {{ end -}}
                 </ul>
-              </li>
+              </li> -->
             {{ else }}
               <li class="nav-item">
                 <a class="nav-link ps-0 py-1{{ if $active }} active{{ end }}" href="{{ .URL | relLangURL }}">{{ .Name }}</a>

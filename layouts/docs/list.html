@@ -1,22 +1,35 @@
 {{ define "main" }}
-<div class="row justify-content-center">
-  <div class="col-md-12 col-lg-10 col-xl-8">
-    <article>
-      <h1 class="text-center">{{ if eq .CurrentSection .FirstSection }}{{ .Section | humanize }}{{ else }}{{ .Title }}{{ end }}</h1>
-      <div class="text-center">{{ .Content }}</div>
-			<div class="card-list">
-				{{ $currentSection := .CurrentSection }}
-				{{ range where .Site.RegularPages.ByTitle "Section" .Section }}
-					{{ if in (.RelPermalink | string) $currentSection.RelPermalink }}
-						<div class="card my-3">
-							<div class="card-body">
-								<a class="stretched-link" href="{{ .RelPermalink }}">{{ .Params.title | title }} &rarr;</a>
-							</div>
-						</div>
-					{{ end }}
-				{{ end }}
-			</div>
-    </article>
-  </div>
-</div>
+	<div class="row flex-xl-nowrap">
+		<div class="col-lg-4 col-xl-3 docs-sidebar d-none d-lg-block">
+			<nav {{ if eq .Site.Params.menu.section.collapsibleSidebar false }}id="sidebar-default" {{ end }}class="docs-links" aria-label="Main navigation">
+				{{ partial "sidebar/docs-menu.html" . }}
+			</nav>
+		</div>
+		<main class="docs-content col-lg-11 col-xl-10">
+			<article>
+				<h1>{{ if eq .CurrentSection .FirstSection }}{{ .Section | humanize }}{{ else }}{{ .Title }}{{ end }}</h1>
+				<div>{{ .Description }}</div>
+				<table class="table docs-list-table">
+					<thead>
+						<tr>
+							<th scope="col" style="width: 35%;">Title</th>
+							<th scope="col" style="width: 65%;">Description</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{ range .CurrentSection.Pages.ByWeight }}
+								<tr class="docs-list-item">
+									<td>
+										<a href="{{ .RelPermalink }}">{{ .Title }}</a>
+									</td>
+									<td>
+										{{ .Params.description | default .Description }}
+									</td>
+								</tr>
+						{{ end }}
+					</tbody>
+				</table>
+			</article>
+		</main>
+	</div>
 {{ end }}

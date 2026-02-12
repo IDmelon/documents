@@ -2,7 +2,6 @@
 .blog .content,
 .page .content,
 .error404 .content,
-.docs.list .content,
 .tutorial.list .content,
 .showcase.list .content {
   padding-top: 1rem;
@@ -58,6 +57,7 @@ a,
 .a {
   font-size: 14px;
   font-weight: lighter;
+  cursor: pointer;
 }
 
 p,
@@ -111,9 +111,56 @@ body.docs {
   }
 }
 
-.home h1 {
+.home {
   /* font-size: calc(1.375rem + 1.5vw); */
-  font-size: 32px;
+  h1 {
+    font-size: 42px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  p, a, .a {
+    font-size: 18px;
+  }
+
+}
+
+.sub-menu {
+  max-width: 1024px;
+
+  h2 {
+    font-size: 22px;
+  }
+}
+
+.docs-list-table {
+  .docs-list-item {
+    td {
+      font-size: 1rem;
+    }
+    a, .a {
+      font-size: 1rem;
+    }
+  }
+}
+
+.docs-sidebar-list-item {
+  .toggle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0.25rem 0rem;
+    a, .a {
+      font-weight: normal;
+      color: $body-color;
+    }
+    a:hover, .active {
+      font-weight: 500;
+    }
+  }
 }
 
 a:hover,
@@ -173,6 +220,7 @@ body {
       top: 4rem;
       z-index: 1000;
       height: calc(100vh - 4rem);
+      min-width: 280px;
     }
   }
 }
@@ -184,6 +232,7 @@ body {
 }
 
 .docs-links {
+  padding-top: 1rem;
   padding-bottom: 5rem;
 }
 
