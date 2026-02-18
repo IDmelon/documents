@@ -14,20 +14,52 @@ weight: 321110
 
 The Workflow Editor is the central environment for creating, managing, testing, and executing workflows. Within the `Workflow Editor` app, you can design and refine workflows, then export them as JSON files for use with the Workflow Runner.
 
+![Workflow Editor](/images/vendor/workflow_automation/automation_app/workflow_editor.png)
+> **Figure:** In Workflow Editor app, you can create/refine/export/import a workflow.
+
 ### Workflows
 
 A workflow is a structured sequence of actions or tasks that are executed step by step to achieve a specific outcome. In automation systems, a workflow typically consists of a list of predefined activities—such as reading data, clicking buttons, entering text, or processing information—that are carried out in order, one after another. Each action depends on the completion of the previous step, creating a logical flow from start to finish.
 
+![Workflow Environment](/images/vendor/workflow_automation/automation_app/workflow_environment.png)
+> **Figure:** Workflow environment including various actions.
+
 #### Export a Workflow
 
-To export a workflow in the `Workflow Editor` app, select it from the list and click the `Export` button. The workflow will be saved as a JSON file, which you can store on your PC or other systems. This file is required for running the workflow via Accesskey scripts.
+To export a workflow in the `Workflow Editor` app, select it from the list and click the `Export` button on the right side. The workflow can be exported and stored on your PC or other systems in two formats. Use `.json` to run it via Accesskey scripts, or use `.idwf` to be able to import it later into Workflow Editor.
+
+#### Import a Workflow
+
+To import a previously saved workflow, click the `Import workflow` button and select an `.idwf` file. The imported workflow opens in Workflow Editor, where you can review, edit, test, and export it again.
+
+![Workflow Exportation](/images/vendor/workflow_automation/automation_app/workflow_export_import.png)
+> **Figure:** The specified buttons can be used to export/import a workflow.
+
+#### Startup behavior for Workflow Runner
+In **Settings** (at the top right corner of the workflow editor), Workflow Runner startup behavior can be configured using one of these options:
+
+1. **Do not run at startup**
+2. **Run at startup**
+3. **Run at startup as administrator**
+
+To enable **Run at startup as administrator**, follow these steps:
+
+1. Close Workflow Editor (if it is running).
+2. Right-click Workflow Editor and select **Run as administrator**.
+3. Open **Settings** and select **Run at startup as administrator**.
+4. Save/apply the change.
+
+> **Note:** Administrator permissions are required to apply this option. If Workflow Editor is not started as administrator, the setting may not be applied.
+
+![Workflow Exportation](/images/vendor/workflow_automation/automation_app/settings_expanded.png)
+> **Figure:** The expanded view of the settings menu.
 
 ### Actions
 
 There are two types of actions:
 
-1. **Element-based actions**: These actions depend on UI elements and operate on a specific element (e.g, clicking a UI element).
-2. **Non-element-based actions**: These actions are not tied to UI elements and perform operations directly on the system (e.g, running an application).
+1. **Element-based actions**: These actions depend on UI elements and operate on a specific element (e.g., clicking a UI element).
+2. **Non-element-based actions**: These actions are not tied to UI elements and perform operations directly on the system (e.g., running an application).
 
 Available actions are listed below.
 
@@ -37,10 +69,13 @@ Simulates a mouse click on a specified UI element, allowing the automation proce
 
 **Input Parameters:**
 
-| Argument   | Optional | Accepts                               | Default Value | Description                  |
-| ---------- | -------- | ------------------------------------- | ------------- | ---------------------------- |
-| UI element | No       | UI element                            | -             | The UI element to click on   |
-| Click type | No       | Left click, Double click, Right click | Left click    | The kind of click to perform |
+| Parameter    | Type       | Required | Default    | Description                                |
+| ------------ | ---------- | -------- | ---------- | ------------------------------------------ |
+| UI element   | UI element | Yes      | -          | The target element to click.               |
+| Click type   | Enum | Yes | Left click | Allowed: Left click, Double click, Right click |
+
+![Click on UI element action](/images/vendor/workflow_automation/automation_app/click_on_UI_element.png)
+> **Figure:** Click on UI element action configuration.
 
 #### Hover mouse over UI element
 
@@ -48,9 +83,9 @@ Moves the cursor over a UI element.
 
 **Input Parameters:**
 
-| Argument   | Optional | Accepts    | Default Value | Description                          |
-| ---------- | -------- | ---------- | ------------- | ------------------------------------ |
-| UI element | No       | UI element | -             | The UI element to hover the mouse on |
+| Parameter  | Type       | Required | Default | Description                          |
+| ---------- | ---------- | -------- | ------- | ------------------------------------ |
+| UI element | UI element | Yes      | -       | The target element to hover over    |
 
 #### Populate text field
 
@@ -58,14 +93,17 @@ Fills a text field with the entered text.
 
 **Input Parameters:**
 
-| Argument        | Optional | Accepts    | Default Value | Description                        |
-| --------------- | -------- | ---------- | ------------- | ---------------------------------- |
-| UI element      | No       | UI element | -             | The text field to populate         |
-| Text to fill-in | No       | Strings    | Empty         | The text to fill in the text field |
+| Parameter      | Type       | Required | Default | Description                           |
+| -------------- | ---------- | -------- | ------- | ------------------------------------- |
+| UI element     | UI element | Yes      | -       | The target text field to populate    |
+| Text to fill-in | String     | Yes      | Empty   | The text to enter in the text field  |
 
 > **Note**: This action can be applied only to Inputs.
 >
-> **Note**: You can use [variables](#variables) instead of static strings. For more details.
+> **Note**: You can use [variables](#variables) instead of static strings. For more details, see [variables](#variables).
+
+![Populate text field action](/images/vendor/workflow_automation/automation_app/populate_text_field.png)
+> **Figure:** Populate text field action configuration.
 
 #### Focus UI element
 
@@ -73,9 +111,9 @@ Sets the focus on a UI element.
 
 **Input Parameters:**
 
-| Argument   | Optional | Accepts    | Default Value | Description                        |
-| ---------- | -------- | ---------- | ------------- | ---------------------------------- |
-| UI element | No       | UI element | -             | The UI element to set the focus on |
+| Parameter  | Type       | Required | Default | Description                         |
+| ---------- | ---------- | -------- | ------- | ----------------------------------- |
+| UI element | UI element | Yes      | -       | The target element to set focus on |
 
 #### Get details of the UI element
 
@@ -83,11 +121,14 @@ Gets the value of a UI element's attribute.
 
 **Input Parameters:**
 
-| Argument         | Optional | Accepts                                               | Default Value | Description                                     |
-| ---------------- | -------- | ----------------------------------------------------- | ------------- | ----------------------------------------------- |
-| UI element       | No       | UI element                                            | -             | The UI element to get details from              |
-| Attribute name   | No       | UI element Attributes (Id, Name, Class, Enabled, ...) | Id            | The attribute name                              |
-| Bind to variable | No       | Variable name (String)                                | Empty         | The variable where the attribute will be stored |
+| Parameter        | Type       | Required | Default | Description                                           |
+| ---------------- | ---------- | -------- | ------- | ----------------------------------------------------- |
+| UI element       | UI element | Yes      | -       | The target element to read details from              |
+| Attribute name   | Enum       | Yes      | Id      | Allowed: Id, Name, Class, Enabled, ...                |
+| Bind to variable | String     | Yes      | Empty   | The variable name where the attribute value is stored|
+
+![Get details of the UI element action](/images/vendor/workflow_automation/automation_app/details_of_UI_element.png)
+> **Figure:** Get details of the UI element action configuration.
 
 #### Wait for UI element
 
@@ -95,10 +136,10 @@ Waits until a UI element appears on screen.
 
 **Input Parameters:**
 
-| Argument   | Optional | Accepts         | Default Value | Description                                                 |
-| ---------- | -------- | --------------- | ------------- | ----------------------------------------------------------- |
-| UI element | No       | UI element      | -             | The UI element to wait for to appear                        |
-| Timeout    | No       | Number (Double) | 10            | Maximum number of seconds to wait for the element to appear |
+| Parameter  | Type            | Required | Default | Description                                        |
+| ---------- | --------------- | -------- | ------- | -------------------------------------------------- |
+| UI element | UI element      | Yes      | -       | The target element to wait for                    |
+| Timeout    | Number (Double) | Yes      | 10      | Maximum wait time (in seconds) for the element    |
 
 #### Send mouse click
 
@@ -106,21 +147,21 @@ Sends a mouse click event.
 
 **Input Parameters:**
 
-| Argument    | Optional | Accepts                               | Default Value | Description                                                         |
-| ----------- | -------- | ------------------------------------- | ------------- | ------------------------------------------------------------------- |
-| Mouse event | No       | Left click, Double click, Right click | Left click    | Specify what form of mouse event to send                            |
-| Delay       | No       | Number (Int)                          | 0             | The time to delay before sending the mouse event (in milliseconds)  |
+| Parameter   | Type       | Required | Default    | Description                                         |
+| ----------- | ---------- | -------- | ---------- | --------------------------------------------------- |
+| Mouse event | Enum       | Yes      | Left click | Allowed: Left click, Double click, Right click     |
+| Delay       | Number (Int) | Yes      | 0          | Delay before sending the mouse event (milliseconds)|
 
 #### Send keys
 
-Send keys to the UI element that is currently focused.
+Sends keys to the UI element that is currently focused.
 
 **Input Parameters:**
 
-| Argument     | Optional | Accepts      | Default Value | Description                                          |
-| ------------ | -------- | ------------ | ------------- | ---------------------------------------------------- |
-| Text to send | No       | String       | Empty         | The text to send to the focused UI element or window |
-| Delay        | No       | Number (Int) | 10            | Delay between keystrokes in milliseconds             |
+| Parameter    | Type         | Required | Default | Description                                      |
+| ------------ | ------------ | -------- | ------- | ------------------------------------------------ |
+| Text to send | String       | Yes      | Empty   | The text to send to the focused element/window  |
+| Delay        | Number (Int) | Yes      | 10      | Delay between keystrokes (milliseconds)         |
 
 > To simulate a key press, use curly brackets {} (e.g., {enter}). For key combinations, wrap both keys in {} (e.g., {leftctrl}({A})).
 >
@@ -137,34 +178,46 @@ Some common shortcuts:
 - **Paste**: {leftctrl}({V})
 - **Shift Delete**: {rightshift}({delete})
 
+![Send keys action](/images/vendor/workflow_automation/automation_app/send_keys.png)
+> **Figure:** Send keys action configuration.
+
 #### Run application
 
 Executes an application.
 
 **Input Parameters:**
 
-| Argument                 | Optional | Accepts                                                      | Default Value        | Description                                                  |
-| ------------------------ | -------- | ------------------------------------------------------------ | -------------------- | ------------------------------------------------------------ |
-| Application path         | No       | String                                                       | Empty                | The executable file path                                     |
-| Command line arguments   | Yes      | String                                                       | Empty                | Extra arguments that would go after the executable file name |
-| Working folder           | Yes      | String                                                       | Empty                | The full path of the folder to work out of, if applicable    |
-| Window style             | No       | Normal, Hidden, Minimized, Maximized                         | Normal               | The application's window style                               |
-| After application launch | No       | Continue immediately, Wait for application to load, Wait for application to close | Continue immediately | Specify whether the next action executes immediately or waits until the program loads or completes |
+| Parameter                | Type   | Required | Default              | Description                                                        |
+| ------------------------ | ------ | -------- | -------------------- | ------------------------------------------------------------------ |
+| Application path         | String | Yes      | Empty                | The executable file path                                          |
+| Command line arguments   | String | No       | Empty                | Additional arguments passed after the executable name             |
+| Working folder           | String | No       | Empty                | The working directory path for the application                    |
+| Window style             | Enum   | Yes      | Normal               | Allowed: Normal, Hidden, Minimized, Maximized                    |
+| After application launch | Enum   | Yes      | Continue immediately | Continue immediately, Wait for application to load, Wait for application to close |
 
 > If you want to use the **ExitCode** variable for next actions, set the **After application launch** option to **Wait for application to load**.
 
-#### Close window
+![Run application action](/images/vendor/workflow_automation/automation_app/run_application.png)
+> **Figure:** Run application action configuration.
 
-Close a specific window.
+#### Update state of the window
+
+Updates the state of one or more windows that match the specified search criteria.
 
 **Input Parameters:**
 
-| Argument         | Optional | Accepts                                 | Default Value        | Description                                                  |
-| ---------------- | -------- | --------------------------------------- | -------------------- | ------------------------------------------------------------ |
-| Find window mode | No       | By window UI element, By title or class | By window UI element | Specify whether to look for the window using a UI element or a combination of window title/class |
-| Window           | No       | UI element (of type Window)             | Empty                | The window UI element                                        |
-| Window title     | Yes      | String                                  | Empty                | The window title. Wildcards can be used, like '?' or '*'     |
-| Window class     | Yes      | String                                  | Empty                | If there are two windows with the same title, window class might help differentiate between them |
+| Parameter         | Type       | Required | Default              | Description                                                                 |
+| ----------------- | ---------- | -------- | -------------------- | --------------------------------------------------------------------------- |
+| Find window mode  | Enum       | Yes      | By window UI element | Allowed: By window UI element, By title or class                           |
+| Window            | UI element | No       | Empty                | Target window UI element (used when mode is **By window UI element**)      |
+| Window title      | String     | No       | Empty                | Window title (used when mode is **By title or class**), supports `?` and `*` |
+| Window class      | String     | No       | Empty                | Window class (used when mode is **By title or class**)                     |
+| Window action     | Enum       | Yes      | Focus on window      | Allowed: Focus on window, Move to background, Maximize window, Minimize window, Close window |
+
+> **Note:** If multiple windows match the criteria, use **When multiple match** to control whether the action is applied to the first match only or to all matches.
+
+![Update state of the window action](/images/vendor/workflow_automation/automation_app/update_state_of_the_window.png)
+> **Figure:** Update state of the window action configuration.
 
 #### Set variable
 
@@ -172,21 +225,24 @@ Set the value of a new or existing variable, create a new variable or overwrite 
 
 **Input Parameters:**
 
-| Argument | Optional | Accepts           | Default Value | Description                                            |
-| -------- | -------- | ----------------- | ------------- | ------------------------------------------------------ |
-| Variable | No       | String            | Empty         | A previously generated variable or a new variable name |
-| Value    | No       | String/Int/Double | Empty         | The value to assign to the variable                    |
+| Parameter | Type              | Required | Default | Description                                             |
+| --------- | ----------------- | -------- | ------- | ------------------------------------------------------- |
+| Variable  | String            | Yes      | Empty   | A variable name (existing or new)                      |
+| Value     | String/Int/Double | Yes      | Empty   | The value assigned to the variable                     |
+
+![Set variable action](/images/vendor/workflow_automation/automation_app/set_variable.png)
+> **Figure:** Set variable action configuration.
 
 #### Increase variable
 
-Increase the value of a variable by a specific amount.
+Increases the value of a variable by a specific amount.
 
 **Input Parameters:**
 
-| Argument      | Optional | Accepts             | Default Value | Description                                                  |
-| ------------- | -------- | ------------------- | ------------- | ------------------------------------------------------------ |
-| Variable name | No       | String              | Empty         | The numeric variable to increase                             |
-| Increase by   | No       | Number (Int/Double) | Empty         | A numeric value, or a previously created variable containing one, to increase the variable by |
+| Parameter     | Type               | Required | Default | Description                                                        |
+| ------------- | ------------------ | -------- | ------- | ------------------------------------------------------------------ |
+| Variable name | String             | Yes      | Empty   | The numeric variable to increase                                  |
+| Increase by   | Number (Int/Double) | Yes      | Empty   | A numeric value or a variable containing a numeric value          |
 
 > **Note**: Negative numbers can also be used to decrease the value of a variable.
 
@@ -196,9 +252,9 @@ Suspends the execution of the flow for a specific amount of seconds.
 
 **Input Parameters:**
 
-| Argument | Optional | Accepts         | Default Value | Description             |
-| -------- | -------- | --------------- | ------------- | ----------------------- |
-| Duration | No       | Number (Double) | Empty         | The duration in seconds |
+| Parameter | Type            | Required | Default | Description                |
+| --------- | --------------- | -------- | ------- | -------------------------- |
+| Duration  | Number (Double) | Yes      | Empty   | The duration in seconds   |
 
 > In addition to numbers, you can also make use of variables (See [Variables](#variables)).
 
@@ -208,9 +264,9 @@ Terminates the flow.
 
 **Input Parameters:**
 
-| Argument    | Optional | Accepts          | Default Value | Description |
-| ----------- | -------- | ---------------- | ------------- | ----------- |
-| With status | No       | Success, Failure | Success       | Status      |
+| Parameter   | Type | Required | Default | Description                           |
+| ----------- | ---- | -------- | ------- | ------------------------------------- |
+| With status | Enum | Yes      | Success | Allowed: Success, Failure            |
 
 #### Lock workstation
 
@@ -218,7 +274,7 @@ Locks the workstation's display.
 
 **Input Parameters:**
 
-No Inputs needed.
+No inputs needed.
 
 #### Call Accesskey function
 
@@ -226,13 +282,16 @@ Calls an Accesskey function and retrieves its result.
 
 **Input Parameters:**
 
-| Argument      | Optional | Accepts                            | Default Value | Description |
-| ------------- | -------- | ---------------------------------- | ------------- | ----------- |
-| Function name | No       | Function name defined by Accesskey | Empty         | -           |
+| Parameter     | Type   | Required | Default | Description                                  |
+| ------------- | ------ | -------- | ------- | -------------------------------------------- |
+| Function name | String | Yes      | Empty   | The Accesskey function name to call         |
 
 > **Note**: To test the function and see the result, after selecting the function and filling the required inputs, click on the **Test** button next to the function's drop-down.
 >
 > **Note**: A badge (or a card) must be cached during execution. So you need to tap your badge on the reader before testing this action.
+
+![Call accesskey function action](/images/vendor/workflow_automation/automation_app/call_accesskey_function.png)
+> **Figure:** Call accesskey function action configuration.
 
 #### Run PowerShell script
 
@@ -240,10 +299,13 @@ Executes some custom PowerShell script and retrieves its output into a variable.
 
 **Input Parameters:**
 
-| Argument | Optional | Accepts         | Default Value | Description                                                  |
-| -------- | -------- | --------------- | ------------- | ------------------------------------------------------------ |
-| Script   | No       | String          | Empty         | The PowerShell code to execute. Variables can be included within the script since they evaluate before the execution of the PowerShell code |
-| Timeout  | No       | Number (Double) | 0             | The maximum number of seconds to wait for the script to complete (0 for indefinitely) |
+| Parameter | Type            | Required | Default | Description                                                         |
+| --------- | --------------- | -------- | ------- | ------------------------------------------------------------------- |
+| Script    | String          | Yes      | Empty   | The PowerShell code to execute (variables are resolved beforehand) |
+| Timeout   | Number (Double) | Yes      | 0       | Maximum wait time in seconds (`0` means no timeout)               |
+
+![Run powershell script action](/images/vendor/workflow_automation/automation_app/run_powershell_script.png)
+> **Figure:** Run powershell script action configuration.
 
 #### Conditional Actions
 
@@ -251,15 +313,21 @@ Conditional actions are workflow steps that execute only when specific condition
 
 #### If
 
-Check if two values match.
+Checks if two values match.
 
 **Input Parameters:**
 
-| Argument       | Optional | Accepts                                                      | Default Value | Description                                                  |
-| -------------- | -------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| First operand  | No       | String                                                       | Empty         | Enter a value name defined by a previous action, text, number or expression to compare with the second operand |
-| Operator       | No       | Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty | Equal to (=)  | The relationship of first operand to the second operand      |
-| Second operand | No       | String/Number                                                | Empty         | Enter a value name produced by a previous action, text, number or expression to compare with the first operand |
+| Parameter      | Type          | Required | Default      | Description                                                            |
+| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------------------------- |
+| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare                   |
+| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands                     |
+| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare                  |
+
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+
+![If action](/images/vendor/workflow_automation/automation_app/if.png)
+> **Figure:** If conditional action configuration.
+
 
 #### Else if
 
@@ -267,11 +335,13 @@ Starts a block of actions that run only if earlier `If` or `else if` checks fail
 
 **Input Parameters:**
 
-| Argument       | Optional | Accepts                                                      | Default Value | Description                                                  |
-| -------------- | -------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| First operand  | No       | String                                                       | Empty         | Enter a value name defined by a previous action, text, number or expression to compare with the second operand |
-| Operator       | No       | Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty | Equal to (=)  | The relationship of first operand to the second operand      |
-| Second operand | No       | String/Number                                                | Empty         | Enter a value name produced by a previous action, text, number or expression to compare with the first operand |
+| Parameter      | Type          | Required | Default      | Description                                                            |
+| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------------------------- |
+| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare                   |
+| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands                     |
+| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare                  |
+
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
 
 #### Else
 
@@ -279,19 +349,22 @@ Starts a block of actions when none of the preceding `if` or `else if` condition
 
 **Input Parameters:**
 
-No Inputs needed.
+No inputs needed.
 
 #### If UI element exists
 
-Checking whether a UI element exists on the screen.
+Checks whether a UI element exists on the screen.
 
 **Input Parameters:**
 
-| Argument      | Optional | Accepts              | Default Value | Description                                                  |
-| ------------- | -------- | -------------------- | ------------- | ------------------------------------------------------------ |
-| UI element    | No       | UI element           | -             | The UI element to check if it exists                         |
-| If UI element | No       | Exist, Doesn't exist | Exist         | Specifies the condition to check for the UI element’s presence or absence on the screen. |
-| Timeout       | No       | Number (Double)      | 2             | Search timeout in seconds                                    |
+| Parameter      | Type            | Required | Default | Description                                                   |
+| -------------- | --------------- | -------- | ------- | ------------------------------------------------------------- |
+| UI element     | UI element      | Yes      | -       | The target element to check                                  |
+| If UI element  | Enum            | Yes      | Exist   | Allowed: Exist, Doesn't exist                                |
+| Timeout        | Number (Double) | Yes      | 2       | Search timeout in seconds                                    |
+
+![If UI element exists action](/images/vendor/workflow_automation/automation_app/if_UI_element_exists.png)
+> **Figure:** If UI element exists action configuration.
 
 #### Loops
 
@@ -303,13 +376,16 @@ Iterates a block of actions for a specific number of times.
 
 **Input Parameters:**
 
-| Argument     | Optional | Accepts      | Default Value | Description                                                  |
-| ------------ | -------- | ------------ | ------------- | ------------------------------------------------------------ |
-| Start from   | No       | Number (Int) | Empty         | Set the starting point of the loop counter (variables are allowed) |
-| End to       | No       | Number (Int) | Empty         | Set the ending point of the loop counter (variables are allowed) |
-| Increment by | No       | Number (Int) | Empty         | Set the increment that the loop counter is increased by (variables are allowed) |
+| Parameter    | Type         | Required | Default | Description                                            |
+| ------------ | ------------ | -------- | ------- | ------------------------------------------------------ |
+| Start from   | Number (Int) | Yes      | Empty   | The starting value of the loop counter (variables allowed) |
+| End to       | Number (Int) | Yes      | Empty   | The ending value of the loop counter (variables allowed)   |
+| Increment by | Number (Int) | Yes      | Empty   | The increment step for the loop counter (variables allowed)   |
 
 > **Note**: You can use variables instead of static numbers. For more details, see [Variables](#variables).
+
+![For loop action](/images/vendor/workflow_automation/automation_app/for_loop.png)
+> **Figure:** For loop action configuration.
 
 ##### Loop condition
 
@@ -317,25 +393,62 @@ Iterates a block of actions as long as a specific condition proves to be true.
 
 **Input Parameters:**
 
-| Argument       | Optional | Accepts                                                      | Default Value | Description                                                  |
-| -------------- | -------- | ------------------------------------------------------------ | ------------- | ------------------------------------------------------------ |
-| First operand  | No       | String                                                       | Empty         | Enter a value name defined by a previous action, text, number or expression to compare with the second operand |
-| Operator       | No       | Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty | Equal to (=)  | The relationship of first operand to the second operand      |
-| Second operand | No       | String/Number                                                | Empty         | Enter a value name produced by a previous action, text, number or expression to compare with the first operand |
+| Parameter      | Type          | Required | Default      | Description                                            |
+| -------------- | ------------- | -------- | ------------ | ------------------------------------------------------ |
+| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare   |
+| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands     |
+| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare  |
+
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
 
 ##### Next loop
 
-Uses inside a loop to skip the current iteration and jump directly to the next one when certain conditions are met.
+Used inside a loop to skip the current iteration and jump directly to the next one when certain conditions are met.
 
 ##### Exit loop
 
-To immediately terminate a loop when a specific condition is met, stopping any further iterations.
+Immediately terminates a loop when a specific condition is met, stopping any further iterations.
+
+#### Read CSV from file
+
+Reads a CSV file from your PC or system and loads it into a data table variable.
+
+**Input Parameters:**
+
+| Parameter            | Type    | Required | Default | Description                                                                 |
+| -------------------- | ------- | -------- | ------- | --------------------------------------------------------------------------- |
+| CSV file path        | String  | Yes      | Empty   | Full path to the `.csv` file to read (you can also use the `select file` button on the right side for convenience)|
+| First line is header | Boolean | No       | false   | If enabled, the first row is treated as column names; otherwise, columns are auto-named (`Col 1`, `Col 2`, ...) |
+| Trim fields          | Boolean | No       | false   | If enabled, trims leading/trailing spaces for each field value             |
+| Store result in      | Variable| Yes      | Empty   | Name of the variable that receives the output DataTable                    |
+
+![Read CSV from file action](/images/vendor/workflow_automation/automation_app/read_csv_from_file.png)
+> **Figure:** Read CSV from file action configuration.
+
+#### Find in data table
+
+Searches a column in a source data table and stores matching rows in a new data table variable.
+
+**Input Parameters:**
+
+| Parameter            | Type     | Required | Default | Description                                                                 |
+| -------------------- | -------- | -------- | ------- | --------------------------------------------------------------------------- |
+| Data table           | Variable | Yes      | Empty   | Source variable containing the input DataTable                             |
+| Text to find         | String   | Yes      | Empty   | Text to search for in the selected column. Supports variable placeholders  |
+| Column name or index | String   | Yes      | Empty   | Target column by exact name or zero-based index (`0`, `1`, ...)           |
+| All matches          | Boolean  | No       | false   | If enabled, returns all matching rows; otherwise, returns only the first matching row |
+| Match case           | Boolean  | No       | false   | If enabled, text comparison is case-sensitive                              |
+| Match entire cell    | Boolean  | No       | false   | If enabled, value must match the full cell text; otherwise, substring matching is used |
+| Store result in      | Variable | Yes      | Empty   | Variable name that receives the output DataTable with matched rows         |
+
+![Find in data table action](/images/vendor/workflow_automation/automation_app/find_in_data_table.png)
+> **Figure:** Find in data table action configuration.
 
 ### Variables
 
 Variables are placeholders that store values during workflow execution. These values can be reused across different actions, making workflows dynamic and flexible. To reference a variable in another action, use the format `%variable_name%`, which substitutes the stored value at runtime.
 
-You can see the list of the current generated variables by clicking on the variables icon at the top right corner of the menu items.
+You can see the list of the currently generated variables by clicking on the variables icon at the top right corner of the menu items.
 
 #### Define a variable
 
@@ -355,11 +468,11 @@ To increase/decrease the value of a numeric variable, select the `Increase varia
 
 The variables `CardId` and `UserId` are reserved; one is the ID of the card tapped on the reader, and the other is the username of the card’s owner.
 
-#### Variables scope
+#### Variable scope
 
 To use a variable in an action, it must be defined in the previous flows.
 
-When a variable is defined, it will be alive throughout the workflow execution.
+When a variable is defined, it remains available throughout the workflow execution.
 
 #### Variable types
 
@@ -374,7 +487,7 @@ To access a variable in an action, use the format `%var_name%`. For example, if 
 A UI element (User Interface Element) is a distinct, identifiable component of a software interface that an automation process can recognize, interact with, and manipulate during execution.
 For example, buttons, text boxes, hyperlinks, or images are UI elements.
 
-You can add these elements to the workflow and do actions(like clicking) on them.
+You can add these elements to the workflow and perform actions (like clicking) on them.
 
 To add UI elements to the workflow, click on the **Add UI element** button at the top right of the workflow editor window.
 
@@ -384,6 +497,9 @@ When you click on the **Add UI element**, the UI element picker window will appe
 You can add UI elements by hovering the mouse cursor over the element. When the red rectangle appears around the element, hold the keyboard **Control** key and click on the element to add it to the elements list.
 
 > Some UI elements contain multiple parts; for example, a button may contain a text element inside it. So make sure that you select the desired element correctly by checking the element name that appears on the top of the red rectangle.
+
+![UI element picker](/images/vendor/workflow_automation/automation_app/UI_element_picker.png)
+> **Figure:** The UI element picker environment.
 
 #### Supported UI elements
 
@@ -426,6 +542,9 @@ To edit selectors of a UI element, double-click on the element that exists in th
 >
 > **Note**: If you want to create a workflow that is going to run on other systems, be careful when choosing the selector and attributes so that the values are not dependent on your system.
 > For example, when the root view of an element is a window, the title of that window is tab-dependent, so you can uncheck the Name attribute to avoid mismatches.
+
+![UI element selector](/images/vendor/workflow_automation/automation_app/UI_element_selector.png)
+> **Figure:** The UI element selector environment.
 
 #### Test selectors
 
@@ -507,11 +626,11 @@ To run a workflow on the security key presence (card tap) trigger, do the follow
 
 ### Test Workflow
 
-When you configured everything in the previous section, the workflow must be run when you tap your badge on the reader.
+When you have configured everything in the previous section, the workflow must be run when you tap your badge on the reader.
 
 ## Workflow Runner CLI
 
-Workflow Runner CLI is a tool for running a workflow directly from the command line. This method is usable for the Accesskey script.
+Workflow Runner CLI is a tool for running a workflow directly from the command line. This method can be used in Accesskey scripts.
 
 ### Arguments
 
@@ -524,7 +643,7 @@ To run a workflow using the command line, enter the following command in PowerSh
 
 ```bash
 workflowrunnercli -w "WORKFLOW_JSON_FILE_PATH"
-#Example
+# Example
 workflowrunnercli -w "C:\workflows\login.json"
 ```
 
