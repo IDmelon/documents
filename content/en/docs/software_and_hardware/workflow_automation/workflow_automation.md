@@ -36,6 +36,7 @@ To import a previously saved workflow, click the `Import workflow` button and se
 > **Figure:** The specified buttons can be used to export/import a workflow.
 
 #### Startup behavior for Workflow Runner
+
 In **Settings** (at the top right corner of the workflow editor), Workflow Runner startup behavior can be configured using one of these options:
 
 1. **Do not run at startup**
@@ -330,7 +331,6 @@ Checks if two values match.
 ![If action](/images/vendor/workflow_automation/automation_app/if.png)
 > **Figure:** If conditional action configuration.
 
-
 #### Else if
 
 Starts a block of actions that run only if earlier `If` or `else if` checks fail, and this condition is true.
@@ -486,16 +486,11 @@ To access a variable in an action, use the format `%var_name%`. For example, if 
 
 - To access values from a **JSON variable**, use dot notation.
 
-> **Example JSON**
+Example JSON
 >
-> ```
-> {
->   "user": {
->     "id": 123,
->     "name": "user1"
->   }
-> }
-> ```
+>
+> {>   "user": {>     "id": 123,>     "name": "user1">   }> }
+>
 
 If the variable name is `X`:
 `X.user.id` -> `123`
