@@ -47,7 +47,6 @@ To enable **Run at startup as administrator**, follow these steps:
 1. Close Workflow Editor (if it is running).
 2. Right-click Workflow Editor and select **Run as administrator**.
 3. Open **Settings** and select **Run at startup as administrator**.
-4. Save/apply the change.
 
 > **Note:** Administrator permissions are required to apply this option. If Workflow Editor is not started as administrator, the setting may not be applied.
 
@@ -230,7 +229,10 @@ Set the value of a new or existing variable, create a new variable or overwrite 
 | Variable  | String            | Yes      | Empty   | A variable name (existing or new)                      |
 | Value     | String/Int/Double | Yes      | Empty   | The value assigned to the variable                     |
 
+> **Note**: You can use [variables](#variables) in the form of %variable_name% for assigning values. For more details, see [variables](#variables).
+
 ![Set variable action](/images/vendor/workflow_automation/automation_app/set_variable.png)
+![Set variable action - 2](/images/vendor/workflow_automation/automation_app/set_variable_to_variable.png)
 > **Figure:** Set variable action configuration.
 
 #### Increase variable
@@ -481,6 +483,38 @@ A variable can be of type string, number, or a JSON string. A variable can be as
 #### Using variables in actions
 
 To access a variable in an action, use the format `%var_name%`. For example, if you have defined a variable named `username`, and you want to fill it in a text field, select the `Populate text field` action from the actions list, and set the value of the `Text to fill-in` to `%username%`. When the workflow is running, it will be replaced with the actual value of the username.
+
+- To access values from a **JSON variable**, use dot notation.
+
+> **Example JSON**
+>
+> ```
+> {
+>   "user": {
+>     "id": 123,
+>     "name": "user1"
+>   }
+> }
+> ```
+
+If the variable name is `X`:
+`X.user.id` -> `123`
+`X.user.name` -> `user1`
+
+- To access values from a **data table**, use row/column indexing.
+
+Example data table:
+
+  | id  | name |
+  | --- | ---- |
+  | 123 | abc  |
+
+Syntax:
+`X[row][columnNameOrIndex]`
+
+Examples:
+`X[0]['id']` -> `123`
+`X[0][1]` -> `abc`
 
 ### UI Elements
 
