@@ -200,7 +200,7 @@ Executes an application.
 ![Run application action](/images/vendor/workflow_automation/automation_app/run_application.png)
 > **Figure:** Run application action configuration.
 
-#### Update state of the window
+#### Window control
 
 Updates the state of one or more windows that match the specified search criteria.
 
@@ -216,8 +216,8 @@ Updates the state of one or more windows that match the specified search criteri
 
 > **Note:** If multiple windows match the criteria, use **When multiple match** to control whether the action is applied to the first match only or to all matches.
 
-![Update state of the window action](/images/vendor/workflow_automation/automation_app/update_state_of_the_window.png)
-> **Figure:** Update state of the window action configuration.
+![Window control action](/images/vendor/workflow_automation/automation_app/update_state_of_the_window.png)
+> **Figure:** Window control action configuration.
 
 #### Set variable
 
@@ -522,10 +522,29 @@ To add UI elements to the workflow, click on the **Add UI element** button at th
 
 #### UI Element Picker
 
-When you click on the **Add UI element**, the UI element picker window will appear.
-You can add UI elements by hovering the mouse cursor over the element. When the red rectangle appears around the element, hold the keyboard **Control** key and click on the element to add it to the elements list.
+When you click on the **Add UI element**, the **UI Element Picker** window opens in **Capture** mode.
 
-> Some UI elements contain multiple parts; for example, a button may contain a text element inside it. So make sure that you select the desired element correctly by checking the element name that appears on the top of the red rectangle.
+In Capture mode, add elements directly from the target app:
+
+1. Hover your mouse over the target UI element until a red highlight rectangle appears.
+2. Confirm the element label shown at the top of the rectangle.
+3. Press and hold **Ctrl**, then **left-click** to add that element to the list.
+
+> Some UI controls include nested child elements (for example, a button that contains a text element). Always verify the highlighted element name before adding, so you capture the correct one.
+
+#### Inspector Mode
+
+Use **Inspect** when hovering is difficult or when you need more precise selection.
+
+1. Click **Inspect** in the picker window.
+2. In the tree, expand the target window and its child nodes to find the exact UI element.
+3. Select a concrete element (not a container/placeholder), then click **Add selected**.
+4. The selected element is highlighted on screen, and once added it appears in the elements list.
+5. If the UI tree changes, click **Refresh** to reload the inspector tree.
+6. Press **Done** once you have added all of the intended elements.
+
+> The picker prevents duplicate additions of the same element path.  
+> If **Add selected** is disabled, choose a valid supported UI element node.
 
 ![UI element picker](/images/vendor/workflow_automation/automation_app/UI_element_picker.png)
 > **Figure:** The UI element picker environment.
@@ -571,6 +590,9 @@ To edit selectors of a UI element, double-click on the element that exists in th
 >
 > **Note**: If you want to create a workflow that is going to run on other systems, be careful when choosing the selector and attributes so that the values are not dependent on your system.
 > For example, when the root view of an element is a window, the title of that window is tab-dependent, so you can uncheck the Name attribute to avoid mismatches.
+>
+> **Note**: Attribute values support regular expressions.  
+> Use regular expressions when dynamic values may change between runs (for example, window titles that include document names, tabs, IDs, or timestamps).
 
 ![UI element selector](/images/vendor/workflow_automation/automation_app/UI_element_selector.png)
 > **Figure:** The UI element selector environment.
