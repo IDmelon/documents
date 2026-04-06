@@ -1,6 +1,6 @@
 ---
 title: "Audit User Activities"
-description: ""
+description: "Check on user logins and registrations per security key and per passkey/application."
 lead: ""
 date: 2023-09-20T14:05:30+03:30
 lastmod: 2023-09-20T14:05:30+03:30

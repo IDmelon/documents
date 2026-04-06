@@ -1,6 +1,6 @@
 ---
 title: "Shared User Accounts"
-description: ""
+description: "Set up generic/shared accounts and configure policies to restrict access to specific devices."
 lead: ""
 date: 2023-09-11T14:59:22+03:30
 lastmod: 2023-09-11T14:59:22+03:30

@@ -20,21 +20,21 @@ toc: true
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Workflow Editor</h2>
         <p class="card-text">Login with one tap and log out on your next tap. Learn about our Workflow Editor.</p>
-        <a href="/docs/{{ if .Site.Params.options.docsVersioning }}{{ .Site.Params.docsVersion }}/{{ end }}workflow_automation/workflow_editor/overview" class="stretched-link"></a>
+        <a href="/docs/workflow_automation/workflow_editor/" class="stretched-link"></a>
       </div>
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Passkey Provisioning</h2>
         <p class="card-text">Assign Microsoft and Okta passkeys automatically from your Panel.</p>
-        <a href="/docs/{{ if .Site.Params.options.docsVersioning }}{{ .Site.Params.docsVersion }}/{{ end }}workflow_automation/passkey_provisioning/overview" class="stretched-link"></a>
+        <a href="/docs/workflow_automation/passkey_provisioning/" class="stretched-link"></a>
       </div>
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Entra ID Import</h2>
         <p class="card-text">Schedule Entra ID user and device imports from your Panel.</p>
-        <a href="/docs/{{ if .Site.Params.options.docsVersioning }}{{ .Site.Params.docsVersion }}/{{ end }}workflow_automation/entraID_import/overview" class="stretched-link"></a>
+        <a href="/docs/workflow_automation/entraid_import/" class="stretched-link"></a>
       </div>
     </div>
   </div>

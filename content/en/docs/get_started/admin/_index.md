@@ -1,6 +1,6 @@
 ---
 title: "Admin"
-description: "Hello this is an example"
+description: ""
 lead: ""
 date: 2026-01-30 11:43:39 -08:00
 lastmod: 2026-01-30 11:43:39 -08:00

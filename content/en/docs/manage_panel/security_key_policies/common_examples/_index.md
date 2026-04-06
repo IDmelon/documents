@@ -1,6 +1,6 @@
 ---
 title: "Common Examples"
-description: ""
+description: "Examples on how to restrict user access to a city/country, working hours, shared device, web service/application, and IP addresses."
 lead: ""
 date: 2023-09-20T14:55:57+03:30
 lastmod: 2023-09-20T14:55:57+03:30
