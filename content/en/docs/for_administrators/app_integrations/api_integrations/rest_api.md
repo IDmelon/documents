@@ -3,7 +3,7 @@ title: "REST API"
 description: "IDmelon Admin Panel REST API for workspace stats, users, security keys, and activity logs"
 lead: ""
 date: 2026-03-03T00:00:00+00:00
-lastmod: 2026-03-03T00:00:00+00:00
+lastmod: 2026-04-10T00:00:00+00:00
 draft: false
 images: []
 menu:
@@ -175,15 +175,37 @@ Endpoints that correspond to **Activity** or **Authentication logs** in the Admi
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | GET | `/administrator/workspace/activity/logs` | Workspace activity / authentication logs |
+| GET | `/administrator/tokens/activity/{userId}/logs` | Activity / authentication logs for a specific user |
 
 **Query parameters:**
 
 - `limit` (optional) – Max number of log entries (e.g. `50`).
+- `from` (optional) - Start time (ISO timestamp).
+- `to` (optional) - End time (ISO timestamp).
+- `skip` (optional) - Offset for pagination.
+- `action` (optional) - Filter by action enum value(s). Supports comma-separated values.
+- `status` (optional) - Filter by status enum value(s). Supports comma-separated values.
 
-**Example:**
+**Action enum values (`action`):**
+
+- `1` = `Create`
+- `2` = `Sign`
+- `4` = `Delete`
+
+**Status enum values (`status`):**
+
+- `1` = `Success`
+- `2` = `BlockedByPolicy`
+
+**Examples:**
 
 ```http
-GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50
+GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?from=2026-04-01T00:00:00.000Z&limit=50
+Authorization: YOUR_API_KEY
+```
+
+```http
+GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?action=1,2,4&status=1,2&limit=50
 Authorization: YOUR_API_KEY
 ```
 
