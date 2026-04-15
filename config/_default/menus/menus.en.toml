@@ -40,9 +40,14 @@
   weight = 10
 
 [[main]]
+  name = "Release Notes"
+  url = "/docs/release/panel"
+  weight = 20
+
+[[main]]
   name = "Security"
   url = "/docs/restructure_folder/security"
-  weight = 10
+  weight = 30
 
 # [[main]]
 #   name = "Tutorial"

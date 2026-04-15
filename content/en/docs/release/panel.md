@@ -1,6 +1,6 @@
 ---
-title: "Release Notes"
-description: "IDmelon Release notes"
+title: "Panel Release Notes"
+description: "IDmelon Panel release notes"
 lead: ""
 date: 2022-02-16T18:14:02-08:00
 lastmod: 2022-02-16T18:14:02-08:00

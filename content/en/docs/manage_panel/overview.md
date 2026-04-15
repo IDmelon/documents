@@ -42,7 +42,7 @@ toc: true
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">User Permissions</h2>
-        <p class="card-text">Configure admin permissions, user views, and streamline these using Organizational Units.</p>
+        <p class="card-text">Configure user/admin permissions, and streamline them using Organizational Units.</p>
         <a href="/docs/manage_panel/user_permissions" class="stretched-link"></a>
       </div>
     </div>

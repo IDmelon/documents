@@ -4,6 +4,9 @@
 {{- end }}
 {{- end -}}
 
+/docs / 301
+/docs/ / 301
+
 # /docs/1.0/prologue/   /docs/1.0/prologue/introduction/
 # /docs/1.0/help/       /docs/1.0/help/how-to-update/
 # /docs/1.0/            /docs/1.0/prologue/introduction/
