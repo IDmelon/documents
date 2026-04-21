@@ -20,5 +20,5 @@ April 21, 2026
 
 **Bug Fixes**
 
-- Login option for shared accounts not showing up during login attempts? Hopefully, we won't be seeing this issue anymore.
-- Passkeys on the IDmelon Authenticator app for Android no longer perform magic tricks where they disappear, only to reappear after a refresh. Passkeys now stay visible at all times in your IDmelon app for Android.
+- Shared account login option not showing up during login attempts? Now, unless there is a policy in place or you are using the WebLogin Extension, both personal and shared account login options should always be available.
+- Passkeys on the IDmelon Authenticator app for Android no longer perform magic tricks where they disappear, only to reappear after refreshing the app. Passkeys now stay visible at all times in your IDmelon app for Android.
