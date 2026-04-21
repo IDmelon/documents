@@ -13,7 +13,7 @@ weight: 37300
 toc: true
 ---
 
-Here are the steps to enable or disable the offline login option for a user’ security key in their detail view:  
+Here are the steps to enable or disable the offline login option for a user’s security key in their detail view:  
 
 1. Log in to the admin panel.  
 2. Go to the **Users** section on the left-side menu, click the **All Users**. This section lists all users associated with your workspace.  
@@ -22,3 +22,5 @@ Here are the steps to enable or disable the offline login option for a user’ s
 5. After making your selection, remember to save your changes by clicking the **Confirm** button.  
 
 By following these steps, you can easily enable or disable the offline login option for the selected user. This feature allows the user to utilize their security key for offline logins for a limited number of times within a specified timeframe, providing flexibility and security for scenarios where internet connectivity might be temporarily unavailable.  
+
+**Important Note**: For all offline logins, you must first login while being online once. Furthermore, for smartphone security keys, the [IDmelon Reader](https://idmelon.com/products/reader) is required to obtain offline capabilities.
