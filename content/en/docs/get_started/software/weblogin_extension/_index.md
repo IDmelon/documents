@@ -1,5 +1,5 @@
 ---
-title: "WebLogin"
+title: "WebLogin Extension"
 description: ""
 lead: ""
 date: 2023-09-11T11:37:06+03:30

@@ -12,9 +12,12 @@ menu:
 weight: 341000
 toc: true
 ---
-IDmelon Reader is a hardware technology designed and developed by IDmelon Technologies to let users use their smartphones as a security key.
-As an example, users on a shared or personal computer can enjoy the passwordless login experience with a single tap with a smartphone on the reader.
-IDmelon Reader supports different modes of operation each of which has different capabilities and features. In this document and the following pages,
+The IDmelon Reader is a small Bluetooth Low Energy (BLE) reader that gives smartphones a tap-and-go experience when used as security keys.
+Thus, users on a shared or personal computer can enjoy the passwordless login experience with a single tap of their smartphone on the reader.
+Although the reader is not necessary to use your smartphone as a security key, it is highly recommended for shared workstations.
+
+
+The IDmelon Reader supports different modes of operation each of which has different capabilities and features. In this document and the following pages,
 we will describe how the reader works in different modes and how you can switch between these modes.
 
 ## Hardware
@@ -27,7 +30,7 @@ we will describe how the reader works in different modes and how you can switch 
 
 ---
 
-IDmelon Reader supports 3 different working modes.
+The IDmelon Reader supports 3 different working modes.
 Each mode has different capabilities and designed for a use case. Users can switch and choose their working mode according to their needs and use cases.
 
 ### Smartphone BLE Reader

@@ -1,5 +1,5 @@
 ---
-title: "How to Use Pairing Tool?"
+title: "How to Use the IDmelon Pairing Tool?"
 description: "How to install and use the IDmelon Pairing Tool to pair your phone with your computer and use your phone as a security key."
 lead: ""
 date: 2022-02-16T18:14:02-08:00

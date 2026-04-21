@@ -1,6 +1,6 @@
 ---
-title: "Overview"
-description: ""
+title: "What is WebLogin?"
+description: "An overview of what IDmelon WebLogin is and how it can be used."
 lead: ""
 date: 2024-07-20T14:40:56+01:00
 lastmod: 2024-07-20T14:40:56+01:00
@@ -45,8 +45,3 @@ Cancelling this dialog will forward request to the platform so user can use othe
 feature completely you can turn off **Handle Passkey Requests** option in extension popup.
 
 ![alt](/images/vendor/weblogin/handle_passkey.jpg)
-
-## Workflow Automation
-
-Refer
-to [Automation Extension](https://docs.idmelon.com/docs/for_administrators/workflow_automation/automation_extension/)

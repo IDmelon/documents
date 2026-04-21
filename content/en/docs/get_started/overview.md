@@ -41,16 +41,16 @@ New user or new organization? This is the place to start.
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
-        <h2 class="card-title">Hardware</h2>
-        <p class="card-text">IDmelon Readers.</p>
-        <a href="/docs/get_started/hardware/" class="stretched-link"></a>
+        <h2 class="card-title">Software</h2>
+        <p class="card-text">Learn the software needed to make IDmelon work.</p>
+        <a href="/docs/get_started/software/" class="stretched-link"></a>
       </div>
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
-        <h2 class="card-title">Software</h2>
-        <p class="card-text">Card reader drivers, authenticator app, and more.</p>
-        <a href="/docs/get_started/software/" class="stretched-link"></a>
+        <h2 class="card-title">Hardware</h2>
+        <p class="card-text">Learn to use IDmelon Readers for smartphones.</p>
+        <a href="/docs/get_started/hardware/" class="stretched-link"></a>
       </div>
     </div>
   </div>

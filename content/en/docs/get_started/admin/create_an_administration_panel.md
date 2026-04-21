@@ -11,6 +11,11 @@ menu:
     parent: "admin"
 weight: 101000
 toc: true
+related_topics:
+  - title: "Deployment options"
+    url: "/docs/deployment/deployment_options/"
+  - title: "External guide"
+    url: "https://example.com/docs"
 ---
 
 1. Click [here](https://panel.idmelon.com) to create your organization’s admin panel.
@@ -36,3 +41,4 @@ To activate your security key, based on your selected device, please follow one 
    a. Choose **FIDO2 Hardware** Security Key as your security key device.  
    b. Enter a name for your hardware security key and click on **Register**.  
    c. Touch your Hardware Security key.
+

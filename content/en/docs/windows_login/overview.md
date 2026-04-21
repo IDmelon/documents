@@ -20,21 +20,21 @@ toc: true
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Entra Joined</h2>
         <p class="card-text">Configure login for fully Entra joined devices.</p>
-        <a href="/docs/{{ if .Site.Params.options.docsVersioning }}{{ .Site.Params.docsVersion }}/{{ end }}windows_login/entra_joined/overview/" class="stretched-link"></a>
+        <a href="/docs/windows_login/entra_joined/" class="stretched-link"></a>
       </div>
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Entra Hybrid Joined</h2>
         <p class="card-text">Configure login for Entra hybrid joined devices.</p>
-        <a href="/docs/{{ if .Site.Params.options.docsVersioning }}{{ .Site.Params.docsVersion }}/{{ end }}windows_login/entra_hybrid/overview/" class="stretched-link"></a>
+        <a href="/docs/windows_login/entra_hybrid/" class="stretched-link"></a>
       </div>
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Local & UAC</h2>
         <p class="card-text">Grant admin rights and configure login for Local accounts.</p>
-        <a href="/docs/{{ if .Site.Params.options.docsVersioning }}{{ .Site.Params.docsVersion }}/{{ end }}windows_login/local/overview/" class="stretched-link"></a>
+        <a href="/docs/windows_login/local/" class="stretched-link"></a>
       </div>
     </div>
   </div>

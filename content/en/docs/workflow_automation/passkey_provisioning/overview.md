@@ -1,6 +1,6 @@
 ---
 title: "Overview"
-description: ""
+description: "Overview of workflows for passkey provisioning."
 lead: ""
 date: 2026-01-30 11:43:39 -08:00
 lastmod: 2026-01-30 11:43:39 -08:00

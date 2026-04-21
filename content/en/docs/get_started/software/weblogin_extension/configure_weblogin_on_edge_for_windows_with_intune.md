@@ -25,7 +25,7 @@ workflows, and operational options—by writing directly to the Windows Registry
 - Windows 10/11 devices enrolled in Intune.
 
 - The WebLogin extension must be
-  force-installed ([Guide](/docs/software_and_hardware/browser_extensions/weblogin/install_weblogin_on_edge_for_windows_with_intune/)).
+  force-installed ([Guide](/docs/get_started/software/weblogin_extension/install_weblogin_on_edge_for_windows_with_intune/)).
 
 ## Step 1: Create the PowerShell Script
 

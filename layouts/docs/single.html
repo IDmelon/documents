@@ -36,11 +36,13 @@
 				{{ if .Site.Params.lastMod -}}
 					{{ partial "main/last-modified.html" . }}
 				{{ end -}}
-				{{ if .Site.Params.editPage -}}
-					{{ partial "main/edit-page.html" . }}
-				{{ end -}}
 			</div>
 			{{ partial "main/docs-navigation.html" . }}
+			{{ if .Site.Params.editPage -}}
+			<div class="docs-edit-page-footer d-flex justify-content-end mt-3">
+				{{ partial "main/edit-page.html" . }}
+			</div>
+			{{ end -}}
 			<!--
 			{{ if not .Site.Params.options.collapsibleSidebar -}}
 				{{ partial "main/docs-navigation.html" . }}

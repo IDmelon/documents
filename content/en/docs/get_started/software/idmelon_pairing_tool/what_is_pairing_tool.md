@@ -1,5 +1,5 @@
 ---
-title: "What is Pairing Tool?"
+title: "What is the IDmelon Pairing Tool?"
 description: "IDmelon Pairing Tool is a software technology designed and developed by IDmelon Technologies Inc. to let users pair their smartphones with their PCs and use their smartphones as a security key. It is really best suited for environments with single-user PCs so that users can enjoy the passwordless login experiance with a single touch on a push notification on their smartphones."
 lead: ""
 date: 2022-02-16T18:14:02-08:00
@@ -13,8 +13,9 @@ weight: 311000
 toc: true
 ---
 
-IDmelon Pairing Tool is a completely hardware-less authentication method that ensures that you, and only you, can have
-authorized access through your smartphone.
+The IDmelon Pairing Tool is an application that pairs your smartphone with your desktop/laptop.
+It makes using your smartphone as a security key much easier by sending push notifications on login attempts.
+This tool is perfect for devices with a single user.
 
 You will need to download and install two applications:
 

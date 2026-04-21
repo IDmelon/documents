@@ -1,5 +1,5 @@
 ---
-title: "Deployment Options"
+title: "Dedicated Deployment"
 description: "Overview of IDmelon deployment options: managed cloud, self-managed, and on-premises."
 lead: ""
 date: 2024-03-05T14:30:00+03:30

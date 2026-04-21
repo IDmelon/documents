@@ -49,6 +49,14 @@ h4:hover a {
   margin-bottom: 0.25rem;
 }
 
+.docs-edit-page-footer {
+  padding-bottom: 0.25rem;
+}
+
+.docs-edit-page-footer .edit-page {
+  flex: 0 0 auto;
+}
+
 p.meta {
   margin-top: 0.5rem;
   font-size: $font-size-base;

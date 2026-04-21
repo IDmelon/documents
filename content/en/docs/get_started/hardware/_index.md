@@ -1,5 +1,5 @@
 ---
-title: "On-Premises"
+title: "Hardware"
 description: ""
 lead: ""
 date: 2026-01-30 11:43:39 -08:00
@@ -8,8 +8,8 @@ draft: false
 images: []
 menu:
   docs:
-    parent: "deployment"
-weight: 3000
+    parent: "get_started"
+weight: 4000
 type: docs
 toc: true
 ---

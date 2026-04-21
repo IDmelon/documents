@@ -1,6 +1,6 @@
 ---
-title: "Add a Key to IDmelon Authenticator"
-description: "How to add a new security key or passkey to the IDmelon Authenticator app."
+title: "Adding a Passkey"
+description: "How to add a new passkey to the IDmelon Authenticator app."
 lead: ""
 date: 2022-02-16T18:14:02-08:00
 lastmod: 2022-02-16T18:14:02-08:00
@@ -20,7 +20,7 @@ You can add the following platforms to your security key.
 - This feature is only available for Azure Active Directory joined PCs. Standalone PCs or even on-premise AD do not support this feature.  
 - To enable this feature on your Azure AD joined PCs, call your IT administrator.  
 
-Note: Administrators for a technical guide can refer to this [link](/docs/for_administrators/windows_passwordless_deployment/entra_id_connected_pcs).  
+Note: Administrators looking for a technical guide can refer to this [link](/docs/windows_login/entra_joined/entra_id_joined_pcs/).  
 
 ## Office 365  
 
