@@ -77,8 +77,6 @@ https://login-us.microsoftonline.com
 The app prefix allow list should include `com.idmelon.` so the iPad can move cleanly between
 IDmelon Authenticator and Microsoft applications in the shared-device flow.
 
-> Screenshot placeholder: Intune Device Features profile showing the Microsoft Enterprise SSO settings.
-
 ## Assignments
 
 1. Assign the profile to the same device group used for the shared iPad application and managed app
