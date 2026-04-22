@@ -19,8 +19,15 @@ toc: true
     <div class="home-page-card card-transition home-card-body text-dark" >
       <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
         <h2 class="card-title">Workflow Editor</h2>
-        <p class="card-text">Login with one tap and log out on your next tap. Learn about our Workflow Editor.</p>
+        <p class="card-text">Log in to your machine and get your apps ready with one tap.</p>
         <a href="/docs/workflow_automation/workflow_editor/" class="stretched-link"></a>
+      </div>
+    </div>
+    <div class="home-page-card card-transition home-card-body text-dark" >
+      <div class="card-body py-3 d-flex flex-column align-items-center justify-content-center">
+        <h2 class="card-title">Browser Workflows</h2>
+        <p class="card-text">Tap to action workflows for kiosk and non-kiosk browsers.</p>
+        <a href="/docs/workflow_automation/tap_to_action/" class="stretched-link"></a>
       </div>
     </div>
     <div class="home-page-card card-transition home-card-body text-dark" >
