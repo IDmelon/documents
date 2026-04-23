@@ -584,22 +584,55 @@ To edit selectors of a UI element, double-click on the element that exists in th
 - **Elements**: Contains all intermediate elements—such as window, panels, groups, or parent controls—that lead to the target element.
 - **Attributes**: Contains all attributes of the selected element that help in finding the correct element. You can edit the desired attribute's value.
 
-> **Note**: To exclude an element from the search operation, uncheck it.
+> **Note**: To exclude an element from the search operation, **uncheck** it. When you uncheck a step in the elements list, that step is **removed from the effective selector path**. The saved path only includes **active** steps. Use this when an intermediate container is optional, duplicated, or unstable.
 >
-> **Note**: To exclude an attribute from matching during search, uncheck it.
->
+> **Note**: To exclude an attribute from matching during search, **uncheck** it. When you uncheck an attribute, that step **remains** in the path, but matching **ignores** that property. Only attributes that are **enabled** and have a **value** participate in the search.
+
+**Guidance:** Disable a **whole element** when the hierarchy level is wrong or unnecessary. Disable an **attribute** when the property is volatile (titles, generated IDs) but the element itself is still the right node type and position in the tree.
+
 > **Note**: If you want to create a workflow that is going to run on other systems, be careful when choosing the selector and attributes so that the values are not dependent on your system.
-> For example, when the root view of an element is a window, the title of that window is tab-dependent, so you can uncheck the Name attribute to avoid mismatches.
->
-> **Note**: Attribute values support regular expressions.  
-> Use regular expressions when dynamic values may change between runs (for example, window titles that include document names, tabs, IDs, or timestamps).
+> For example, when the root view of an element is a window, the title of that window is browser-tab-dependent, so you can uncheck the Name attribute to avoid mismatches.
+
+##### Regular expressions
+
+Attribute values support **Regular Expressions**. Choose regular expressions when the property is still the right one but only a **pattern** is stable, meaning only **part** of the value is predictable. For example:
+
+- Window or tab titles that include a **file name**, **tab title**, or **counter**.
+
+- Labels with **dates**, **IDs**, or **user-specific** suffixes.
+
+> **Note**: For example, to match any window whose title starts with `Report` and ends with `.pdf`, you could use a pattern like `^Report.*\.pdf$`. Matching uses case-insensitive regex. [Use this documentation for more information on syntax and behavior.](https://learn.microsoft.com/en-us/dotnet/standard/base-types/regular-expressions)
+
+##### Variables in values
+
+Attribute values can support **workflow variables** where the product substitutes placeholders before matching. Use that for data that is not fixed at authoring time.
+
+##### Stability and portability
+
+Not all attributes are equally stable across **machines**, **sessions**, or **user actions**:
+
+- **Same machine, different situation:** focus, open tabs, document name, list order, and dynamically generated lists can change **Name**, **Text**, or **Id** without changing computers.
+
+- **Different machines:** paths in titles, localization, scaling, and process naming can differ.
+
+- **Id** may be an intentional stable id, or it may be **generated** when the UI is data-driven; treat it as stable only after you verify it across scenarios.
+
+- **ProcessName** helps distinguish hosts but is environment-dependent if executables or hosting differ.
+
+**Practical approach:**
+
+1. Start from the capture and **test** the selector in realistic conditions (other tabs, other data).
+
+2. If matching fails, decide whether the failing constraint is **wrong in principle** (uncheck attribute or step) or **partially predictable** (use **Contains** / **Starts with** / **regex**).
+
+3. Prefer the **shortest** set of constraints that still identifies the control **uniquely**.
+
+##### Test selectors
+
+To make sure the selector is set correctly, click the `Test` button at the top of the selector window. If the element is located on the screen and found, a red rectangle will appear around it.
 
 ![UI element selector](/images/vendor/workflow_automation/automation_app/UI_element_selector.png)
 > **Figure:** The UI element selector environment.
-
-#### Test selectors
-
-To make sure the selector is set correctly, click the `Test` button at the top of the selector window. If the element is located on the screen, a red rectangle will appear around it.
 
 #### Deleting a UI element
 
