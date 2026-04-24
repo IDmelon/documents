@@ -14,7 +14,15 @@ toc: true
 
 ---
 
-## IDmelon Panel 2.16
+## IDmelon Panel 2.160.4
+
+April 24, 2026
+
+### Bug Fixes
+
+- Email activation links from the security key device assignment workflow for smartphones were in need of some maintenance. Now, the workflow will run smoothly, as it normally does.
+
+## IDmelon Panel 2.160.3
 
 April 21, 2026
 
