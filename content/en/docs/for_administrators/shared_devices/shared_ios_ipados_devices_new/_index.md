@@ -1,5 +1,5 @@
 ---
-title: "iOS Devices"
+title: "Shared iPad with MSAL"
 description: "Shared iPad with MSAL"
 lead: "Shared iPad with MSAL"
 date: 2026-04-21T00:00:00-07:00

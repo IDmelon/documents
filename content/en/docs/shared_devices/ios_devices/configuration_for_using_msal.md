@@ -1,77 +1,78 @@
 ---
-title: "Configuration for Using MSAL"
-description: "Configure iOS devices to log into all Microsoft applications with just one sign in."
+title: "Microsoft Entra app for MSAL"
+description: ""
 lead: ""
-date: 2023-09-20T15:19:33+03:30
-lastmod: 2023-09-20T15:19:33+03:30
+date: 2026-04-21T00:00:00-07:00
+lastmod: 2026-04-21T00:00:00-07:00
 draft: false
 images: []
 menu:
   docs:
-    parent: "shared_mobile_devices"
+    parent: "shared_ios_ipados_devices_new"
 weight: 62400
 toc: true
 ---
 
-Microsoft Authentication Library (MSAL) enables a unified sign‑in experience across Microsoft applications. On shared iPads, MSAL ensures that once a user signs in, the authentication state is seamlessly applied to apps like Teams, Outlook, Word, Excel, etc, eliminating the need for repeated logins. This provides a consistent and secure single sign‑on environment for all Microsoft apps.
+This page covers one task only: create the **Microsoft Entra app registration** that provides the
+`azure_client_id` value used by the shared iPad Intune policy.
 
-## Integrating with IDmelon SSO
+## Prerequisites
 
-To enable **Single Sign‑On (SSO)** login capabilities, your environment must be integrated with **IDmelon**. The IDmelon SSO extension handles authentication flows for users whose identity provider is set to IDmelon.
+- Access to the [Microsoft Entra admin center](https://entra.microsoft.com)
+- Permission to create or manage app registrations in the correct tenant
+- The shared iPad deployment described in [Set up Shared iPad with MSAL](../shared_device_mode_configuration_ios_ipad)
 
-To configure, see [IDmelon Configuration as IDP](../../../app_integrations/integration_guides/app_integration_guides/entraid/#idmelon-configuration-as-idp).
-
-## Register an application in Microsoft Entra ID
-
-This process is essential for establishing a trust relationship between IDmelon Authenticator and the Microsoft identity platform.
-
-Follow these steps to create the app registration:
+## Entra app
 
 1. Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com/).
-2. If you have access to multiple tenants, use the **Settings** icon  in the top menu to switch to the tenant in which you want to register the application.
-3. Browse to **Entra ID > App registrations** and select **New registration**.
-4. Enter a meaningful Name for the app, for example `IDmelon-Authenticator-MSAL`.
-5. Under **Supported account types**, specify who can use the application. We recommend you select **Accounts in this organizational directory only**.
-6. For the **Redirect URI**, select **Mobile and desktop applications** as the platform, and then, in the URL box, enter:
+2. If you manage more than one tenant, switch to the tenant used by your shared iPad deployment.
+3. Go to **Entra ID > App registrations**.
+4. Click **New registration**.
+5. Enter a recognizable name such as `IDmelon-Authenticator-Shared-iPad`.
+6. Under **Supported account types**, select the option that matches your tenant policy.
+   In most deployments, this is **Accounts in this organizational directory only**.
+7. Under **Redirect URI**, select **Mobile and desktop applications**.
+8. Enter the following redirect URI:
 
-    ```text
-    msauth.com.idmelon.idmelon-2://auth
-    ```
+   ```text
+   msauth.com.idmelon.idmelon-2://auth
+   ```
 
-7. Select **Register** to complete the app registration.
-8. Under the **Manage** section, select **API permissions**.
-9. Make sure the delegated permission **User.Read** is present. If it is not, select **Add a permission → Microsoft Graph → Delegated permissions**, then check **User.Read** and click **Add permissions**.
-10. Select **Grant admin consent** for < tenant name >, then select **Yes**.
-11. From the **Overview** section, the **Application (client) ID** is available. You can use this value as the configuration for [azure_client_id](../shared_device_mode_configuration_ios_ipad/#azure_client_id-string-optional).
+9. Click **Register**.
+10. Open the new app registration and go to **API permissions**.
+11. Confirm that delegated permission **User.Read** is present.
+12. If it is missing, click **Add a permission > Microsoft Graph > Delegated permissions**,
+    select **User.Read**, and add the permission.
+13. Click **Grant admin consent** for the tenant if your policy requires it.
+14. From the **Overview** page, copy the **Application (client) ID**.
 
-![Client ID](/images/vendor/shared_ipads/shared_ipads_entra_app_registration_client_id.png)
+![Entra app registration client ID](/images/vendor/shared_ipads_new/shared_ipads_entra_app_registration_client_id.png)
 
-## Microsoft Enterprise SSO plug-in
+## Client ID
 
-For MSAL integration, the [**Microsoft Enterprise SSO plug-in**](../configuration_for_microsoft_enterprise_sso) must be configured on the device.
+Once the Microsoft Entra application exists, place its **Application (client) ID** into the
+managed app configuration:
 
-## Configuring the IDmelon Enterprise SSO plug-in
+```xml
+<dict>
+<key>use_msal</key>
+<true/>
+<key>azure_client_id</key>
+<string>YOUR_ENTRA_APP_CLIENT_ID</string>
+</dict>
+```
 
-The IDmelon SSO extension is responsible for authenticating shared users in the IDmelon panel.
+Do not paste the example value from this document. Use the client ID from your own Entra app
+registration.
 
-To configure, follow the steps below:
+## Next step
 
-1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com).
-2. Select **Devices > Manage devices > Configuration > Create > New policy**.
-3. Enter the following properties:
-    - **Platform**: Select `iOS/iPadOS`.
-    - **Profile type**: Select `Templates > Device features`.
-4. Select **Create**:
-5. In Basics, enter the following properties:
-    - **Name**: Enter a descriptive name for the policy.
-    - **Description**: Enter a description for the policy.
-6. Select **Next**.
-7. In Configuration settings, select **Single sign-on app extension**, and configure the following properties:
-    - **SSO app extension type**: `Redirect`.
-    - **Extension ID**: `com.idmelon.idmelon-2.ssoextension`
-    - **Team ID**: `4A6ZQ29Y2F`
-    - **URLs:**
+After you have the client ID:
 
-        ```json
-        https://panel.idmelon.com/auth/sign-in
-        ```
+1. Place it in the shared iPad app configuration as `azure_client_id`.
+2. Configure **Microsoft Authenticator** with `sharedDeviceMode` set to Boolean `true`.
+3. Configure the Microsoft Enterprise SSO profile.
+
+Use this reference page:
+
+- [Microsoft Enterprise SSO profile](../configuration_for_microsoft_enterprise_sso)

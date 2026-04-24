@@ -1,315 +1,266 @@
 ---
-title: "Set up an iOS or iPadOS device in Shared Device Mode"
-description: "Set up an iOS or iPadOS device in Shared Device Mode"
-lead: "Set up an iOS or iPadOS device in Shared Device Mode"
-date: 2023-09-20T15:19:33+03:30
-lastmod: 2023-09-20T15:19:33+03:30
+title: "Set up Shared iPad with MSAL"
+description: "Set up Shared iPad with MSAL"
+lead: "Set up Shared iPad with MSAL"
+date: 2026-04-21T00:00:00-07:00
+lastmod: 2026-04-21T00:00:00-07:00
 draft: false
 images: []
 menu:
   docs:
-    parent: "shared_mobile_devices"
+    parent: "shared_ios_ipados_devices_new"
 weight: 62100
 toc: true
 ---
 
-Shared mobile devices are widely used across many industries, including manufacturing and retail. IDmelon Authenticator can be configured in shared device mode, enabling users to use their badge or biometric authentication to load passkeys into the device instantly. This allows users to access multiple applications with auto-login. The session time-to-live can be configured to support various shift change use cases with auto logout.
+This is the main setup guide for the current **Shared iPad with MSAL** deployment.
 
-IDmelon Authenticator Shared Configuration Mode Features:
+The goal is simple:
 
-- **Passkeys Autofill:** Provides passkeys to the operating system for authentication.
-- **SSO Integration:** Enables quick access to IDmelon-connected service providers.
-- **MSAL Integration:** Streamlines access to Microsoft apps.
+- Deploy **IDmelon Authenticator** to shared iPads
+- Apply the shared-mode configuration
+- Put **Microsoft Authenticator** in shared mode
+- Connect the iPad to **Microsoft Entra ID** through MSAL
+- Let users open **Teams**, **Outlook**, and **My Apps** after they sign in
 
-This configuration is tested with Microsoft Intune as MDM but can work with other MDMs as well to push configuration.
+This guide is intentionally shorter than the older shared iPad documentation. It focuses only on
+the deployment you are using now.
 
----
+## What you are setting up
 
-## Prerequisites
+- **Shared mode** in IDmelon Authenticator
+- **Shared mode** in Microsoft Authenticator
+- **MSAL** for Microsoft applications
+- **Shortcut tiles** such as Teams, Outlook, Google, and My Apps
+- **Self-service fallback** for users who are not fully enrolled yet
 
-- iOS or iPadOS **17 or later**.
+## Before you start
 
----
+- iOS or iPadOS **17 or later**
+- Administrative access to the [Microsoft Intune admin center](https://intune.microsoft.com)
+- Administrative access to the [Microsoft Entra admin center](https://entra.microsoft.com)
+- Access to the [IDmelon Admin Panel](https://panel.idmelon.com)
+- The **IDmelon Authenticator** app available in your MDM catalog
+- The **Microsoft Authenticator** app available in your MDM catalog
+- A **Shared Mobile** API key created in the IDmelon Admin Panel
+- Permission to create an app registration in Microsoft Entra ID
 
-## Configure IDmelon Authenticator
+## API key
 
-Use these managed app configuration keys to set up **IDmelon Authenticator** in **shared device mode** via your MDM (e.g., Microsoft Intune, Jamf, Kandji, VMware Workspace ONE). Push them as standard managed app settings to enrolled devices.
+Before you configure the iPad, create a workspace API key dedicated to shared mobile devices.
 
-> **Scope:** Controls shared-mode behavior, PIN prompts, self-service flows, shortcuts, and optional MSAL shared-mode integration.
+1. Open the [IDmelon Admin Panel](https://panel.idmelon.com).
+2. Go to **App Integrations > Authentication > API Key Management**.
+3. Click **+ New API Key**.
+4. Enter a descriptive name such as `Shared iPad - Intune`.
+5. Set the **Type** acceto **Shared Mobile**.
+6. Create the key and copy the value securely.
 
-### Configuration Keys
+For more information, see [API Key Management](/docs/for_administrators/authentication/api_key_management/).
 
-| Key                         | Type        |    Required | Purpose                                                                     |
-| --------------------------- | ----------- | ----------- | --------------------------------------------------------------------------- |
-| `shared_device_passkeys`    | Boolean     |         Yes | Enable shared device mode (`true`).                                         |
-| `authentication_type`       | String      |         Yes | When to prompt for PIN (`onInit`, `onUse`, `none`).                         |
-| `device_id`                 | String      |         Yes | MDM device identifier (e.g., Intune `{{deviceid}}`).                        |
-| `api_key`                   | String      | Recommended | Auto-activate app (Admin Panel → **Shared Mobile** API key).                |
-| `one_time_use_passkeys`     | Boolean     |          No | Remove/invalidate passkey after first successful login.                     |
-| `base_api_url`              | String      |          No | Target dedicated/on-prem API endpoint.                                      |
-| `self_service_url`          | String      |          No | Redirect to self-service enrollment if card isn’t registered.               |
-| `auto_logout`               | String      |          No | Scheduled logout (`one-time use`, `5m`, `60m`, `2h`, `4h`, `6h`, `8h`).     |
-| `shortcut_list`             | JSON string |          No | In-app shortcuts (titles, URLs, icons).                                     |
-| `use_msal`                  | Boolean     |          No | MSAL shared device mode flag (requires MS Authenticator shared mode).       |
-| `azure_client_id`           | String      |          No | Azure App Registration Client ID for MSAL.                                  |
-| `microsoft_sp_name`         | String      |          No | Microsoft's service provider name (SSO)                                     |
-| `default_sp_for_auto_login` | String      |          No | Set a service provider to log in automatically after the user signs in (SSO)|
-| `open_url_after_login`      | String      |          No | Launches a specified app or URL immediately after the user signs in.        |
-| `open_url_after_logout`     | String      |          No | Launches a specified app or URL immediately after the user logs out.        |
+## Entra app
 
-### Key Details & Valid Values
+Before you build the Intune policy, create the Microsoft Entra app registration and copy the
+**Application (client) ID**.
 
-#### `shared_device_passkeys` (Boolean, **Required**)
+Use this reference page:
 
-Enable shared device mode.
+- [Microsoft Entra app for MSAL](../configuration_for_using_msal)
 
-```json
-"shared_device_passkeys": true
+You will place that client ID into the `azure_client_id` setting.
+
+## Intune app
+
+1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com).
+2. Go to **Apps > iOS/iPadOS**.
+3. Add **IDmelon Authenticator** as an iOS store app.
+4. Assign the app to the shared iPad device group.
+
+![Intune app add flow for IDmelon Authenticator](/images/vendor/shared_ipads_new/intune_panel_apps_idmelon.png)
+
+Assign **Microsoft Authenticator** to the same shared iPad device group. The MSAL flow depends on
+Microsoft Authenticator being present on the device.
+
+## App configuration
+
+Create a managed app configuration policy for **IDmelon Authenticator** and apply the following
+sanitized `dict` payload.
+
+```xml
+<dict>
+  <key>api_key</key>
+  <string>YOUR_SHARED_MOBILE_API_KEY</string>
+  <key>azure_client_id</key>
+  <string>YOUR_ENTRA_APP_CLIENT_ID</string>
+  <key>shared_authentication_backend</key>
+  <string>legacy</string>
+  <key>shared_device_passkeys</key>
+  <true/>
+  <key>shared_login_method</key>
+  <dict>
+    <key>type</key>
+    <string>face</string>
+    <key>model</key>
+    <string>hid</string>
+  </dict>
+  <key>shortcut_list</key>
+  <array>
+    <dict>
+      <key>iconName</key>
+      <string>teams</string>
+      <key>title</key>
+      <string>Teams</string>
+      <key>url</key>
+      <string>msteams://</string>
+    </dict>
+    <dict>
+      <key>iconName</key>
+      <string>outlook</string>
+      <key>title</key>
+      <string>Outlook</string>
+      <key>url</key>
+      <string>ms-outlook://</string>
+    </dict>
+    <dict>
+      <key>iconName</key>
+      <string>google.com</string>
+      <key>title</key>
+      <string>Google</string>
+      <key>url</key>
+      <string>https://google.com</string>
+    </dict>
+    <dict>
+      <key>iconName</key>
+      <string>myapps</string>
+      <key>title</key>
+      <string>My Apps</string>
+      <key>url</key>
+      <string>https://myapps.microsoft.com/?login_hint={email}</string>
+    </dict>
+  </array>
+  <key>use_msal</key>
+  <true/>
+  <key>self_service_url</key>
+  <string>https://panel.idmelon.com/self-service/YOUR_SELF_SERVICE_WORKFLOW_ID</string>
+</dict>
 ```
 
-#### `authentication_type` (String, **Required**)
+Use your own values for:
 
-Controls PIN prompts:
+- `api_key`
+- `azure_client_id`
+- `self_service_url`
 
-- `onInit` — PIN once after first tap
-- `onUse` — PIN every login
-- `none` — PINless login
+Keep these values exactly as shown unless your deployment team gives you a different requirement:
 
-```json
-"authentication_type": "onInit"
+- `shared_authentication_backend` = `legacy`
+- `shared_device_passkeys` = `true`
+- `use_msal` = `true`
+
+## Shared login method
+
+Set `shared_login_method` explicitly in the managed app configuration. The deployment can use one
+of these patterns:
+
+### Face login
+
+Use this when the shared iPad sign-in flow should use face-based authentication hardware:
+
+```xml
+<key>shared_login_method</key>
+<dict>
+  <key>type</key>
+  <string>face</string>
+  <key>model</key>
+  <string>hid</string>
+</dict>
 ```
 
-#### `device_id` (String, **Required**)
+- `type = face` means the user signs in with the face-based method
+- `model = hid` means the configured HID-connected reader model is used
 
-MDM device identifier used for device binding.
+### Badge login
 
-- **Intune:** `{{deviceid}}`
-- **Others:** use the provider's device identifier token
+Use this when the shared iPad sign-in flow should use badge tap instead:
 
-```json
-"device_id": "{{deviceid}}"
+```xml
+<key>shared_login_method</key>
+<dict>
+  <key>type</key>
+  <string>badge</string>
+  <key>model</key>
+  <string>auto</string>
+</dict>
 ```
 
-#### `api_key` (String, **Recommended**)
+- `type = badge` means the user starts sign-in by tapping their badge
+- `model = auto` means the app automatically detects the supported badge-reader setup
 
-Auto-activates the app on first run (no manual activation). Generate under **Admin Panel → Authentication → API Key Management → Create → Type: Shared Mobile**.
+Choose the option that matches your hardware and sign-in flow. Do not leave
+`shared_login_method` undefined if your deployment depends on a specific login method.
 
-```json
-"api_key": "YOUR_GENERATED_KEY"
-```
+The shortcut list in the current setup includes:
 
-#### `one_time_use_passkeys` (Boolean, Optional)
+- **Teams**
+- **Outlook**
+- **Google**
+- **My Apps**
 
-Logs user out after the first successful login with the passkey.
+If you use a different shortcut set in production, update only that array.
 
-```json
-"one_time_use_passkeys": true
-```
+## Microsoft Authenticator
 
-#### `base_api_url` (String, Optional)
+Create a separate managed app configuration policy for **Microsoft Authenticator** and apply this
+required setting:
 
-Specify this when pointing to a dedicated/on-premises API endpoint.
+| Key | Type | Value |
+| --- | --- | --- |
+| `sharedDeviceMode` | Boolean | `true` |
 
-```json
-"base_api_url": "https://your-dedicated-server.example.com/api"
-```
+This setting must be applied to **Microsoft Authenticator**, not to **IDmelon Authenticator**.
+Without it, the shared iPad MSAL sign-in flow will not behave like a shared device deployment.
 
-#### `self_service_url` (String, Optional)
+Use the same device group used for the shared iPad rollout so both apps receive their policies
+before testing.
 
-Redirect users to self-service enrollment if their card isn’t registered (Admin Panel → **Security Keys → Workflows → Self-Service Actions**).
+## Enterprise SSO
 
-```json
-"self_service_url": "https://panel.idmelon.com/self-service"
-```
+After both app configurations are ready, configure the Microsoft Enterprise SSO Intune profile.
 
-#### `auto_logout` (String, Optional)
+Use this reference page:
 
-Auto-logout after the given duration or after single use.
-**Allowed:** `one-time use`, `5m`, `60m`, `2h`, `4h`, `6h`, `8h`
+- [Microsoft Enterprise SSO profile](../configuration_for_microsoft_enterprise_sso)
 
-```json
-"auto_logout": "2h"
-```
+## Test sign-in
 
-#### `shortcut_list` (JSON string, Optional)
+1. Open **IDmelon Authenticator** on the shared iPad.
+2. Complete the configured shared login method.
+3. Open **Teams**, **Outlook**, or **My Apps**.
+4. Confirm the device has already received the **Microsoft Authenticator** policy with
+   `sharedDeviceMode = true`.
+5. When the Microsoft dialog appears, continue with the MSAL sign-in flow.
+6. When the passkey prompt appears, use the passkey.
 
-Quick-access shortcuts inside the app.
+![Microsoft sign-in dialog](/images/vendor/shared_ipads_new/msal_face_fingerprint_pin_or_security_key.png)
+![Passkey prompt](/images/vendor/shared_ipads_new/msal_use_passkey_prompt.png)
 
-**Pretty:**
+## After sign-in
 
-```batch
-{
-  \"shortcuts\": [
-    { \"title\": \"My Apps\", \"url\": \"https://myapps.microsoft.com\", \"iconName\": \"microsoft.com\" },
-    { \"title\": \"MS Teams\", \"url\": \"https://teams.microsoft.com\", \"iconName\": \"Teams\" }
-  ]
-}
-```
+After a successful sign-in, the user should return to the shared-mode home screen and see:
 
-> The `\` before the `"` is required.
+- the signed-in identity at the top of the page
+- the available shortcut tiles
+- Microsoft apps ready to open without repeating the full sign-in flow
 
-#### `open_url_after_login`, `open_url_after_logout` (String, Optional)
+![Shared mode home screen after login](/images/vendor/shared_ipads_new/shared_ipad_home_after_login.png)
 
-Immediately after a user successfully signs in (or out), the app launches a specified application or web address.
+## Troubleshooting
 
-```json
-"open_url_after_login": "https://..."
-```
-
-> Don't use these configurations if you have configured MSAL
-
-It can be a URL scheme (to open a native app directly) or a regular URL (to open a website in the browser).
-
-**Examples for URL Scheme:**
-
-- Launch Microsoft Teams: `msteams://`
-- Launch Microsoft Excel: `ms-excel://`
-
-```json
-"open_url_after_login": "app-scheme://"
-```
-
-#### `microsoft_sp_name` (String, Optional)
-
-Microsoft' service provider name in the IDmelon Admin Panel.
-
-**Default value**: `entra_id`
-
-```json
-"microsoft_sp_name": "entra_id"
-```
-
-#### `default_sp_for_auto_login` (String, Optional)
-
-Set a service provider to log in automatically after the user signs in.
-
-This configuration works for SSO login experience.
-
-```json
-"default_sp_for_auto_login": "entra_id"
-```
-
-#### `use_msal` (Boolean, Optional)
-
-If you plan to use Microsoft applications (such as Teams, Outlook, and other Office apps) on shared iPads, we recommend using **MSAL**.
-
-This and the next configuration are **required** when enabling MSAL.
-
-> For detailed steps on configuring **MSAL**, please refer to [Configuration for using MSAL](../configuration_for_using_msal).
-
-```json
-"use_msal": true
-```
-
-#### `azure_client_id` (String, Optional)
-
-Azure App Registration **Client ID** for MSAL.
-
-```json
-"azure_client_id": "YOUR_AZURE_APP_CLIENT_ID"
-```
-
-## Configure IDmelon Authenticator using Intune
-
-1. Navigate to **Apps > iOS/iPadOS**.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_apps.png)
-2. Click the **Add** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_apps_add.png)
-3. Select **iOS store app** as the **App type** and click the **Select** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_apps_search.png)
-4. Click the **Search the App Store**.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_apps_search_appstore.png)
-5. Search for the **IDmelon Authenticator** app and click the **Select** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_apps_idmelon.png)
-6. Select **iOS 17.0** as the **Minimum operating system** and click the **Next** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_app_minimum_os.png)
-7. Configure the **Assignments** tab according to your organization's policies.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_app_assignments.png)
-8. Review the configurations you set and click the **Create** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_app_review.png)
-9. Navigate to **Apps > App configuration policies**, click the **+ Add**, and then **Managed devices**.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies.png)
-10. Set a **Name**, select the **iOS/iPadOS** as the Platform, and **IDmelon Authenticator** as the **Targeted app**, then click the **Next** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_app.png)
-11. In the **Settings** tab, select the **User configuration designer** as the **Configuration settings format**, enter values for the configuration keys as explained in the [Configuration Keys](#configuration-keys) section above, and click the **Next** button.
-![MS Intune](/images/vendor/shared_ipads/intune_panel_configuration_policies_configurtion_keys.png)
-
-## Login Experience
-
-When IDmelon Authenticator is configured in shared mode, users can walk in, tap their badge, and get the passkeys available to the device for authentication. Depending on the configuration, you can provide multiple user experiences.
-
-### Example 1: Basic configuration
-
-Use the following configuration object when your MDM asks for app configuration (exact UI varies).
-
-```json
-{
-  "shared_device_passkeys": true,
-  "authentication_type": "onInit",
-  "device_id": "{{deviceid}}",
-  "api_key": "YOUR_API_KEY"
-}
-```
-
-> **Note**: If you are using Microsoft products on the shared iPad (such as Microsoft Teams, Outlook, or Microsoft 365), we recommend configuring the **Microsoft Enterprise SSO plug-in**.
-This plug-in simplifies authentication and reduces repeated credential prompts (see [Configuring the Microsoft Enterprise SSO plug-in](../configuration_for_microsoft_enterprise_sso)).
-
-1. Open the **IDmelon Authenticator**.
-2. Get close to the reader (or plug the keystroke reader) and tap your card on it.
-3. According to the **Card Verification Method** set in the IDmelon admin panel, if PIN is required, enter it. Otherwise, go to the next step.
-![Authenticator](/images/vendor/shared_ipads/shared_ipad_enter_pin.PNG)
-4. In case of successful login, user information will be displayed. At this stage, move the app to the background.
-![Authenticator](/images/vendor/shared_ipads/shared_ipad_logged_in.PNG)
-5. Open the app you want to log in to using the passkey (e.g., MS Teams), tap the paste icon on the top left corner of the keyboard, and tap **Next**.
-![MS Teams](/images/vendor/shared_ipads/msteams_login_page.PNG)
-6. Tap the **Next**.
-![MS Teams](/images/vendor/shared_ipads/msteams_login_with_passkey.PNG)
-7. Tap the **Continue**.
-![MS Teams](/images/vendor/shared_ipads/shared_ipad_msteams_passkey.PNG)
-
-### Example 2: SSO Login Experience
-
-If you plan to use Microsoft applications (such as Teams, Outlook, and other Office apps) on shared iPads, we recommend using **MSAL** (see [configuration guide](../configuration_for_using_msal)).
-
-Once MSAL has been configured, you can leverage the integrated authentication experience across Microsoft applications.
-
-Use the following configuration object when your MDM asks for app configuration (exact UI varies).
-
-```json
-{
-  "shared_device_passkeys": true,
-  "authentication_type": "onInit",
-  "device_id": "{{deviceid}}",
-  "api_key": "YOUR_API_KEY",
-  "use_msal": true,
-  "azure_client_id": "YOUR_AZURE_APP_CLIENT_ID"
-}
-```
-
-> **Note**: The `use_msal` and `azure_client_id` configuration keys are required only when enabling the **MSAL** login experience.
-
-- Complete the user login steps (1-4) in the IDmelon Authenticator app according to the previous section.
-- After the user logs in, the MSAL prompt appears. Paste the user's email, click Next, and then select Continue.
-![MSAL login](/images/vendor/shared_ipads/shared_ipads_msal_signin_prompt.png)
-![MSAL login](/images/vendor/shared_ipads/shared_ipads_msal_accept_msal_login.png)
-
-- Move the app to the background.
-- Open any app you want to sign in to (for example, Teams).
-- Paste the email using the paste icon on the keyboard.
-
-#### SSO Login for Non-Microsoft Service Providers
-
-- After the user logs in, a list of available service providers is displayed in the app.
-- By selecting any service provider, the device’s default browser opens and the user is automatically signed in to that provider.
-
-## Logout Experience
-
-There are several ways to log out. One is manual, which you can see below. Another way is by managing the temporary session on iPad, which can streamline the logout experience. For more information, see [Temporary Session Experience on Shared iPad](../temporary_session_experience).
-
-### Manual Logout from IDmelon Authenticator
-
-This is a manual logout that, when MSAL is configured, can also trigger sign-out from Microsoft connected services as well.
-
-1. Open the app you logged into, and log out of the account.
-2. Open the **IDmelon Authenticator** and then tap the logout icon on the top right corner of the app. Your user information and existing passkeys will be deleted from the iPad.
-![Authenticator](/images/vendor/shared_ipads/shared_ipad_logout.PNG)
+- If Microsoft apps still ask for repeated credentials, verify both `use_msal` and the Enterprise
+  SSO profile.
+- If the Microsoft flow does not act like a shared-device session, verify the **Microsoft
+  Authenticator** policy sets `sharedDeviceMode` to Boolean `true`.
+- If the app does not activate automatically, verify the **Shared Mobile** API key.
+- If **My Apps** does not open correctly, confirm that the shortcut URL still contains
+  `login_hint={email}`.
+- If unenrolled users do not get redirected correctly, verify the `self_service_url`.
