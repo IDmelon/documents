@@ -74,7 +74,7 @@ accesskey config rfideas uid byte-padding OFF
 
 #### NFC Card Reader Configuration
 
-**Reader Configuration**
+Reader Configuration
 
 NFC reader configuration is used to control how the Reader Driver communicates with the NFC reader device itself.
 
@@ -95,13 +95,15 @@ accesskey config nfc reader ccid-driver set disabled
 
 > The CCID driver is enabled by default.
 
-> When the CCID driver is enabled, the Reader Driver installs the WinUSB driver on the supported NFC reader and communicates with the reader directly through the USB protocol using CCID data formats.
+When the CCID driver is enabled, the Reader Driver installs the WinUSB driver on the supported NFC reader and communicates with the reader directly through the USB protocol using CCID data formats.
 
-> This configuration is intended to prevent the operating system from detecting the tapped card, so only the IDmelon Reader Driver can communicate with the card without interruption.
+This configuration is intended to prevent the operating system from detecting the tapped card, so only the IDmelon Reader Driver can communicate with the card without interruption.
 
-> The NFC readers that support WinUSB driver installation are limited. The Reader Driver installs the WinUSB driver using pre-built `.inf` and `.cat` files included with the service package. These driver package files are signed through Microsoft Partner Center.
+The NFC readers that support WinUSB driver installation are limited. The Reader Driver installs the WinUSB driver using pre-built `.inf` and `.cat` files included with the service package. These driver package files are signed through Microsoft Partner Center.
 
-**Card Configuration**
+---------
+
+Card Configuration
 
 For NFC card readers, the expected card behavior can be configured by defining one or more NFC card definitions. Each definition tells the Reader Driver how to detect the tapped card, which identifier to read from it, and which post-read format should be applied to the identifier value.
 
