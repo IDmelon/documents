@@ -13,7 +13,7 @@ weight: 15
 toc: true
 ---
 
-IDmelon can be inegrated to work as [extenal authentication method in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-authentication-external-method-manage).
+IDmelon can be integrated to work as [external authentication method in Microsoft Entra ID](https://learn.microsoft.com/en-us/entra/identity/authentication/how-to-authentication-external-method-manage).
 
 ## Microsoft Entra ID
 
