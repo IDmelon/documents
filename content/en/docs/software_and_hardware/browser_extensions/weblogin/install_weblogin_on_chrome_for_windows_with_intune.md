@@ -103,11 +103,13 @@ version you want to deploy.
 6. Under **Extension/App IDs and update URLs to be silently installed**, enter the following string exactly:
 
    **For Stable version:**
+
    ```bash
    eagmgpbjpedchliifpgfgogdknnmkaej;https://clients2.google.com/service/update2/crx
    ```
 
    **For Latest version:**
+
    ```bash
    mnejefleopgpkjplbcbcgkdbnkdolomj;https://clients2.google.com/service/update2/crx
    ```

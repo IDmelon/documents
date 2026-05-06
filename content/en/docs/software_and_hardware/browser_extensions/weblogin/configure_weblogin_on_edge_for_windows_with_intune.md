@@ -31,14 +31,14 @@ workflows, and operational options—by writing directly to the Windows Registry
 
 This guide is written for the WebLogin Stable extension and uses the following extension ID throughout the document:
 
-```
+```bash
 eagmgpbjpedchliifpgfgogdknnmkaej
 ```
 
 If you want to configure the WebLogin Latest version instead, replace every occurrence of the stable extension ID in
 this guide with the following ID:
 
-```
+```bash
 mnejefleopgpkjplbcbcgkdbnkdolomj
 ```
 
