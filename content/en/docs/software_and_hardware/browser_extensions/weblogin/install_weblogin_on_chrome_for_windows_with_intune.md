@@ -25,11 +25,40 @@ Microsoft Intune.
 
 - Google Chrome must already be installed on the target devices.
 
+## WebLogin Extension Versions
+
+The WebLogin extension is available in two different release channels:
+
+- [**Stable Version**](https://chromewebstore.google.com/detail/idmelon-weblogin/eagmgpbjpedchliifpgfgogdknnmkaej)
+
+  Recommended for production environments and general users.
+
+  Receives fully tested and stable updates.
+
+- [**Latest Version**](https://chromewebstore.google.com/detail/idmelon-weblogin-latest/mnejefleopgpkjplbcbcgkdbnkdolomj)
+
+  Includes the newest features and improvements before they are released to the stable channel.
+
+  Intended for testing, evaluation, or early access scenarios.
+
+Each version has a different extension ID.
+
+When configuring the extension deployment in Microsoft Intune, make sure you use the correct extension ID based on the
+version you want to deploy.
+
+| Version | Extension ID                       |
+|---------|------------------------------------|
+| Stable  | `eagmgpbjpedchliifpgfgogdknnmkaej` |
+| Latest  | `mnejefleopgpkjplbcbcgkdbnkdolomj` |
+
+> Important: Installing one version does not automatically install or update the other version, because they are treated
+> as separate extensions by Google Chrome.
+
 ## Installation Details
 
 - **Extension Name:** WebLogin
 
-- **Extension ID:** eagmgpbjpedchliifpgfgogdknnmkaej
+- **Extension ID:** Check the table above
 
 - **Update URL:** https://clients2.google.com/service/update2/crx
 
@@ -73,8 +102,14 @@ Microsoft Intune.
 
 6. Under **Extension/App IDs and update URLs to be silently installed**, enter the following string exactly:
 
+   **For Stable version:**
    ```bash
    eagmgpbjpedchliifpgfgogdknnmkaej;https://clients2.google.com/service/update2/crx
+   ```
+
+   **For Latest version:**
+   ```bash
+   mnejefleopgpkjplbcbcgkdbnkdolomj;https://clients2.google.com/service/update2/crx
    ```
 
    ![alt](/images/vendor/weblogin/extension_id.jpg)

@@ -27,6 +27,21 @@ workflows, and operational options—by writing directly to the Windows Registry
 - The WebLogin extension must be
   force-installed ([Guide](/docs/software_and_hardware/browser_extensions/weblogin/install_weblogin_on_edge_for_windows_with_intune/)).
 
+## Extension Version Information
+
+This guide is written for the WebLogin Stable extension and uses the following extension ID throughout the document:
+
+```
+eagmgpbjpedchliifpgfgogdknnmkaej
+```
+
+If you want to configure the WebLogin Latest version instead, replace every occurrence of the stable extension ID in
+this guide with the following ID:
+
+```
+mnejefleopgpkjplbcbcgkdbnkdolomj
+```
+
 ## Step 1: Create the PowerShell Script
 
 Create a script named `Configure-WebLogin-Edge.ps1`. Update the variables in the script to match your organization's
