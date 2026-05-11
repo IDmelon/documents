@@ -25,12 +25,16 @@ For more details on access scenarios, refer to the official <a href="https://lea
 
 Due to current Microsoft limitations, applications cannot request a subset of permissions for different actions. Consequently, IDmelon must request all permissions associated with its features. Learn more about this restriction in the <a href="https://learn.microsoft.com/en-us/entra/identity-platform/consent-types-developer#incremental-and-dynamic-user-consent" target="_blank">Microsoft consent documentation</a>.
 
-The required permissions are as follows:
+The default requested permissions are the following:
 
 - `Device.Read.All`: Allows IDmelon to import all devices from Microsoft Entra ID.
 - `Group.Read.All`: Allows IDmelon to import all groups from Microsoft Entra ID.
 - `User.Read.All`: Allows IDmelon to read all users from Microsoft Entra ID.
-- `UserAuthenticationMethod.ReadWrite.All`: Allows IDmelon to add FIDO2 security keys for users.
+- `UserAuthenticationMethod.ReadWrite.All`: Allows IDmelon to add authentication methods such as passkeys.
+
+Although the last permission listed is not required to start using passkeys, it is required when using IDmelon as an external IdP for SSO, and other use cases. To only allow IDmelon to create passkeys, the following permission can be set through the [manual app configuration](/docs/for_administrators/app_integrations/api_integrations/integrate_azure_application/#using-manual-app-registration) as an alternative:
+
+- `UserAuthenticationMethod-Passkey.ReadWrite.All`: Allows IDmelon to add passkeys.
 
 ## Granting Consent
 
@@ -80,7 +84,9 @@ If your organization restricts permission approvals from external applications o
 8. Finally, you should see the following state in your Azure Application:
     ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_14.png)
 
-If your organization wants to limit the `UserAuthenticationMethod.ReadWrite.All` permission to specific user groups, you can use **Administrative Units** instead of granting this permission globally. This allows you to scope the permission more precisely, giving IDmelon access only to manage authentication methods for users within the defined units. To configure scoped permissions:
+#### Limiting Permission Scope
+
+If your organization wants to limit the `UserAuthenticationMethod-Passkey.ReadWrite.All` or the `UserAuthenticationMethod.ReadWrite.All` permission to specific user groups, you can use **Administrative Units** instead of granting this permission globally. This allows you to scope the permission more precisely, giving IDmelon access only to manage authentication methods for users within the defined units. To configure scoped permissions:
 
 1. Navigate to **Azure Portal** > **Microsoft Entra ID**.
 2. Go to **Roles and administrators**.
