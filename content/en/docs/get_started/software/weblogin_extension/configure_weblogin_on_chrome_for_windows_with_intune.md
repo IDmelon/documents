@@ -27,6 +27,21 @@ workflows, and operational options—by writing directly to the Windows Registry
 - The WebLogin extension must be
   force-installed ([Guide](/docs/get_started/software/weblogin_extension/install_weblogin_on_chrome_for_windows_with_intune/)).
 
+## Extension Version Information
+
+This guide is written for the WebLogin Stable extension and uses the following extension ID throughout the document:
+
+```bash
+eagmgpbjpedchliifpgfgogdknnmkaej
+```
+
+If you want to configure the WebLogin Latest version instead, replace every occurrence of the stable extension ID in
+this guide with the following ID:
+
+```bash
+mnejefleopgpkjplbcbcgkdbnkdolomj
+```
+
 ## Step 1: Create the PowerShell Script
 
 Create a script named `Configure-WebLogin-Chrome.ps1`. Update the variables in the script to match your organization's
@@ -38,7 +53,7 @@ environment. Please note all the configs are optional and you should only declar
 $api_key = "your-api-key-goes-here"
 $workspace_id = "your-workspace-id-goes-here"
 $server_address = "{ `"env`": `"onpremise`", `"env`": `"https://domain.com/api/url`" }"
-$options = "{ `"handlePasskeyRequests`": { `"value`": true }, `"allowAddingNewPasswords`": { `"value`": true }, `"allowPasswordUpdatePrompts`": { `"value`": true }, `"useEmbeddedNumpad`": { `"value`": true }, `"keystroking`": { `"value`": true }, `"debugMode`": { `"value`": true }, `"autofillPrompt`": { `"value`": true, `"includedUrls`": [`"https://domain.com/login`"], `"excludedUrls`": [`"https://domain.com/login`"] } }"
+$options = "{ `"handlePasskeyRequests`": { `"value`": true }, `"allowAddingNewPasswords`": { `"value`": true }, `"allowPasswordUpdatePrompts`": { `"value`": true }, `"useEmbeddedNumpad`": { `"value`": true }, `"keystroking`": { `"value`": true }, `"debugMode`": { `"value`": true }, `"pin`": {`"autoSubmit`": true, `"length`": 6, `"resetUrl`": `"https://domain.com/reset`"}, `"autofillPrompt`": { `"value`": true, `"includedUrls`": [`"https://domain.com/login`"], `"excludedUrls`": [`"https://domain.com/login`"] } }"
 $workflow_automation = "{ `"action`": `"login`", `"window`": `"incognito`", `"hint`": { `"type`": `"pinTapPage`" }, `"urls`": [ { `"method`": `"passkey`", `"url`": `"https://myapps.microsoft.com`" } ] }"
 
 $registry_path = "HKLM:\SOFTWARE\Policies\Google\Chrome\3rdparty\extensions\eagmgpbjpedchliifpgfgogdknnmkaej\policy"

@@ -3,7 +3,7 @@ title: "Azure Application Integration"
 description: "Integrating IDmelon with Azure Application"
 lead: ""
 date: 2023-12-15T23:05:00+03:30
-lastmod: 2025-02-04T16:39:00+03:30
+lastmod: 2026-05-11T16:39:00+03:30
 draft: false
 images: []
 menu:
@@ -23,26 +23,14 @@ For more details on access scenarios, refer to the official <a href="https://lea
 
 ## Required Permissions
 
-Due to current Microsoft limitations, applications cannot request a subset of permissions for different actions. Consequently, IDmelon must request all permissions associated with its features. Learn more about this restriction in the <a href="https://learn.microsoft.com/en-us/entra/identity-platform/consent-types-developer#incremental-and-dynamic-user-consent" target="_blank">Microsoft consent documentation</a>.
-
-The required permissions are as follows:
+The required permissions are the following:
 
 - `Device.Read.All`: Allows IDmelon to import all devices from Microsoft Entra ID.
 - `Group.Read.All`: Allows IDmelon to import all groups from Microsoft Entra ID.
 - `User.Read.All`: Allows IDmelon to read all users from Microsoft Entra ID.
-- `UserAuthenticationMethod.ReadWrite.All`: Allows IDmelon to add FIDO2 security keys for users.
+- `UserAuthMethod-Passkey.ReadWrite.All`: Allows IDmelon to add passkeys.
 
-## Granting Consent
-
-You can either grant permissions to the predefined IDmelon app registration with predefined permissions or create your own app registration manually and provide the required information to us.
-
-### Using Default App Registration
-
-To approve these permissions, initiate any Microsoft Entra ID-related feature within IDmelon. This action will redirect you to the admin consent flow. According to Microsoft, you need to sign in as at least a Privileged Role Administrator to consent to application permissions to Microsoft Graph.
-
-For more details, refer to the official <a href="https://learn.microsoft.com/en-us/entra/identity/enterprise-apps/grant-admin-consent?pivots=ms-graph#grant-admin-consent-for-application-permissions-using-microsoft-graph-api" target="_blank">Microsoft admin consent documentation</a>.
-
-### Using Manual App Registration
+## Manual App Registration
 
 If your organization restricts permission approvals from external applications or requires more control over app registration and permissions, you can create your own app registration and integrate it with IDmelon. To do so, follow the steps below:
 
@@ -66,21 +54,19 @@ If your organization restricts permission approvals from external applications o
     - `Device.Read.All`
     - `Group.Read.All`
     - `User.Read.All`
-    - `UserAuthenticationMethod.ReadWrite.All`
+    - `UserAuthMethod-Passkey.ReadWrite.All`
 
     ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_12.png)
 
-    > You can also substitute all these permissions with the broader <a href="https://learn.microsoft.com/en-us/graph/permissions-reference#directoryreadall" target="_blank">Directory.Read.All</a> permission.
-    > If you want to restrict the `UserAuthenticationMethod.ReadWrite.All` permission to a specific subset of users in your organization, you can skip adding this permission at this stage and follow the instructions below to configure it using Administrative Units.
+    > If you want to restrict any of these permissions to a specific subset of users in your organization, please follow [these instructions](/docs/for_administrators/app_integrations/api_integrations/integrate_azure_application/#permissions-for-administrative-units).
 
 7. After adding all permissions, click **Grant admin consent for <domain>** and accept the confirmation.
 
     ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_13.png)
 
-8. Finally, you should see the following state in your Azure Application:
-    ![Azure Portal](/images/vendor/app_integration/azure_application/azure_app_14.png)
+### Permissions for Administrative Units
 
-If your organization wants to limit the `UserAuthenticationMethod.ReadWrite.All` permission to specific user groups, you can use **Administrative Units** instead of granting this permission globally. This allows you to scope the permission more precisely, giving IDmelon access only to manage authentication methods for users within the defined units. To configure scoped permissions:
+If your organization wants to limit the `UserAuthMethod-Passkey.ReadWrite.All` permission to specific user groups, you can use **Administrative Units** instead of granting this permission globally. This allows you to scope the permission more precisely, giving IDmelon access only to manage authentication methods for users within the defined units. To configure scoped permissions:
 
 1. Navigate to **Azure Portal** > **Microsoft Entra ID**.
 2. Go to **Roles and administrators**.

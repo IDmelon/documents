@@ -17,15 +17,13 @@ Organizations with **Azure AD-joined** or **Hybrid AD-joined** environments can 
 
 ## Prerequisites
 
-Before importing users, ensure the following:
-
-- A client application must be registered and integrated in your Entra ID tenant to enable one-time consent for the necessary permissions.
+A global admin role in Entra is required to link the application.
 
 ## Manual User Import from Entra ID
 
 1. Go to the IDmelon **Admin Panel > Users > All Users**.
 2. Click **Import Users** and select **Entra ID** (Azure AD).
-3. After the required permissions are granted, select the group(s) of users you'd like to import.
+3. Microsoft will ask you to grant certain permissions to integrate with your Entra. To manually add required permissions or scope them to specific user groups, please refer to [this guide](/docs/for_administrators/app_integrations/api_integrations/integrate_azure_application/). After the required permissions are granted, select the group(s) of users you'd like to import.
 4. Choose one of the following options:
    - **Import New Users:** Only imports users not already present in the panel.
    - **Update Existing Users and Add New Ones:** Updates existing users (e.g., syncing the panel owner with Entra ID) and adds any new users selected.
