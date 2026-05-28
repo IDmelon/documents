@@ -1,5 +1,5 @@
 ---
-title: "AWS"
+title: "ADFS"
 description: ""
 lead: ""
 date: 2023-09-13T00:55:12+03:30
