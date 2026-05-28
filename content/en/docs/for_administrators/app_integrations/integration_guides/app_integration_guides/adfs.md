@@ -44,9 +44,7 @@ In this document, you are going to set up `IDmelon` as an external IdP to the `A
 ---
 
 1. On the right panel, click on Add Claims Provider Trust
-2. Choose "Import data about the claims provider from a file" for select data source and upload idmelon metadata 
+2. Choose "Import data about the claims provider from a file" for select data source and upload idmelon metadata
 ![alt](/images/vendor/sso/adfs_03.png)
 3. Choose your name of choice for display name
 4. Click next and confirm creation
-
-

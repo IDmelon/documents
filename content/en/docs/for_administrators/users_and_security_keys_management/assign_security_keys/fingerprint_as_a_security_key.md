@@ -22,14 +22,8 @@ To use a fingerprint as a security key, ensure the following:
 - A compatible fingerprint reader is connected to the user’s PC.
 - The IDmelon Fingerprint Driver is downloaded and installed from the IDmelon website.
 
-## Assign a Fingerprint to a User
+## Supported Scenarios
 
-Admins can assign a fingerprint as a FIDO2 security key to a user through the Admin Panel.
+Fingerprint-based security keys are well suited for users who want a biometric sign-in experience on managed workstations with compatible hardware.
 
-1. Navigate to **Users > All Users**, and select the desired user.
-2. Go to the **Security Keys** tab and click **+ New Security Key**.
-3. Select **Fingerprint** as the security key type.
-4. You will be redirected to a fingerprint onboarding page.
-5. Follow the prompts to scan and register one or more fingers.
-
-Once onboarding is complete, the user can authenticate using their fingerprint as a FIDO2 security key across supported applications and services.
+This option provides a user-friendly authentication experience while keeping the security key tied to the workstation setup and the supported fingerprint hardware.
