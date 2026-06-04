@@ -14,6 +14,15 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.173.0
+
+May 27, 2026
+
+#### New Features
+
+- Español? Français? 中 文? Nederlands? Now, self-service customization supports all of these languages.
+- IDmelon now syncs the preferred language attribute from Entra ID to IDmelon. This will make customized emails, SMS messages, and self-service pages default to the user's preferred language.
+
 ### IDmelon Panel 2.167.0
 
 May 20, 2026
