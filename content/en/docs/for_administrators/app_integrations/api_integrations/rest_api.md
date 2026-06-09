@@ -255,6 +255,77 @@ Authorization: YOUR_API_KEY
 > **Tip:** Combine `sort=lastActivity,ascend` with a high `limit` to build a
 > "stale key" report, then page through with `skip` for large workspaces.
 
+### Delete security keys
+
+Remove one or more security keys from the workspace. Deleting a key revokes it
+and frees any license associated with it.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| DELETE | `/administrator/securityDevice/{keyId}` | Delete a single security key by its `_id` |
+| DELETE | `/administrator/securityDevice/` | Delete multiple security keys (bulk) |
+
+#### Delete a single key
+
+Use the key's `_id` (the `_id` field from the `/administrator/securityDevice`
+list). The same value is sent both in the path and as the `_id` query parameter:
+
+```http
+DELETE https://skm.eu.idmelon.com/administrator/securityDevice/KEY_ID?_id=KEY_ID
+Authorization: YOUR_API_KEY
+```
+
+```bash
+curl -X DELETE -H "Authorization: YOUR_API_KEY" \
+  "https://skm.eu.idmelon.com/administrator/securityDevice/KEY_ID?_id=KEY_ID"
+```
+
+Success response:
+
+```json
+{ "message": "The user's security key has been successfully deleted." }
+```
+
+#### Delete multiple keys (bulk)
+
+Send a JSON body with an `_ids` array of key `_id` values to the collection path
+(note the trailing slash):
+
+```http
+DELETE https://skm.eu.idmelon.com/administrator/securityDevice/
+Authorization: YOUR_API_KEY
+Content-Type: application/json
+
+{ "_ids": ["65dcff77a5f39100085fe897"] }
+```
+
+Success response:
+
+```json
+{ "message": "The selected security keys have been successfully deleted." }
+```
+
+> **Warning:** Deleting a security key is irreversible — the user must enroll a
+> new key to authenticate again. Deletion removes only the key; to deprovision
+> the **user**, manage the user lifecycle through your source directory
+> (e.g. Microsoft Entra ID via SCIM) or the user-level
+> [`/administrator/tokens/deleteMany`](#users) endpoint.
+
+#### Automate inactive-key cleanup
+
+Combine the listing, sorting, and deletion endpoints to remove keys that have
+been unused for a defined period:
+
+1. **List & sort by activity** — `GET /administrator/securityDevice?status=20&limit=50&sort=lastActivity,ascend`
+   returns active keys with the least recently used first.
+2. **Select stale keys** — keep entries whose `lastActivity.createdAt` is older
+   than your inactivity threshold (X days). Keys that have never been used have
+   no `lastActivity` and `totalActivities: 0`.
+3. **Delete** — call `DELETE /administrator/securityDevice/` with the selected
+   `_id` values in `_ids` to revoke them and reclaim their licenses.
+
+Run this as a scheduled job to continuously enforce an inactivity policy.
+
 ---
 
 ## Devices (end-user apps)
