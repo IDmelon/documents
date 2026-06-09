@@ -93,17 +93,45 @@ List and work with users in the workspace.
 |--------|----------|-------------|
 | GET | `/users` | Current API context: returns the workspace and user info for the API key used. |
 | GET | `/administrator/tokens/v2` | List all users in the workspace. |
+| POST | `/administrator/tokens/deleteMany` | Delete one or more users (bulk delete). |
 
-**Query parameters:**
+**Query parameters (list):**
 
-- `limit` (optional) – Max number of items to return (e.g. `50`).
+- `limit` (optional) – Max number of items to return per page (e.g. `50`).
+- `skip` (optional) – Number of items to skip (offset) for pagination (e.g. `50`).
 
-**Example:**
+**Example (list):**
 
 ```http
 GET https://skm.eu.idmelon.com/administrator/tokens/v2?limit=50
 Authorization: YOUR_API_KEY
 ```
+
+The list response also includes `skip`, `limit`, `total`, and a `details` summary
+(e.g. `activeTokens`, `pendingTokens`, `blockTokens`, `notInvitedTokens`,
+`noDeviceTokens`) that mirrors the counters shown on the **All Users** page.
+
+**Bulk delete users:**
+
+`POST /administrator/tokens/deleteMany` removes one or more users. Send a JSON
+body with a `tokens` array of user IDs (the `_id` values from the users list):
+
+```http
+POST https://skm.eu.idmelon.com/administrator/tokens/deleteMany
+Authorization: YOUR_API_KEY
+Content-Type: application/json
+
+{ "tokens": ["6a0217b02571b6081b96e1e2"] }
+```
+
+A successful call returns:
+
+```json
+{ "message": "User has been successfully deleted." }
+```
+
+> **Warning:** This is a destructive, irreversible operation that deletes the
+> user and their associated keys. Double-check the IDs before calling it.
 
 ---
 
@@ -149,15 +177,104 @@ Authorization: YOUR_API_KEY
 
 ## Security keys
 
-List and manage **security keys** in the workspace (active, pending, suspended, etc.).
+The **Security Keys** page lists every security key (credential) issued in the
+workspace. Each key belongs to a user (`token.owner`) and tracks its usage
+(`lastActivity` and `totalActivities`). This is the endpoint to use for key
+inventory, lifecycle, and activity reporting.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/administrator/devices` | List all security keys (devices) in the workspace |
+| GET | `/administrator/securityDevice` | List security keys, with filtering, sorting, and pagination |
 
 **Query parameters:**
 
-- `limit` (optional) – Max number of devices (e.g. `50`).
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `status` | Filter by key lifecycle status. `20` = active keys; other values map to the other tabs of the Security Keys page (e.g. `30` = pending/registered). | `status=20` |
+| `sort` | Sort the results as `field,direction`, where direction is `ascend` or `descend` (note: not `asc`/`desc`). `lastActivity` is the supported sort field. | `sort=lastActivity,ascend` |
+| `limit` | Maximum number of keys to return per page. | `limit=50` |
+| `skip` | Number of keys to skip (offset) for pagination. | `skip=50` |
+
+**Selected response fields (per key):**
+
+| Field | Meaning |
+|-------|---------|
+| `name` | Friendly name of the key |
+| `token.owner` | Email of the user the key belongs to |
+| `token.name` | Full name of the owning user |
+| `status` | Lifecycle status (e.g. `20` = active) |
+| `type` | Key form factor (e.g. phone, badge/card) |
+| `lastActivity.createdAt` | Timestamp of the key's most recent authentication |
+| `totalActivities` | Lifetime count of authentications for this key |
+| `hasOfflineAccess`, `proximity`, `verification`, `isBlocked` | Key capability / policy flags |
+
+The response envelope also includes `skip`, `limit`, a `statistics` breakdown
+(counts by key type), and a `filters` echo of the filters that were applied.
+
+### Useful queries
+
+#### Find the least-active (stale) security keys
+
+Sort ascending by `lastActivity` to surface the keys that have gone the longest
+without being used — ideal for spotting dormant keys that may be candidates for
+revocation or cleanup:
+
+```http
+GET https://skm.eu.idmelon.com/administrator/securityDevice?status=20&limit=50&sort=lastActivity,ascend
+Authorization: YOUR_API_KEY
+```
+
+```bash
+curl -H "Authorization: YOUR_API_KEY" \
+  "https://skm.eu.idmelon.com/administrator/securityDevice?status=20&limit=50&sort=lastActivity,ascend"
+```
+
+#### Find the most-recently-used keys
+
+Reverse the direction to list the most active keys first:
+
+```http
+GET https://skm.eu.idmelon.com/administrator/securityDevice?status=20&limit=50&sort=lastActivity,descend
+Authorization: YOUR_API_KEY
+```
+
+#### List only active keys (no sorting)
+
+```http
+GET https://skm.eu.idmelon.com/administrator/securityDevice?status=20&limit=50
+Authorization: YOUR_API_KEY
+```
+
+#### List pending / non-active keys
+
+```http
+GET https://skm.eu.idmelon.com/administrator/securityDevice?status=30&limit=50
+Authorization: YOUR_API_KEY
+```
+
+> **Tip:** Combine `sort=lastActivity,ascend` with a high `limit` to build a
+> "stale key" report, then page through with `skip` for large workspaces.
+
+---
+
+## Devices (end-user apps)
+
+Distinct from security keys, the **Devices** endpoint lists the end-user devices
+(phones and desktops running the IDmelon app) registered in the workspace.
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/administrator/devices` | List end-user devices (IDmelon app installations) |
+
+Each entry includes `displayName`, `createdDateTime`, `hasOfflineAccess`, and,
+where available, an `apps` object with the installed app `version`. The response
+envelope includes `skip`, `limit`, `total`, `totalOfDevices`, `totalOfAccessKey`,
+and `totalWithoutApp`.
+
+**Query parameters:**
+
+- `limit` (optional) – Max number of devices per page (e.g. `50`).
+- `skip` (optional) – Offset for pagination.
 
 **Example:**
 
@@ -168,24 +285,103 @@ Authorization: YOUR_API_KEY
 
 ---
 
-## Activity and authentication logs
+## Authentication logs
 
-Endpoints that correspond to **Activity** or **Authentication logs** in the Admin Panel (every authentication-related activity).
+This endpoint backs the **Reports → Authentication Logs** page. It returns every
+authentication-related event in the workspace — each time a user authenticates to
+a relying party (application/site) with a security key. Workspaces commonly
+accumulate tens of thousands of entries, so the endpoint supports filtering by
+action, relying party, and date range, plus pagination.
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| GET | `/administrator/workspace/activity/logs` | Workspace activity / authentication logs |
+| GET | `/administrator/workspace/activity/logs` | List authentication / activity log entries |
 
 **Query parameters:**
 
-- `limit` (optional) – Max number of log entries (e.g. `50`).
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `action` | Filter by activity type. `2` = authentication (login) events, which make up the bulk of the logs; other values (e.g. `1`, `4`) correspond to the other entries in the Authentication Logs **action** dropdown. | `action=2` |
+| `rp` | Filter by relying party (the application or site the user signed in to). Matches the relying party name or domain (e.g. `Paypal` matches `PayPal` / `paypal.com`). | `rp=idmelon.com` |
+| `from` | Start of the date range (inclusive), ISO 8601 UTC. Filters on the event timestamp. | `from=2026-06-01T07:00:00.000Z` |
+| `to` | End of the date range (inclusive), ISO 8601 UTC. | `to=2026-06-08T07:00:00.000Z` |
+| `limit` | Maximum number of log entries to return per page. | `limit=50` |
+| `skip` | Number of entries to skip (offset) for pagination. | `skip=50` |
 
-**Example:**
+**Response:**
+
+The response is an envelope with the matching entries plus pagination metadata:
+
+```json
+{
+  "data": [ /* log entries */ ],
+  "total": 23833,
+  "skip": 0,
+  "limit": 50
+}
+```
+
+**Selected fields (per log entry):**
+
+| Field | Meaning |
+|-------|---------|
+| `createdAt` | Timestamp of the event |
+| `action` | Activity type (e.g. `2` = authentication) |
+| `status` | Result status of the event (e.g. `1` = success) |
+| `rpInfo.name` / `rpInfo.id` | Relying party the user authenticated to (name and domain) |
+| `userInfo.name` / `userInfo.displayName` | The user who authenticated |
+| `ownerId` | Owner email of the security key |
+| `deviceName` | Friendly name of the security key used |
+| `securityKeyDevice` | The `_id` of the security key used — matches `_id` from `/administrator/securityDevice` |
+| `credentialId` | The credential (passkey) identifier |
+| `deletedDevice` | `true` if the key has since been deleted |
+
+> **Cross-reference:** A log entry's `securityKeyDevice` and `_id` line up with
+> the `lastActivity` recorded on `/administrator/securityDevice`, so you can pivot
+> from a key to its authentication history and back.
+
+### Useful queries
+
+#### Recent authentications only
 
 ```http
-GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50
+GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50&action=2
 Authorization: YOUR_API_KEY
 ```
+
+#### Logins to a specific application (relying party)
+
+```http
+GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50&rp=idmelon.com
+Authorization: YOUR_API_KEY
+```
+
+#### Activity for a relying party within a date range
+
+Combine `rp` with `from`/`to` to build a per-application audit report for a
+reporting period:
+
+```http
+GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50&rp=idmelon.com&from=2026-06-01T07:00:00.000Z&to=2026-06-08T07:00:00.000Z
+Authorization: YOUR_API_KEY
+```
+
+```bash
+curl -H "Authorization: YOUR_API_KEY" \
+  "https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50&from=2026-06-01T07:00:00.000Z&to=2026-06-08T07:00:00.000Z"
+```
+
+#### Page through the full log
+
+Use `total` from the first response to page with `skip` (`0`, `50`, `100`, …):
+
+```http
+GET https://skm.eu.idmelon.com/administrator/workspace/activity/logs?limit=50&skip=50
+Authorization: YOUR_API_KEY
+```
+
+> **Tip:** Logs are returned newest-first. Pair `from`/`to` with `limit` and
+> `skip` to export a bounded time window without walking the entire history.
 
 ---
 
@@ -214,13 +410,18 @@ Use the same **Authorization** header with your API key for all of these.
 ## Response format
 
 - Successful responses return **JSON**.
-- Standard HTTP status codes apply (e.g. `200` OK, `401` Unauthorized for invalid or missing API key, `404` Not Found).
-- Endpoints that accept `limit` may return paginated data; check the response for additional pagination fields if you need to request more results.
+- Standard HTTP status codes apply (e.g. `200` OK, `304` Not Modified for cached/conditional requests, `401` Unauthorized for invalid or missing API key, `404` Not Found).
+- **Pagination:** list endpoints accept `limit` (page size) and `skip` (offset),
+  and echo them back in the response alongside a `total` count. To page through
+  results, increase `skip` by `limit` on each request (e.g. `skip=0`, `skip=50`,
+  `skip=100`, …) until you have read `total` items.
+- **Sorting:** where supported (e.g. `/administrator/securityDevice`), use
+  `sort=field,direction` with direction `ascend` or `descend`.
 
 ## Quick reference (Postman)
 
 1. **Base URL:** Your SKM base URL (e.g. `https://skm.eu.idmelon.com`).
 2. **Auth:** Type **API Key** → Key: `Authorization`, Value: `{your-api-key}`.
-3. **Paths:** Use the endpoints above (e.g. `/administrator/statistics/users`, `/administrator/devices?limit=50`).
+3. **Paths:** Use the endpoints above (e.g. `/administrator/statistics/users`, `/administrator/securityDevice?status=20&limit=50&sort=lastActivity,ascend`).
 
 If you need more detail on a specific endpoint (request/response bodies or additional query parameters), refer to your Admin Panel behavior or contact IDmelon support.
