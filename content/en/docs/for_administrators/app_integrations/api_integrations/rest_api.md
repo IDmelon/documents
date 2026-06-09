@@ -314,7 +314,18 @@ The response is an envelope with the matching entries plus pagination metadata:
 
 ```json
 {
-  "data": [ /* log entries */ ],
+  "data": [
+    {
+      "createdAt": "2026-06-08T23:21:26.614Z",
+      "action": 2,
+      "status": 1,
+      "rpInfo": { "name": "IDmelon", "id": "idmelon.com" },
+      "userInfo": { "name": "user@example.com", "displayName": "user@example.com" },
+      "ownerId": "user@example.com",
+      "deviceName": "User's iPhone",
+      "securityKeyDevice": "642dd340d45192000bc6bdb8"
+    }
+  ],
   "total": 23833,
   "skip": 0,
   "limit": 50
