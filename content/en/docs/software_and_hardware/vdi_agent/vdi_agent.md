@@ -1,6 +1,6 @@
 ---
-title: "VDI Agent"
-description: "Deploying VDI Agent"
+title: "IDmelon Agent"
+description: "Deploying IDmelon Agent"
 lead: ""
 date: 2025-10-09T11:07:06+03:30
 lastmod: 2025-10-09T11:07:06+03:30
@@ -13,95 +13,163 @@ weight: 20
 toc: true
 ---
 
-**VDI Agent (Virtual Desktop Infrastructure Agent)**<br>
-This software enables organizational users to sign in to their virtual desktops using passwordless authentication with an ID badge. Instead of entering a username and password, the user simply taps their card on a card reader, and authentication is performed through **FIDO Security Keys** (Passkeys).
-On login, the user is automatically connected to their Remote Desktop session. A second tap of the card logs the user out automatically.
-The application supports both **Windows** and **Linux** platforms.
+**IDmelon Agent**<br>
+IDmelon Agent lets users sign in with a badge tap instead of a username and password. The app reads the badge, verifies it with IDmelon, completes the passkey sign-in flow, and then opens the right workspace for the selected mode.
+
+The agent supports two modes:
+
+- **VDI Mode:** For virtual desktop environments such as Citrix and Horizon.
+- **Kiosk Mode:** For devices that authenticate through Microsoft Entra ID and then open a configured URL.
 
 ## Supported Platforms
 
 - Windows 10 and 11
 - Linux Ubuntu 22.04 and later
 - IGEL OS 12
-- Dell Thin OS 2508
+- Dell ThinOS 2508
 
-## Supported VDI Providers
+## Supported Providers
 
 - Citrix
-- VMware Horizon
+- Omnissa Horizon (VMware Horizon)
+- Microsoft SSO
 
 ## SSO Integration with IDmelon
 
-To support passwordless login, you must first integrate with the IDmelon SSO.
+To support passwordless login, first integrate your VDI provider or Microsoft SSO app with IDmelon SSO.
 
 [App Integration Guides](https://docs.idmelon.com/docs/for_administrators/app_integrations/integration_guides/app_integration_guides/)
 
-## App Configuration
+## How the Agent Works
 
-You can access the app configuration on **Windows** and **Linux (Ubuntu)** platforms through the app menu.
+The agent has two parts:
 
-![App Configs](/images/vendor/vdi_agent/app_configs_menu.png)
+- **Backend service:** Runs in the background, starts with the device, reads badges, manages configuration, and communicates with IDmelon.
+- **Frontend app:** Shows the user interface, opens the selected mode, and connects to the backend service locally.
 
-### VDI Providers
+### Agent Mode
 
-You can select the desired provider from the app menu:
+Use **Agent Mode** to choose how the device will be used:
 
-> **Note:** To use each provider, the corresponding software (Citrix Workspace App or Omnisa Horizon Client) must be installed on the device.
+- **VDI:** Badge tap signs the user in to Citrix or Horizon.
+- **Kiosk:** Badge tap signs the user in through Microsoft Entra ID, then opens the configured URL.
 
-![Select Provider](/images/vendor/vdi_agent/select_provider_menu.png)
+Changing the mode is possible from agent settings and the drop-down menu in configuration. This restarts the app so the new flow can load.
+
+![Agent Mode - App Settings](/images/vendor/vdi_agent/IDmelon_Agent/select_agent_mode_1.png)
+![Agent Mode - Configuration](/images/vendor/vdi_agent/IDmelon_Agent/select_agent_mode_2.png)
 
 ### Badge Reader Mode
 
-Currently, **rfIDEAS** and **NFC** (PCSC) readers are supported.
-If you want to use the reader in **keystroking** mode, enable it from the app menu.
+The agent can read badges directly from PC/SC NFC and rfIDEAS readers. If your reader sends badge IDs as keyboard input, enable **Keystroking Mode** from the app menu.
 
-![Keystroking Mode](/images/vendor/vdi_agent/keystroking_menu.png)
+If the badge ID is read in the wrong order, enable **Reverse Byte Order**.
 
-### Configurations
+![Badge Reader Mode](/images/vendor/vdi_agent/IDmelon_Agent/keystroking_menu.png)
 
-- **HTTPS Only:** If your Domain Provider only supports HTTP, you should set `HTTPSOnly` to `False`.
-- **Citrix Url:**  The base URL of your Citrix environment.
-- **Citrix Path:** Citrix Storefront virtual path (/Citrix/[StoreName]). [For more information](https://developer-docs.citrix.com/en-us/storefront-powershell-sdk/2507/get-stfstoreservice)
-- **Citrix Client Version:** The version number of the Citrix Workspace App installed on the device. (Set it to 9909 if your platform is Linux, otherwise specify the actual installed version).
-- **VMware Url:**  The base URL of your VMware Horizon environment.
-- **VMware Path:** Leave the value as `/`.
+## App Configuration
 
-### IGEL
+On Windows and Linux, open the app menu and select **Configuration**.
 
-App configurations on IGEL OS can be accessed from the following path:
+### Shared Configuration Fields
+
+- **Agent Mode:** Select `VDI` or `Kiosk` from app settings or the drop-down menu in configuration.
+- **Workspace ID:** Optional. Use this when requests should be scoped to a specific IDmelon workspace.
+- **API Key:** Optional. Required only when your workspace enforces authenticated clients.
+- **Base URL:** Optional. Use this for on-premise environments.
+
+## VDI Mode
+
+Use **VDI Mode** when the device should launch a virtual desktop session after the user taps their badge.
+
+![App Configs](/images/vendor/vdi_agent/IDmelon_Agent/app_configs_menu_VDI.png)
+
+### Supported VDI Providers
+
+- Citrix
+- Omnissa Horizon (VMware Horizon)
+
+> **Note:** To use a VDI provider, install the matching client on the device first: Citrix Workspace App for Citrix, or Omnissa Horizon Client for Horizon.
+
+### VDI Configuration
+
+Select the provider from the app menu:
+
+- **Citrix**
+- **Horizon**
+
+![Select Provider](/images/vendor/vdi_agent/IDmelon_Agent/select_provider_menu.png)
+
+Configure the provider settings:
+
+- **HTTPS Only:** Set to `False` only if your provider environment uses HTTP or a self-signed certificate.
+- **Citrix URL:** The base URL of your Citrix environment.
+- **Citrix Path:** The Citrix StoreFront virtual path, such as `/Citrix/[StoreName]`. [For more information](https://developer-docs.citrix.com/en-us/storefront-powershell-sdk/2507/get-stfstoreservice)
+- **Citrix Client Version:** The Citrix Workspace App version installed on the device. Use `9909` on Linux.
+- **VMware URL:** The base URL of your Horizon environment.
+- **VMware Path:** Leave this value as `/`.
+
+### VDI User Experience
+
+When the app opens in VDI Mode, the user sees the tap screen.
+
+![Tap Card Screen](/images/vendor/vdi_agent/IDmelon_Agent/tap_card_screen.png)
+
+The user taps their badge on the reader. If a PIN is required, the agent asks for it before continuing.
+
+![Enter PIN Screen](/images/vendor/vdi_agent/IDmelon_Agent/enter_pin_screen.png)
+
+After the badge is verified, the agent completes the passkey sign-in flow and launches the configured Citrix or Horizon desktop.
+
+![Loading Screen - Verifying Credentials](/images/vendor/vdi_agent/IDmelon_Agent/loading_screen_1.png)
+![Loading Screen - Establishing secure session](/images/vendor/vdi_agent/IDmelon_Agent/loading_screen_2.png)
+![Loading Screen - Preparing Workspace](/images/vendor/vdi_agent/IDmelon_Agent/loading_screen_3.png)
+
+After the remote session is active, the user can tap the badge again to disconnect from the session.
+
+Alternatively, use **Disconnect** from the app menu.
+
+![Disconnect Option](/images/vendor/vdi_agent/IDmelon_Agent/disconnect_option.png)
+
+## Kiosk Mode
+
+Use **Kiosk Mode** when the device is shared by multiple users and should open a browser-based workspace after badge sign-in. The configured URL does not control the authentication flow. The agent always uses the Microsoft Entra ID login process first, then loads the configured URL after successful authentication.
+
+![App Configs](/images/vendor/vdi_agent/IDmelon_Agent/app_configs_menu_Kiosk.png)
+
+### Kiosk Configuration
+
+- **Kiosk URL:** The web app to open after successful Microsoft Entra ID authentication. This URL is the post-login destination, not the login provider.
+
+### Kiosk User Experience
+
+In Kiosk Mode, the user follows the same tap card, enter PIN, and loading process as VDI Mode. The agent signs the user in through the Microsoft Entra ID login process with IDmelon passkey authentication, and after authentication succeeds, it loads the configured Kiosk URL.
+
+When the user is finished, they tap the badge again or select **End Session** from the app menu. The agent clears the browser session and returns to the tap screen for the next user.
+
+![End Session Option](/images/vendor/vdi_agent/IDmelon_Agent/end_session_option.png)
+
+## IGEL
+
+On IGEL OS, settings are managed from the IGEL profile instead of the local app menu.
+
+Open the configuration from:
 
 ```shell
-IGEL Setup > Apps > IDmelon VDI Agent > VDI Agent Settings
+IGEL Setup > Apps > IDmelon Agent > Agent Settings
 ```
 
-![App Configs on IGEL](/images/vendor/vdi_agent/igel_setup_configs.png)
+![App Configs on IGEL](/images/vendor/vdi_agent/IDmelon_Agent/igel_setup_configs_VDI.png)
+![App Configs on IGEL](/images/vendor/vdi_agent/IDmelon_Agent/igel_setup_configs_Kiosk.png)
+
+The app menu on IGEL is read-only for settings. It shows the current mode, provider, and reader state, and still allows users to disconnect or exit.
 
 ## Enabling Tap-to-Login Mode
 
-Enable the **Tap-to-Login** mode from the following path in IDmelon Admin Panel:
+Enable **Tap-to-Login** from the IDmelon Admin Panel:
 
 ```shell
 Authentication > Authentication Profile > Managed Authentication Configuration > Badge Tap-to-Login Mode
 ```
 
 ![Enabling Tap-to-Login Mode](/images/vendor/vdi_agent/admin_panel_tap_to_login.png)
-
-## End User Experience
-
-### Tap to Login
-
-When you launch the app, you'll see the IDmelon login page.
-
-![IDmelon Login Page](/images/vendor/vdi_agent/idmelon_login_page.png)
-
-Tap your card on the reader and enter your PIN (You can also set your card verification method to PinLess or use the Remember PIN feature on the Admin Panel to skip PIN entry).
-
-![Enter PIN Prompt](/images/vendor/vdi_agent/enter_pin_prompt.png)
-
-### Tap to Logout
-
-If your reader is not in `Keystroking Mode`, tap your badge a second time to disconnect from the remote session.
-
-Alternatively, use the `Disconnect` button in the app menu.
-
-![Disconnect](/images/vendor/vdi_agent/disconnect_menu.png)
