@@ -14,7 +14,7 @@ toc: true
 ---
 
 **IDmelon Agent**<br>
-IDmelon Agent lets users sign in with a badge tap instead of a username and password. The app reads the badge, verifies it with IDmelon, completes the passkey sign-in flow, and then opens the right workspace for the selected mode.
+IDmelon Agent delivers simple, fast, and secure sign-ins to virtual desktops and cloud apps using employee badges, smartphones, biometrics, or security keys. It automates sign-in, session launch, and user switching for Microsoft, Citrix, and VMware environments.
 
 The agent supports two modes:
 
@@ -28,24 +28,9 @@ The agent supports two modes:
 - IGEL OS 12
 - Dell ThinOS 2508
 
-## Supported Providers
+## App Configuration
 
-- Citrix
-- Omnissa Horizon (VMware Horizon)
-- Microsoft SSO
-
-## SSO Integration with IDmelon
-
-To support passwordless login, first integrate your VDI provider or Microsoft SSO app with IDmelon SSO.
-
-[App Integration Guides](https://docs.idmelon.com/docs/for_administrators/app_integrations/integration_guides/app_integration_guides/)
-
-## How the Agent Works
-
-The agent has two parts:
-
-- **Backend service:** Runs in the background, starts with the device, reads badges, manages configuration, and communicates with IDmelon.
-- **Frontend app:** Shows the user interface, opens the selected mode, and connects to the backend service locally.
+On Windows and Linux, open the app menu and select **Configuration**.
 
 ### Agent Mode
 
@@ -66,10 +51,6 @@ The agent can read badges directly from PC/SC NFC and rfIDEAS readers. If your r
 If the badge ID is read in the wrong order, enable **Reverse Byte Order**.
 
 ![Badge Reader Mode](/images/vendor/vdi_agent/IDmelon_Agent/keystroking_menu.png)
-
-## App Configuration
-
-On Windows and Linux, open the app menu and select **Configuration**.
 
 ### Shared Configuration Fields
 
@@ -131,11 +112,37 @@ Alternatively, use **Disconnect** from the app menu.
 
 ![Disconnect Option](/images/vendor/vdi_agent/IDmelon_Agent/disconnect_option.png)
 
+### SSO Integration with IDmelon
+
+To support passwordless login, first integrate your VDI provider with IDmelon SSO.
+
+[App Integration Guides](https://docs.idmelon.com/docs/for_administrators/app_integrations/integration_guides/app_integration_guides/)
+
+### Enabling Passkey Login mode
+
+Enable **Default Provider** and **Auto-Start Login with Passkey** from the IDmelon Admin Panel:
+
+```shell
+Authentication > Authentication Profile > Managed Authentication Configuration > Default Provider
+```
+
+```shell
+Authentication > Authentication Profile > Managed Authentication Configuration > Auto-Start Login with Passkey
+```
+
+![Enabling Tap-to-Login Mode](/images/vendor/vdi_agent/IDmelon_Agent/admin_panel.png)
+
 ## Kiosk Mode
 
 Use **Kiosk Mode** when the device is shared by multiple users and should open a browser-based workspace after badge sign-in. The configured URL does not control the authentication flow. The agent always uses the Microsoft Entra ID login process first, then loads the configured URL after successful authentication.
 
 ![App Configs](/images/vendor/vdi_agent/IDmelon_Agent/app_configs_menu_Kiosk.png)
+
+### Supported Platforms
+
+- Microsoft Entra ID login using passkeys
+- Microsoft apps such as MyApps, Outlook, and Teams
+- Any other web URL protected by Microsoft SSO
 
 ### Kiosk Configuration
 
@@ -163,13 +170,3 @@ IGEL Setup > Apps > IDmelon Agent > Agent Settings
 ![App Configs on IGEL](/images/vendor/vdi_agent/IDmelon_Agent/igel_setup_configs_Kiosk.png)
 
 The app menu on IGEL is read-only for settings. It shows the current mode, provider, and reader state, and still allows users to disconnect or exit.
-
-## Enabling Tap-to-Login Mode
-
-Enable **Tap-to-Login** from the IDmelon Admin Panel:
-
-```shell
-Authentication > Authentication Profile > Managed Authentication Configuration > Badge Tap-to-Login Mode
-```
-
-![Enabling Tap-to-Login Mode](/images/vendor/vdi_agent/admin_panel_tap_to_login.png)
