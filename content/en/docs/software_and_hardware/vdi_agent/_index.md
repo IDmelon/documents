@@ -1,5 +1,5 @@
 ---
-title: "VDI Agent"
+title: "IDmelon Agent"
 description: ""
 lead: ""
 date: 2025-10-09T11:07:06+03:30
