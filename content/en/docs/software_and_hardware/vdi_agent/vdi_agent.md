@@ -19,7 +19,7 @@ IDmelon Agent delivers simple, fast, and secure sign-ins to virtual desktops and
 The agent supports two modes:
 
 - **VDI Mode:** For virtual desktop environments such as Citrix and Horizon.
-- **Kiosk Mode:** For devices that authenticate through Microsoft Entra ID and then open a configured URL.
+- **Kiosk Mode:** For Microsoft Entra ID sign-in to cloud apps, followed by opening the configured URL after successful authentication. Ideal for shared, multi-user environments such as retail, healthcare, manufacturing, and education, where Tap-to-Login and Tap-to-Logout keep sessions secure and prevent them from being left open.
 
 ## Supported Platforms
 
@@ -34,10 +34,7 @@ On Windows and Linux, open the app menu and select **Configuration**.
 
 ### Agent Mode
 
-Use **Agent Mode** to choose how the device will be used:
-
-- **VDI:** Badge tap signs the user in to Citrix or Horizon.
-- **Kiosk:** Badge tap signs the user in through Microsoft Entra ID, then opens the configured URL.
+Use **Agent Mode** to choose how the device will be used.
 
 Changing the mode is possible from agent settings and the drop-down menu in configuration. This restarts the app so the new flow can load.
 
@@ -54,7 +51,6 @@ If the badge ID is read in the wrong order, enable **Reverse Byte Order**.
 
 ### Shared Configuration Fields
 
-- **Agent Mode:** Select `VDI` or `Kiosk` from app settings or the drop-down menu in configuration.
 - **Workspace ID:** Optional. Use this when requests should be scoped to a specific IDmelon workspace.
 - **API Key:** Optional. Required only when your workspace enforces authenticated clients.
 - **Base URL:** Optional. Use this for on-premise environments.
@@ -134,7 +130,7 @@ Authentication > Authentication Profile > Managed Authentication Configuration >
 
 ## Kiosk Mode
 
-Use **Kiosk Mode** when the device is shared by multiple users and should open a browser-based workspace after badge sign-in. The configured URL does not control the authentication flow. The agent always uses the Microsoft Entra ID login process first, then loads the configured URL after successful authentication.
+Use **Kiosk Mode** when the device is shared by multiple users and should open a browser-based workspace after badge sign-in. The Kiosk URL does not control the authentication flow. The agent always uses the Microsoft Entra ID login process first, then loads the configured URL after successful authentication.
 
 ![App Configs](/images/vendor/vdi_agent/IDmelon_Agent/app_configs_menu_Kiosk.png)
 
@@ -142,11 +138,11 @@ Use **Kiosk Mode** when the device is shared by multiple users and should open a
 
 - Microsoft Entra ID login using passkeys
 - Microsoft apps such as MyApps, Outlook, and Teams
-- Any other web URL protected by Microsoft SSO
+- Any other website that uses Microsoft SSO login.
 
 ### Kiosk Configuration
 
-- **Kiosk URL:** The web app to open after successful Microsoft Entra ID authentication. This URL is the post-login destination, not the login provider.
+- **Kiosk URL:** The URL to open after successful Microsoft Entra ID authentication. This URL is the post-login destination, not the login provider.
 
 ### Kiosk User Experience
 
