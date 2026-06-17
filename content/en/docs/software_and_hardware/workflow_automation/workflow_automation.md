@@ -32,27 +32,20 @@ To export a workflow in the `Workflow Editor` app, select it from the list and c
 
 To import a previously saved workflow, click the `Import workflow` button and select an `.idwf` file. The imported workflow opens in Workflow Editor, where you can review, edit, test, and export it again.
 
+> **Tip:** You can also import a workflow by dragging an `.idwf` file from your file explorer and dropping it onto the workflows window.
+
 ![Workflow Exportation](/images/vendor/workflow_automation/automation_app/workflow_export_import.png)
 > **Figure:** The specified buttons can be used to export/import a workflow.
 
 #### Startup behavior for Workflow Runner
 
-In **Settings** (at the top right corner of the workflow editor), Workflow Runner startup behavior can be configured using one of these options:
+In **Settings** (in the toolbar at the top of the Workflow Editor), the Workflow Runner startup behavior can be configured using one of these two options:
 
-1. **Do not run at startup**
-2. **Run at startup**
-3. **Run at startup as administrator**
+1. **Don't run at startup** — the Workflow Runner does not start automatically when the system starts.
+2. **Run at startup** — the Workflow Runner starts automatically when the system starts.
 
-To enable **Run at startup as administrator**, follow these steps:
-
-1. Close Workflow Editor (if it is running).
-2. Right-click Workflow Editor and select **Run as administrator**.
-3. Open **Settings** and select **Run at startup as administrator**.
-
-> **Note:** Administrator permissions are required to apply this option. If Workflow Editor is not started as administrator, the setting may not be applied.
-
-![Workflow Exportation](/images/vendor/workflow_automation/automation_app/settings_expanded.png)
-> **Figure:** The expanded view of the settings menu.
+![Workflow Runner startup setting](/images/vendor/workflow_automation/automation_app/settings_expanded.png)
+> **Figure:** The Workflow Runner startup behavior in the Settings panel.
 
 ### Actions
 
@@ -210,11 +203,28 @@ Updates the state of one or more windows that match the specified search criteri
 | ----------------- | ---------- | -------- | -------------------- | --------------------------------------------------------------------------- |
 | Find window mode  | Enum       | Yes      | By window UI element | Allowed: By window UI element, By title or class                           |
 | Window            | UI element | No       | Empty                | Target window UI element (used when mode is **By window UI element**)      |
-| Window title      | String     | No       | Empty                | Window title (used when mode is **By title or class**), supports `?` and `*` |
-| Window class      | String     | No       | Empty                | Window class (used when mode is **By title or class**)                     |
+| Window title      | String     | No       | Empty                | Window title (used when mode is **By title or class**), supports wildcards `?` and `*` |
+| Window class      | String     | No       | Empty                | Window class (used when mode is **By title or class**), supports wildcards `?` and `*` |
 | Window action     | Enum       | Yes      | Focus on window      | Allowed: Focus on window, Move to background, Maximize window, Minimize window, Close window |
 
 > **Note:** If multiple windows match the criteria, use **When multiple match** to control whether the action is applied to the first match only or to all matches.
+
+##### Wildcards
+
+In **By title or class** mode, both the **Window title** and **Window class** values support **wildcards**. Use wildcards when only **part** of the title or class is predictable, so you can match a window without typing its exact text. The available wildcard characters are:
+
+| Wildcard | Match behavior |
+| -------- | -------------------------------------------------- |
+| `*`      | Matches any sequence of characters, including none. |
+| `?`      | Matches exactly one character. |
+
+Matching is **case-insensitive**, and the **whole value** must match the pattern (not just part of it). For example:
+
+- `*Notepad` matches any title that ends with `Notepad`.
+- `Report *` matches any title that starts with `Report` (such as `Report 2026`).
+- `Untitled - ?otepad` matches `Untitled - Notepad`.
+
+> **Note:** Wildcards are simpler than [regular expressions](#regular-expressions) and are only available for the **Window title** and **Window class** in the Window control action. If you need more advanced pattern matching for a UI element, use a regular expression in the element selector instead.
 
 ![Window control action](/images/vendor/workflow_automation/automation_app/update_state_of_the_window.png)
 > **Figure:** Window control action configuration.
@@ -446,6 +456,21 @@ Searches a column in a source data table and stores matching rows in a new data 
 ![Find in data table action](/images/vendor/workflow_automation/automation_app/find_in_data_table.png)
 > **Figure:** Find in data table action configuration.
 
+#### Run subflow
+
+Runs another subflow from the same workflow. Use this action to reuse a shared sequence of actions or to organize a large workflow into smaller, named parts. For more details on creating and managing subflows, see [Subflows](#subflows).
+
+**Input Parameters:**
+
+| Parameter | Type   | Required | Default | Description                          |
+| --------- | ------ | -------- | ------- | ------------------------------------ |
+| Subflow   | Enum   | Yes      | Empty   | The subflow to run from this workflow |
+
+> **Note:** At least one subflow must already exist in the workflow before this action can be configured.
+
+![Run subflow action](/images/vendor/workflow_automation/automation_app/run_subflow.png)
+> **Figure:** Run subflow action configuration.
+
 ### Variables
 
 Variables are placeholders that store values during workflow execution. These values can be reused across different actions, making workflows dynamic and flexible. To reference a variable in another action, use the format `%variable_name%`, which substitutes the stored value at runtime.
@@ -546,6 +571,8 @@ Use **Inspect** when hovering is difficult or when you need more precise selecti
 > The picker prevents duplicate additions of the same element path.  
 > If **Add selected** is disabled, choose a valid supported UI element node.
 
+When an element is captured, its window is captured and shown in the image preview section. Use the magnifier in the preview to zoom in and confirm you have selected the correct element.
+
 ![UI element picker](/images/vendor/workflow_automation/automation_app/UI_element_picker.png)
 > **Figure:** The UI element picker environment.
 
@@ -581,6 +608,7 @@ Therefore, in order to find an element properly, it is necessary to set attribut
 
 To edit selectors of a UI element, double-click on the element that exists in the elements tree. The element selector window will appear, which contains:
 
+- **Selectors**: The list of selectors defined for the element (see [Multiple selectors](#multiple-selectors)).
 - **Elements**: Contains all intermediate elements—such as window, panels, groups, or parent controls—that lead to the target element.
 - **Attributes**: Contains all attributes of the selected element that help in finding the correct element. You can edit the desired attribute's value.
 
@@ -593,9 +621,21 @@ To edit selectors of a UI element, double-click on the element that exists in th
 > **Note**: If you want to create a workflow that is going to run on other systems, be careful when choosing the selector and attributes so that the values are not dependent on your system.
 > For example, when the root view of an element is a window, the title of that window is browser-tab-dependent, so you can uncheck the Name attribute to avoid mismatches.
 
+##### Multiple selectors
+
+A single UI element can have more than one selector. This is useful when the same element can be identified in different ways depending on the situation (for example, the target app looks slightly different across versions, layouts, or machines). When the workflow runs, the enabled selectors are tried in order, and the first one that locates the element on screen is used.
+
+The **Selectors** panel of the element selector window lets you manage the selectors of the element:
+
+- **Add** a new selector using the **Add selector** button.
+- **Test**, **Duplicate**, **Rename**, **Move up/Move down**, or **Delete** a selector from its context menu.
+- Select a selector to view and edit its **Elements** and **Attributes**.
+
+> **Note:** Each selector is an independent path with its own elements and attributes. Order your selectors so that the most reliable one comes first. Provide alternative selectors only when a single one cannot reliably match the element in every situation.
+
 ##### Regular expressions
 
-Attribute values support **Regular Expressions**. Choose regular expressions when the property is still the right one but only a **pattern** is stable, meaning only **part** of the value is predictable. For example:
+Attribute values support **Regular Expressions**. To match an attribute with a regular expression, set the attribute's **Operator** to **Regular Expression** and enter the pattern as its value. Choose regular expressions when the property is still the right one but only a **pattern** is stable, meaning only **part** of the value is predictable. For example:
 
 - Window or tab titles that include a **file name**, **tab title**, or **counter**.
 
@@ -634,6 +674,15 @@ To make sure the selector is set correctly, click the `Test` button at the top o
 ![UI element selector](/images/vendor/workflow_automation/automation_app/UI_element_selector.png)
 > **Figure:** The UI element selector environment.
 
+#### UI element tree view
+
+UI elements are shown in a tree, grouped under their window. The tree view provides several aids to help you keep elements organized and connected to your flows:
+
+- **Element icons**: Each element shows an icon representing its type (button, input, checkbox, and so on), making it easier to identify elements at a glance.
+- **Relationship highlighting**: When you select a UI element in the tree, every flow that uses that element is highlighted in the flows list, and the view scrolls to the first matching flow. This helps you see exactly where an element is used.
+- **Attention icon for unused elements**: An attention icon appears next to any UI element that is not used by any flow, so you can quickly spot and clean up elements that are no longer needed.
+- **Context menu**: Right-click an element to **Rename** or **Delete** it.
+
 #### Deleting a UI element
 
 To delete a UI element from the tree, select the element and press the keyboard **Delete** key or select the delete option from the context menu.
@@ -645,7 +694,7 @@ To delete all UI elements of a window, select and delete the window.
 
 A flow is an action with specific parameters and conditions that will be executed one by one when the workflow starts.
 
-You can see the list of flows in the middle section of the workflow editor.
+You can see the list of flows in the middle section of the workflow editor. Each flow shows a **line number** so you can easily reference and locate actions within the workflow.
 
 Some commands are defined for flows that you can use by clicking the right mouse button on a selected row or rows.
 
@@ -674,6 +723,16 @@ If you want to disable a flow temporarily to prevent it from running, select **E
 
 > **Note**: A disabled flow will be ignored from the exported workflow.
 
+#### Comment a flow
+
+You can attach a comment to any flow to document what it does or why it is needed. Right-click the flow and select **Comment**, then enter your note. A comment icon appears on the flow, and hovering over it shows the comment text.
+
+> **Note**: Comments are for documentation only and do not affect how the workflow runs.
+
+#### Undo/Redo
+
+You can undo and redo changes you make to the flows (such as adding, moving, editing, or deleting actions) using the **Undo** and **Redo** buttons in the toolbar, or the **Ctrl+Z** (undo) and **Ctrl+Y** (redo) keyboard shortcuts.
+
 #### Run/Stop workflow
 
 To test the workflow, click on the **Run** button, and to stop it, click it again.
@@ -683,6 +742,35 @@ To test the workflow, click on the **Run** button, and to stop it, click it agai
 To test the selected flow, click on the **Test selected action** button.
 
 > **Note**: When you select multiple flows, this event only affects the first selected flow.
+
+### Subflows
+
+Subflows let you split a large workflow into smaller, named parts and reuse a shared sequence of actions. Every workflow has a **Main** flow, which is the entry point that runs when the workflow starts. In addition to Main, you can create one or more subflows.
+
+Subflows are shown as tabs above the flows list. The **Main** tab is always present; each subflow you create appears as an additional tab.
+
+#### Creating and managing subflows
+
+1. Click the **Add subflow** button (the **+** next to the tabs) to create a new subflow.
+2. Enter a **name** for the subflow and choose its **Scope** (see below).
+3. Select a subflow's tab to edit its flows, just like you edit the Main flow.
+
+Right-click a subflow tab to **Move left**, **Move right**, **Rename**, **Clone**, or **Remove** it.
+
+> **Note**: The name **Main** is reserved for the main flow, and each subflow must have a unique name.
+
+#### Running a subflow
+
+A subflow does not run on its own. To run it, add a [Run subflow](#run-subflow) action to the Main flow (or to another subflow) and select the subflow to run.
+
+#### Subflow scope
+
+When you create a subflow, you choose how it handles [variables](#variables):
+
+- **Local**: The subflow runs with its own isolated copy of the variables. Any variable changes made inside the subflow are discarded when it finishes, so they do not affect the caller. Use this to keep a reusable subflow self-contained.
+- **Global**: The subflow shares variables with the rest of the workflow. Variable changes made inside the subflow persist after it returns. Use this when the subflow is meant to produce results for the caller to use.
+
+> **Note**: The scope is chosen when the subflow is created and cannot be changed afterward.
 
 ## Workflow Runner
 
@@ -762,3 +850,11 @@ You can run workflows directly using the Workflow Runner CLI in the Accesskey sc
     > ```bash
     > accesskey config access-automation remove all
     > ```
+
+## Uninstalling Workflow Automation
+
+When you uninstall Workflow Automation, your personal data (workflows and application settings) is **kept by default**.
+
+If you also want to remove this data, select the **remove user data** option in the uninstaller before continuing. When this option is selected, your saved workflows and settings are permanently deleted along with the application.
+
+> **Note**: Removing user data cannot be undone. If you might reinstall later and want to keep your workflows, leave this option unchecked or export your workflows as `.idwf` files first.
