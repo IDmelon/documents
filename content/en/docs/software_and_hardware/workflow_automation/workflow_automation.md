@@ -64,10 +64,10 @@ Simulates a mouse click on a specified UI element, allowing the automation proce
 
 **Input Parameters:**
 
-| Parameter    | Type       | Required | Default    | Description                                |
-| ------------ | ---------- | -------- | ---------- | ------------------------------------------ |
-| UI element   | UI element | Yes      | -          | The target element to click.               |
-| Click type   | Enum | Yes | Left click | Allowed: Left click, Double click, Right click |
+| Parameter  | Type       | Required | Default    | Description                                    |
+| ---------- | ---------- | -------- | ---------- | ---------------------------------------------- |
+| UI element | UI element | Yes      | -          | The target element to click.                   |
+| Click type | Enum       | Yes      | Left click | Allowed: Left click, Double click, Right click |
 
 ![Click on UI element action](/images/vendor/workflow_automation/automation_app/click_on_UI_element.png)
 > **Figure:** Click on UI element action configuration.
@@ -78,9 +78,9 @@ Moves the cursor over a UI element.
 
 **Input Parameters:**
 
-| Parameter  | Type       | Required | Default | Description                          |
-| ---------- | ---------- | -------- | ------- | ------------------------------------ |
-| UI element | UI element | Yes      | -       | The target element to hover over    |
+| Parameter  | Type       | Required | Default | Description                      |
+| ---------- | ---------- | -------- | ------- | -------------------------------- |
+| UI element | UI element | Yes      | -       | The target element to hover over |
 
 #### Populate text field
 
@@ -88,10 +88,10 @@ Fills a text field with the entered text.
 
 **Input Parameters:**
 
-| Parameter      | Type       | Required | Default | Description                           |
-| -------------- | ---------- | -------- | ------- | ------------------------------------- |
-| UI element     | UI element | Yes      | -       | The target text field to populate    |
-| Text to fill-in | String     | Yes      | Empty   | The text to enter in the text field  |
+| Parameter       | Type       | Required | Default | Description                         |
+| --------------- | ---------- | -------- | ------- | ----------------------------------- |
+| UI element      | UI element | Yes      | -       | The target text field to populate   |
+| Text to fill-in | String     | Yes      | Empty   | The text to enter in the text field |
 
 > **Note**: This action can be applied only to Inputs.
 >
@@ -106,8 +106,8 @@ Sets the focus on a UI element.
 
 **Input Parameters:**
 
-| Parameter  | Type       | Required | Default | Description                         |
-| ---------- | ---------- | -------- | ------- | ----------------------------------- |
+| Parameter  | Type       | Required | Default | Description                        |
+| ---------- | ---------- | -------- | ------- | ---------------------------------- |
 | UI element | UI element | Yes      | -       | The target element to set focus on |
 
 #### Get details of the UI element
@@ -118,9 +118,9 @@ Gets the value of a UI element's attribute.
 
 | Parameter        | Type       | Required | Default | Description                                           |
 | ---------------- | ---------- | -------- | ------- | ----------------------------------------------------- |
-| UI element       | UI element | Yes      | -       | The target element to read details from              |
+| UI element       | UI element | Yes      | -       | The target element to read details from               |
 | Attribute name   | Enum       | Yes      | Id      | Allowed: Id, Name, Class, Enabled, ...                |
-| Bind to variable | String     | Yes      | Empty   | The variable name where the attribute value is stored|
+| Bind to variable | String     | Yes      | Empty   | The variable name where the attribute value is stored |
 
 ![Get details of the UI element action](/images/vendor/workflow_automation/automation_app/details_of_UI_element.png)
 > **Figure:** Get details of the UI element action configuration.
@@ -131,10 +131,10 @@ Waits until a UI element appears on screen.
 
 **Input Parameters:**
 
-| Parameter  | Type            | Required | Default | Description                                        |
-| ---------- | --------------- | -------- | ------- | -------------------------------------------------- |
-| UI element | UI element      | Yes      | -       | The target element to wait for                    |
-| Timeout    | Number (Double) | Yes      | 10      | Maximum wait time (in seconds) for the element    |
+| Parameter  | Type            | Required | Default | Description                                    |
+| ---------- | --------------- | -------- | ------- | ---------------------------------------------- |
+| UI element | UI element      | Yes      | -       | The target element to wait for                 |
+| Timeout    | Number (Double) | Yes      | 10      | Maximum wait time (in seconds) for the element |
 
 #### Send mouse click
 
@@ -142,10 +142,10 @@ Sends a mouse click event.
 
 **Input Parameters:**
 
-| Parameter   | Type       | Required | Default    | Description                                         |
-| ----------- | ---------- | -------- | ---------- | --------------------------------------------------- |
-| Mouse event | Enum       | Yes      | Left click | Allowed: Left click, Double click, Right click     |
-| Delay       | Number (Int) | Yes      | 0          | Delay before sending the mouse event (milliseconds)|
+| Parameter   | Type         | Required | Default    | Description                                         |
+| ----------- | ------------ | -------- | ---------- | --------------------------------------------------- |
+| Mouse event | Enum         | Yes      | Left click | Allowed: Left click, Double click, Right click      |
+| Delay       | Number (Int) | Yes      | 0          | Delay before sending the mouse event (milliseconds) |
 
 #### Send keys
 
@@ -153,10 +153,10 @@ Sends keys to the UI element that is currently focused.
 
 **Input Parameters:**
 
-| Parameter    | Type         | Required | Default | Description                                      |
-| ------------ | ------------ | -------- | ------- | ------------------------------------------------ |
-| Text to send | String       | Yes      | Empty   | The text to send to the focused element/window  |
-| Delay        | Number (Int) | Yes      | 10      | Delay between keystrokes (milliseconds)         |
+| Parameter    | Type         | Required | Default | Description                                    |
+| ------------ | ------------ | -------- | ------- | ---------------------------------------------- |
+| Text to send | String       | Yes      | Empty   | The text to send to the focused element/window |
+| Delay        | Number (Int) | Yes      | 10      | Delay between keystrokes (milliseconds)        |
 
 > To simulate a key press, use curly brackets {} (e.g., {enter}). For key combinations, wrap both keys in {} (e.g., {leftctrl}({A})).
 >
@@ -182,12 +182,12 @@ Executes an application.
 
 **Input Parameters:**
 
-| Parameter                | Type   | Required | Default              | Description                                                        |
-| ------------------------ | ------ | -------- | -------------------- | ------------------------------------------------------------------ |
-| Application path         | String | Yes      | Empty                | The executable file path                                          |
-| Command line arguments   | String | No       | Empty                | Additional arguments passed after the executable name             |
-| Working folder           | String | No       | Empty                | The working directory path for the application                    |
-| Window style             | Enum   | Yes      | Normal               | Allowed: Normal, Hidden, Minimized, Maximized                    |
+| Parameter                | Type   | Required | Default              | Description                                                                       |
+| ------------------------ | ------ | -------- | -------------------- | --------------------------------------------------------------------------------- |
+| Application path         | String | Yes      | Empty                | The executable file path                                                          |
+| Command line arguments   | String | No       | Empty                | Additional arguments passed after the executable name                             |
+| Working folder           | String | No       | Empty                | The working directory path for the application                                    |
+| Window style             | Enum   | Yes      | Normal               | Allowed: Normal, Hidden, Minimized, Maximized                                     |
 | After application launch | Enum   | Yes      | Continue immediately | Continue immediately, Wait for application to load, Wait for application to close |
 
 > If you want to use the **ExitCode** variable for next actions, set the **After application launch** option to **Wait for application to load**.
@@ -201,13 +201,13 @@ Updates the state of one or more windows that match the specified search criteri
 
 **Input Parameters:**
 
-| Parameter         | Type       | Required | Default              | Description                                                                 |
-| ----------------- | ---------- | -------- | -------------------- | --------------------------------------------------------------------------- |
-| Find window mode  | Enum       | Yes      | By window UI element | Allowed: By window UI element, By title or class                           |
-| Window            | UI element | No       | Empty                | Target window UI element (used when mode is **By window UI element**)      |
-| Window title      | String     | No       | Empty                | Window title (used when mode is **By title or class**), supports wildcards `?` and `*` |
-| Window class      | String     | No       | Empty                | Window class (used when mode is **By title or class**), supports wildcards `?` and `*` |
-| Window action     | Enum       | Yes      | Focus on window      | Allowed: Focus on window, Move to background, Maximize window, Minimize window, Close window |
+| Parameter        | Type       | Required | Default              | Description                                                                                  |
+| ---------------- | ---------- | -------- | -------------------- | -------------------------------------------------------------------------------------------- |
+| Find window mode | Enum       | Yes      | By window UI element | Allowed: By window UI element, By title or class                                             |
+| Window           | UI element | No       | Empty                | Target window UI element (used when mode is **By window UI element**)                        |
+| Window title     | String     | No       | Empty                | Window title (used when mode is **By title or class**), supports wildcards `?` and `*`       |
+| Window class     | String     | No       | Empty                | Window class (used when mode is **By title or class**), supports wildcards `?` and `*`       |
+| Window action    | Enum       | Yes      | Focus on window      | Allowed: Focus on window, Move to background, Maximize window, Minimize window, Close window |
 
 > **Note:** If multiple windows match the criteria, use **When multiple match** to control whether the action is applied to the first match only or to all matches.
 
@@ -215,10 +215,10 @@ Updates the state of one or more windows that match the specified search criteri
 
 In **By title or class** mode, both the **Window title** and **Window class** values support **wildcards**. Use wildcards when only **part** of the title or class is predictable, so you can match a window without typing its exact text. The available wildcard characters are:
 
-| Wildcard | Match behavior |
-| -------- | -------------------------------------------------- |
+| Wildcard | Match behavior                                      |
+| -------- | --------------------------------------------------- |
 | `*`      | Matches any sequence of characters, including none. |
-| `?`      | Matches exactly one character. |
+| `?`      | Matches exactly one character.                      |
 
 Matching is **case-insensitive**, and the **whole value** must match the pattern (not just part of it). For example:
 
@@ -237,10 +237,10 @@ Set the value of a new or existing variable, create a new variable or overwrite 
 
 **Input Parameters:**
 
-| Parameter | Type              | Required | Default | Description                                             |
-| --------- | ----------------- | -------- | ------- | ------------------------------------------------------- |
-| Variable  | String            | Yes      | Empty   | A variable name (existing or new)                      |
-| Value     | String/Int/Double | Yes      | Empty   | The value assigned to the variable                     |
+| Parameter | Type              | Required | Default | Description                        |
+| --------- | ----------------- | -------- | ------- | ---------------------------------- |
+| Variable  | String            | Yes      | Empty   | A variable name (existing or new)  |
+| Value     | String/Int/Double | Yes      | Empty   | The value assigned to the variable |
 
 > **Note**: You can use [variables](#variables) in the form of %variable_name% for assigning values. For more details, see [variables](#variables).
 
@@ -254,10 +254,10 @@ Increases the value of a variable by a specific amount.
 
 **Input Parameters:**
 
-| Parameter     | Type               | Required | Default | Description                                                        |
-| ------------- | ------------------ | -------- | ------- | ------------------------------------------------------------------ |
-| Variable name | String             | Yes      | Empty   | The numeric variable to increase                                  |
-| Increase by   | Number (Int/Double) | Yes      | Empty   | A numeric value or a variable containing a numeric value          |
+| Parameter     | Type                | Required | Default | Description                                              |
+| ------------- | ------------------- | -------- | ------- | -------------------------------------------------------- |
+| Variable name | String              | Yes      | Empty   | The numeric variable to increase                         |
+| Increase by   | Number (Int/Double) | Yes      | Empty   | A numeric value or a variable containing a numeric value |
 
 > **Note**: Negative numbers can also be used to decrease the value of a variable.
 
@@ -267,9 +267,9 @@ Suspends the execution of the flow for a specific amount of seconds.
 
 **Input Parameters:**
 
-| Parameter | Type            | Required | Default | Description                |
-| --------- | --------------- | -------- | ------- | -------------------------- |
-| Duration  | Number (Double) | Yes      | Empty   | The duration in seconds   |
+| Parameter | Type            | Required | Default | Description             |
+| --------- | --------------- | -------- | ------- | ----------------------- |
+| Duration  | Number (Double) | Yes      | Empty   | The duration in seconds |
 
 > In addition to numbers, you can also make use of variables (See [Variables](#variables)).
 
@@ -279,9 +279,9 @@ Terminates the flow.
 
 **Input Parameters:**
 
-| Parameter   | Type | Required | Default | Description                           |
-| ----------- | ---- | -------- | ------- | ------------------------------------- |
-| With status | Enum | Yes      | Success | Allowed: Success, Failure            |
+| Parameter   | Type | Required | Default | Description               |
+| ----------- | ---- | -------- | ------- | ------------------------- |
+| With status | Enum | Yes      | Success | Allowed: Success, Failure |
 
 #### Lock workstation
 
@@ -297,11 +297,11 @@ Interacts with the Windows clipboard. Use it to put text on the clipboard, clear
 
 **Input Parameters:**
 
-| Parameter        | Type   | Required | Default            | Description                                                                 |
-| ---------------- | ------ | -------- | ------------------ | --------------------------------------------------------------------------- |
-| Action           | Enum   | Yes      | Set clipboard text | Allowed: Set clipboard text, Clear clipboard content, Retrieve clipboard text |
+| Parameter        | Type   | Required | Default            | Description                                                                                                                   |
+| ---------------- | ------ | -------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| Action           | Enum   | Yes      | Set clipboard text | Allowed: Set clipboard text, Clear clipboard content, Retrieve clipboard text                                                 |
 | Clipboard text   | String | No       | Empty              | The text to place on the clipboard (used with **Set clipboard text**). Supports [variables](#variables) like `%VariableName%` |
-| Bind to variable | String | No       | Empty              | The variable that receives the clipboard text (used with **Retrieve clipboard text**) |
+| Bind to variable | String | No       | Empty              | The variable that receives the clipboard text (used with **Retrieve clipboard text**)                                         |
 
 > **Note**: **Clipboard text** applies only to **Set clipboard text**, and **Bind to variable** applies only to **Retrieve clipboard text**. **Clear clipboard content** needs no additional input.
 
@@ -315,9 +315,9 @@ Calls an Accesskey function and retrieves its result.
 
 **Input Parameters:**
 
-| Parameter     | Type   | Required | Default | Description                                  |
-| ------------- | ------ | -------- | ------- | -------------------------------------------- |
-| Function name | String | Yes      | Empty   | The Accesskey function name to call         |
+| Parameter     | Type   | Required | Default | Description                         |
+| ------------- | ------ | -------- | ------- | ----------------------------------- |
+| Function name | String | Yes      | Empty   | The Accesskey function name to call |
 
 > **Note**: To test the function and see the result, after selecting the function and filling the required inputs, click on the **Test** button next to the function's drop-down.
 >
@@ -332,10 +332,10 @@ Executes some custom PowerShell script and retrieves its output into a variable.
 
 **Input Parameters:**
 
-| Parameter | Type            | Required | Default | Description                                                         |
-| --------- | --------------- | -------- | ------- | ------------------------------------------------------------------- |
+| Parameter | Type            | Required | Default | Description                                                        |
+| --------- | --------------- | -------- | ------- | ------------------------------------------------------------------ |
 | Script    | String          | Yes      | Empty   | The PowerShell code to execute (variables are resolved beforehand) |
-| Timeout   | Number (Double) | Yes      | 0       | Maximum wait time in seconds (`0` means no timeout)               |
+| Timeout   | Number (Double) | Yes      | 0       | Maximum wait time in seconds (`0` means no timeout)                |
 
 ![Run powershell script action](/images/vendor/workflow_automation/automation_app/run_powershell_script.png)
 > **Figure:** Run powershell script action configuration.
@@ -350,11 +350,11 @@ Checks if two values match.
 
 **Input Parameters:**
 
-| Parameter      | Type          | Required | Default      | Description                                                            |
-| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------------------------- |
-| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare                   |
-| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands                     |
-| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare                  |
+| Parameter      | Type          | Required | Default      | Description                                          |
+| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------- |
+| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare  |
+| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
+| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
 > **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
 
@@ -367,11 +367,11 @@ Starts a block of actions that run only if earlier `If` or `else if` checks fail
 
 **Input Parameters:**
 
-| Parameter      | Type          | Required | Default      | Description                                                            |
-| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------------------------- |
-| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare                   |
-| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands                     |
-| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare                  |
+| Parameter      | Type          | Required | Default      | Description                                          |
+| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------- |
+| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare  |
+| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
+| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
 > **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
 
@@ -389,11 +389,11 @@ Checks whether a UI element exists on the screen.
 
 **Input Parameters:**
 
-| Parameter      | Type            | Required | Default | Description                                                   |
-| -------------- | --------------- | -------- | ------- | ------------------------------------------------------------- |
-| UI element     | UI element      | Yes      | -       | The target element to check                                  |
-| If UI element  | Enum            | Yes      | Exist   | Allowed: Exist, Doesn't exist                                |
-| Timeout        | Number (Double) | Yes      | 2       | Search timeout in seconds                                    |
+| Parameter     | Type            | Required | Default | Description                   |
+| ------------- | --------------- | -------- | ------- | ----------------------------- |
+| UI element    | UI element      | Yes      | -       | The target element to check   |
+| If UI element | Enum            | Yes      | Exist   | Allowed: Exist, Doesn't exist |
+| Timeout       | Number (Double) | Yes      | 2       | Search timeout in seconds     |
 
 ![If UI element exists action](/images/vendor/workflow_automation/automation_app/if_UI_element_exists.png)
 > **Figure:** If UI element exists action configuration.
@@ -408,11 +408,11 @@ Iterates a block of actions for a specific number of times.
 
 **Input Parameters:**
 
-| Parameter    | Type         | Required | Default | Description                                            |
-| ------------ | ------------ | -------- | ------- | ------------------------------------------------------ |
-| Start from   | Number (Int) | Yes      | Empty   | The starting value of the loop counter (variables allowed) |
-| End to       | Number (Int) | Yes      | Empty   | The ending value of the loop counter (variables allowed)   |
-| Increment by | Number (Int) | Yes      | Empty   | The increment step for the loop counter (variables allowed)   |
+| Parameter    | Type         | Required | Default | Description                                                 |
+| ------------ | ------------ | -------- | ------- | ----------------------------------------------------------- |
+| Start from   | Number (Int) | Yes      | Empty   | The starting value of the loop counter (variables allowed)  |
+| End to       | Number (Int) | Yes      | Empty   | The ending value of the loop counter (variables allowed)    |
+| Increment by | Number (Int) | Yes      | Empty   | The increment step for the loop counter (variables allowed) |
 
 > **Note**: You can use variables instead of static numbers. For more details, see [Variables](#variables).
 
@@ -425,11 +425,11 @@ Iterates a block of actions as long as a specific condition proves to be true.
 
 **Input Parameters:**
 
-| Parameter      | Type          | Required | Default      | Description                                            |
-| -------------- | ------------- | -------- | ------------ | ------------------------------------------------------ |
-| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare   |
-| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands     |
-| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare  |
+| Parameter      | Type          | Required | Default      | Description                                          |
+| -------------- | ------------- | -------- | ------------ | ---------------------------------------------------- |
+| First operand  | String/Number | Yes      | Empty        | The first value, variable, or expression to compare  |
+| Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
+| Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
 > **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
 
@@ -447,12 +447,12 @@ Reads a CSV file from your PC or system and loads it into a data table variable.
 
 **Input Parameters:**
 
-| Parameter            | Type    | Required | Default | Description                                                                 |
-| -------------------- | ------- | -------- | ------- | --------------------------------------------------------------------------- |
-| CSV file path        | String  | Yes      | Empty   | Full path to the `.csv` file to read (you can also use the `select file` button on the right side for convenience)|
-| First line is header | Boolean | No       | false   | If enabled, the first row is treated as column names; otherwise, columns are auto-named (`Col 1`, `Col 2`, ...) |
-| Trim fields          | Boolean | No       | false   | If enabled, trims leading/trailing spaces for each field value             |
-| Store result in      | Variable| Yes      | Empty   | Name of the variable that receives the output DataTable                    |
+| Parameter            | Type     | Required | Default | Description                                                                                                        |
+| -------------------- | -------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------ |
+| CSV file path        | String   | Yes      | Empty   | Full path to the `.csv` file to read (you can also use the `select file` button on the right side for convenience) |
+| First line is header | Boolean  | No       | false   | If enabled, the first row is treated as column names; otherwise, columns are auto-named (`Col 1`, `Col 2`, ...)    |
+| Trim fields          | Boolean  | No       | false   | If enabled, trims leading/trailing spaces for each field value                                                     |
+| Store result in      | Variable | Yes      | Empty   | Name of the variable that receives the output DataTable                                                            |
 
 ![Read CSV from file action](/images/vendor/workflow_automation/automation_app/read_csv_from_file.png)
 > **Figure:** Read CSV from file action configuration.
@@ -463,15 +463,15 @@ Searches a column in a source data table and stores matching rows in a new data 
 
 **Input Parameters:**
 
-| Parameter            | Type     | Required | Default | Description                                                                 |
-| -------------------- | -------- | -------- | ------- | --------------------------------------------------------------------------- |
-| Data table           | Variable | Yes      | Empty   | Source variable containing the input DataTable                             |
-| Text to find         | String   | Yes      | Empty   | Text to search for in the selected column. Supports variable placeholders  |
-| Column name or index | String   | Yes      | Empty   | Target column by exact name or zero-based index (`0`, `1`, ...)           |
-| All matches          | Boolean  | No       | false   | If enabled, returns all matching rows; otherwise, returns only the first matching row |
-| Match case           | Boolean  | No       | false   | If enabled, text comparison is case-sensitive                              |
+| Parameter            | Type     | Required | Default | Description                                                                            |
+| -------------------- | -------- | -------- | ------- | -------------------------------------------------------------------------------------- |
+| Data table           | Variable | Yes      | Empty   | Source variable containing the input DataTable                                         |
+| Text to find         | String   | Yes      | Empty   | Text to search for in the selected column. Supports variable placeholders              |
+| Column name or index | String   | Yes      | Empty   | Target column by exact name or zero-based index (`0`, `1`, ...)                        |
+| All matches          | Boolean  | No       | false   | If enabled, returns all matching rows; otherwise, returns only the first matching row  |
+| Match case           | Boolean  | No       | false   | If enabled, text comparison is case-sensitive                                          |
 | Match entire cell    | Boolean  | No       | false   | If enabled, value must match the full cell text; otherwise, substring matching is used |
-| Store result in      | Variable | Yes      | Empty   | Variable name that receives the output DataTable with matched rows         |
+| Store result in      | Variable | Yes      | Empty   | Variable name that receives the output DataTable with matched rows                     |
 
 ![Find in data table action](/images/vendor/workflow_automation/automation_app/find_in_data_table.png)
 > **Figure:** Find in data table action configuration.
@@ -482,9 +482,9 @@ Runs another subflow from the same workflow. Use this action to reuse a shared s
 
 **Input Parameters:**
 
-| Parameter | Type   | Required | Default | Description                          |
-| --------- | ------ | -------- | ------- | ------------------------------------ |
-| Subflow   | Enum   | Yes      | Empty   | The subflow to run from this workflow |
+| Parameter | Type | Required | Default | Description                           |
+| --------- | ---- | -------- | ------- | ------------------------------------- |
+| Subflow   | Enum | Yes      | Empty   | The subflow to run from this workflow |
 
 > **Note:** At least one subflow must already exist in the workflow before this action can be configured.
 >
