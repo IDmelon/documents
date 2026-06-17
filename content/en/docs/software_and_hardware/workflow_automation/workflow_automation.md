@@ -44,6 +44,8 @@ In **Settings** (in the toolbar at the top of the Workflow Editor), the Workflow
 1. **Don't run at startup** — the Workflow Runner does not start automatically when the system starts.
 2. **Run at startup** — the Workflow Runner starts automatically when the system starts.
 
+The default setting is **Run at startup**. Changing this setting (either disabling or re-enabling it) requires elevated access, so you must run Workflow Editor as administrator before changing it.
+
 ![Workflow Runner startup setting](/images/vendor/workflow_automation/automation_app/settings_expanded.png)
 > **Figure:** The Workflow Runner startup behavior in the Settings panel.
 
