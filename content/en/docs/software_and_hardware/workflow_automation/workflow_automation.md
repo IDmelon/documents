@@ -690,6 +690,9 @@ To delete all UI elements of a window, select and delete the window.
 
 > **Note**: When you delete an element, all related flows (element-based actions) will be deleted too.
 
+![UI element Tree View](/images/vendor/workflow_automation/automation_app/UI_element_tree_view.png)
+> **Figure:** The UI element tree view environment.
+
 ### Flows
 
 A flow is an action with specific parameters and conditions that will be executed one by one when the workflow starts.
@@ -728,6 +731,10 @@ If you want to disable a flow temporarily to prevent it from running, select **E
 You can attach a comment to any flow to document what it does or why it is needed. Right-click the flow and select **Comment**, then enter your note. A comment icon appears on the flow, and hovering over it shows the comment text.
 
 > **Note**: Comments are for documentation only and do not affect how the workflow runs.
+
+![Comment Example 1](/images/vendor/workflow_automation/automation_app/flow_comment_1.png)
+![Comment Example 2](/images/vendor/workflow_automation/automation_app/flow_comment_2.png)
+> **Figure:** A Comment for a flow.
 
 #### Undo/Redo
 
@@ -771,6 +778,9 @@ When you create a subflow, you choose how it handles [variables](#variables):
 - **Global**: The subflow shares variables with the rest of the workflow. Variable changes made inside the subflow persist after it returns. Use this when the subflow is meant to produce results for the caller to use.
 
 > **Note**: The scope is chosen when the subflow is created and cannot be changed afterward.
+
+![Subflows Example](/images/vendor/workflow_automation/automation_app/subflows.png)
+> **Figure:** A subflow that runs Google Chrome.
 
 ## Workflow Runner
 
