@@ -52,7 +52,7 @@ If the badge ID is read in the wrong order, enable **Reverse Byte Order**.
 ### Shared Configuration Fields
 
 - **Workspace ID:** Optional. Use this when requests should be scoped to a specific IDmelon workspace.
-- **API Key:** Optional. Required only when your workspace enforces authenticated clients.
+- **API Key:** Optional. Required only when your workspace enforces authenticated clients (Admin Panel > Authentication > API Key Management (API Key Type: Clients)).
 - **Base URL:** Optional. Use this for on-premise environments.
 
 ## VDI Mode
