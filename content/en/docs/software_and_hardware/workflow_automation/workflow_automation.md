@@ -289,6 +289,24 @@ Locks the workstation's display.
 
 No inputs needed.
 
+#### Clipboard
+
+Interacts with the Windows clipboard. Use it to put text on the clipboard, clear the clipboard, or read the current clipboard text into a variable.
+
+**Input Parameters:**
+
+| Parameter        | Type   | Required | Default            | Description                                                                 |
+| ---------------- | ------ | -------- | ------------------ | --------------------------------------------------------------------------- |
+| Action           | Enum   | Yes      | Set clipboard text | Allowed: Set clipboard text, Clear clipboard content, Retrieve clipboard text |
+| Clipboard text   | String | No       | Empty              | The text to place on the clipboard (used with **Set clipboard text**). Supports [variables](#variables) like `%VariableName%` |
+| Bind to variable | String | No       | Empty              | The variable that receives the clipboard text (used with **Retrieve clipboard text**) |
+
+> **Note**: **Clipboard text** applies only to **Set clipboard text**, and **Bind to variable** applies only to **Retrieve clipboard text**. **Clear clipboard content** needs no additional input.
+
+![Clipboard action - 1](/images/vendor/workflow_automation/automation_app/clipboard_1.png)
+![Clipboard action - 2](/images/vendor/workflow_automation/automation_app/clipboard_2.png)
+> **Figure:** Clipboard action configuration.
+
 #### Call Accesskey function
 
 Calls an Accesskey function and retrieves its result.
@@ -467,6 +485,8 @@ Runs another subflow from the same workflow. Use this action to reuse a shared s
 | Subflow   | Enum   | Yes      | Empty   | The subflow to run from this workflow |
 
 > **Note:** At least one subflow must already exist in the workflow before this action can be configured.
+>
+> **Note:** A subflow cannot call itself, either directly or indirectly through another subflow that is already running. This prevents unwanted infinite loops. If such a recursive call is detected, the workflow stops with an error.
 
 ![Run subflow action](/images/vendor/workflow_automation/automation_app/run_subflow.png)
 > **Figure:** Run subflow action configuration.
@@ -570,8 +590,6 @@ Use **Inspect** when hovering is difficult or when you need more precise selecti
 
 > The picker prevents duplicate additions of the same element path.  
 > If **Add selected** is disabled, choose a valid supported UI element node.
-
-When an element is captured, its window is captured and shown in the image preview section. Use the magnifier in the preview to zoom in and confirm you have selected the correct element.
 
 ![UI element picker](/images/vendor/workflow_automation/automation_app/UI_element_picker.png)
 > **Figure:** The UI element picker environment.
@@ -743,6 +761,11 @@ You can undo and redo changes you make to the flows (such as adding, moving, edi
 #### Run/Stop workflow
 
 To test the workflow, click on the **Run** button, and to stop it, click it again.
+
+While the workflow is running, the flows list shows the execution progress:
+
+- A **green arrow** marks the flow that is currently running.
+- A **red cross** marks a flow that failed during execution. Hover the mouse over the red cross to see the error message for that flow.
 
 #### Test Selected Action
 
