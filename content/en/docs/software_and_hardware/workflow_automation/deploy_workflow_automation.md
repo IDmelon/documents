@@ -46,7 +46,7 @@ You will use a PowerShell **platform script** in Intune to copy the workflow fil
 
 2. Create the deployment script and save it as a `.ps1` file:
 
-   ```powershell
+   ```bash
    # Destination folder on each kiosk device
    $workflowDir = "C:\ProgramData\IDmelon\Workflow Automation\Workflows"
    $workflowPath = Join-Path $workflowDir "documentation_sample.json"
@@ -83,7 +83,7 @@ You will use a PowerShell **platform script** in Intune to copy the workflow fil
 
 To remove the automation later, deploy a script that disables it:
 
-```powershell
+```bash
 accesskeycli workflow-automation -t automation-app -r
 ```
 
@@ -101,7 +101,7 @@ The Workflow Automation app itself can be installed either **from Intune** (see 
 
    When the target is reached **by IP address or is not domain-joined**, add it to `TrustedHosts` and authenticate explicitly:
 
-   ```powershell
+   ```bash
    $ComputerName = "192.168.1.80"
 
    # Required for IP / workgroup (non-domain) targets
@@ -116,7 +116,7 @@ The Workflow Automation app itself can be installed either **from Intune** (see 
 
    Skip this step if the app is already deployed through Intune.
 
-   ```powershell
+   ```bash
    $SetupSource = "C:\Users\you\Downloads\Workflow Automation\Setup.exe"
    $SetupDest   = "C:\Temp\Setup.exe"
 
@@ -137,7 +137,7 @@ The Workflow Automation app itself can be installed either **from Intune** (see 
 
 3. Copy the workflow file and register the automation command:
 
-   ```powershell
+   ```bash
    $WorkflowSource = "C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json"
    $WorkflowDest   = "C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json"
 
