@@ -3,7 +3,7 @@ title: "IDmelon Panel Release Notes"
 description: "IDmelon Panel Release notes"
 lead: ""
 date: 2022-02-16T18:14:02-08:00
-lastmod: 2022-02-16T18:14:02-08:00
+lastmod: 2026-06-15T18:14:02-08:00
 draft: false
 images: []
 menu:
@@ -13,6 +13,28 @@ weight: 360000
 toc: true
 
 ---
+
+### IDmelon Panel 2.178.0
+
+June 15, 2026
+
+#### New Features
+
+- When using SCIM, admins can deprovision users outside of SCIM.
+- Contact customer support to set up security key enrolment policies which allow, block, or automatically replace security keys.
+
+#### Bug Fixes
+
+- Trouble adding a credit card? We have improved the credit card addition flow.
+
+### IDmelon Panel 2.175.0
+
+June 2, 2026
+
+#### New Features
+
+- Find the self-service language selector on all pages of the self-service to easily switch languages.
+- Card invitation email links now sends users to the self-service page, following user's preferred language.
 
 ### IDmelon Panel 2.173.0
 
