@@ -19,6 +19,15 @@ Deployment always involves two things on each target device:
 
 > **Prerequisite:** Workflow Automation (which includes the Workflow Runner) and IDmelon Accesskey (**version 3.12.1 or later**) must be installed on every target device. With Intune you can deploy these apps the same way you deploy any other application; see [Automatic Software Deployment](../../../for_administrators/automatic_software_deployment/deploy_with_intune/) for guidance on packaging and assigning apps.
 
+<!-- -->
+
+> **Note:** The scripts in this guide are examples and will need to be adjusted to your environment. Update them based on:
+>
+> - The **file name** and **path** of the exported workflow (`documentation_sample.json` is only a placeholder).
+> - Whether the workflow `.json` file **already exists** on the device and you only want to update its contents, versus copying it for the first time.
+> - Whether you want to **change the file name or path** referenced in the Accesskey automation command (`--workflow-path`), in which case re-register the command so it points to the new location.
+> - The source location you copy the workflow from.
+
 ## Deploying in a Kiosk Environment
 
 In a kiosk environment, deployment is the most important part of the rollout, because the `Workflow Editor` itself cannot run in kiosk mode (Windows allows only one application at a time in kiosk mode; see [Workflow Automation in Kiosk Environment](../configuring_for_kiosk_env/)).
