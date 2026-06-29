@@ -215,6 +215,83 @@ Select the desired Microsoft Entra ID attribute to map in the **Source attribute
 
 Finally, **Save** your changes.
 
+## Assigning Administrator Roles via SCIM
+
+IDmelon supports assigning predefined workspace administrator roles to users and groups through SCIM provisioning. This allows Microsoft Entra ID to automatically grant or revoke admin access in IDmelon based on role assignments.
+
+> Role assignments made via SCIM are independent of manual role assignments made in the IDmelon panel. SCIM only manages SCIM-assigned roles and does not affect panel-assigned permissions.
+
+### Available Roles
+
+The following predefined roles can be assigned via SCIM:
+
+| Role Value *(use exactly as shown — case-sensitive)* | Display Name                     | Description |
+|------------------------------------------------------|----------------------------------|-------------|
+| `GlobalAdministrator`                                | Global Administrator             | Full access to all workspace settings, users, devices, and configurations. Equivalent to workspace owner-level access for day-to-day administration. |
+| `AuthenticationAdministrator`                        | Authentication Administrator     | Can manage users' security keys and passkeys, view authentication activities, and configure authentication policies. Cannot access billing or global workspace settings. |
+| `BillingAdministrator`                               | Billing Administrator            | Can view and manage billing information, subscription plans, and payment details for the workspace. |
+| `ConditionalAccessAdministrator`                     | Conditional Access Administrator | Can configure conditional access policies, manage organization units, and control access rules within the workspace. |
+
+### Step 1 - Define App Roles in Azure
+
+1. Go to **Azure Portal** → **App Registrations** → select your IDmelon application → **App roles**
+2. Click **Create app role** for each role listed above and fill in:
+   * **Display name**: e.g. `Global Administrator`
+   * **Allowed member types**: `Users/Groups`
+   * **Value**: e.g. `GlobalAdministrator` *(must match exactly — case-sensitive)*
+   * **Enable this app role**: checked
+3. Repeat for all four roles.
+
+> Azure does not allow editing the **Value** field after creation. To fix a value, you must disable the role, delete it, and recreate it.
+
+### Step 2 - Configure Attribute Mapping
+
+1. Go to **Enterprise Application** → **Provisioning** → **Edit Attribute Mappings** → **Provision Microsoft Entra ID Users**
+2. Find the attribute `roles[primary eq "True"].value` and click **Edit**
+3. Set the following and click **OK**, then **Save**:
+
+| Field            | Value                                          |
+|------------------|------------------------------------------------|
+| Mapping type     | Expression                                     |
+| Expression       | `SingleAppRoleAssignment([appRoleAssignments])` |
+| Target attribute | `roles[primary eq "True"].value`               |
+
+> **Note:** This mapping supports one role per user at a time. For assigning multiple roles to a single user, use group-based role assignment (see below).
+
+### Step 3 - Assign a Role to a User or Group
+
+1. Go to **Enterprise Application** → **Users and groups** → **Add user/group**
+2. Select the user or group
+3. In **Select a role**, choose one of the four IDmelon roles
+4. Click **Assign**
+
+On the next provisioning cycle (or via **Provision on demand**), IDmelon will automatically grant the selected admin role to the user.
+
+### Revoking a Role
+
+To remove an admin role from a user without removing the user:
+
+1. Go to **Enterprise Application** → **Users and groups**
+2. Select the user → **Edit assignment**
+3. Change the role to **Default Access** (no role)
+4. Trigger a sync via **Provision on demand**
+
+IDmelon will automatically revoke the SCIM-assigned role.
+
+> Deactivating or removing a user from the Enterprise Application will also clear their SCIM-assigned roles in IDmelon.
+
+### Group-Based Role Assignment (Multiple Roles per User)
+
+To assign multiple roles to the same user, use group-based provisioning:
+
+1. Create a dedicated group in Azure for each role, for example:
+   * `IDMelon-GlobalAdministrators`
+   * `IDMelon-BillingAdministrators`
+2. Go to **Enterprise Application** → **Users and groups** → assign the corresponding App Role to each group
+3. Add users to the appropriate groups
+
+Each user will receive all roles from the groups they belong to.
+
 ## Deprovisioning
 
 The rules for deprovisioning are as follows:
