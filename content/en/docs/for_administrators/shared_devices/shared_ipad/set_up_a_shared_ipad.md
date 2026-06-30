@@ -116,7 +116,7 @@ Sign-in defaults to badge. To use face or another method, see
 
 > Not using Microsoft apps? Remove the `use_msal` and `azure_client_id` lines; keep
 > `api_key` and `shared_login_method`.
-
+>
 > Running IDmelon on-premise? You'll also add `base_api_url`. See
 > [Configuration keys](../configuration_keys).
 

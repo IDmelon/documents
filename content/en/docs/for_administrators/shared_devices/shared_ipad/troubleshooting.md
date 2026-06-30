@@ -54,37 +54,15 @@ badge/hub.
 
 Fix:
 
-1. Pick the method. Badge/hub is the default (tap arrives over the Hub, no iPad accessory);
-   face uses the iPad camera, no reader.
-2. Paste the exact block. Badge over the Hub:
+1. Pick the method. Badge/hub is the default (the tap arrives over the Hub, no iPad
+   accessory); face uses the iPad camera, no reader.
+2. Paste the exact `shared_login_method` block for that method. A wrong or malformed block
+   silently falls back to badge/hub.
+3. If you meant face but see a badge prompt, your face block is malformed — re-check `type`
+   and `model`.
+4. For badge/hub, confirm the reader feeding the Hub is powered and reachable.
 
-```xml
-<key>shared_login_method</key>
-<dict>
-  <key>type</key>
-  <string>badge</string>
-  <key>model</key>
-  <string>hub</string>
-</dict>
-```
-
-3. Face on the iPad camera:
-
-```xml
-<key>shared_login_method</key>
-<dict>
-  <key>type</key>
-  <string>face</string>
-  <key>model</key>
-  <string>hid</string>
-</dict>
-```
-
-4. Meant face but see a badge prompt? Your face block is malformed — re-check `type` and
-   `model`.
-5. For badge/hub, confirm the reader feeding the Hub is powered and reachable.
-
-See [Login methods](../login_methods) for every model and block.
+See [Login methods](../login_methods) for every model and the exact block to paste.
 
 ## Microsoft apps keep asking for a password
 
@@ -130,12 +108,8 @@ Fix:
 
 1. Open the `shortcut_list` entry and check the `url`.
 2. Use a supported token, spelled exactly: `{email}`, `{username}`, `{name}`, `{realm}`,
-   `{organization}`, `{tenantID}`. Example:
-
-```
-https://myapps.microsoft.com/?login_hint={email}
-```
-
+   `{organization}`, `{tenantID}` — for example
+   `https://myapps.microsoft.com/?login_hint={email}`.
 3. Re-sync and tap the tile again.
 
 See [Home page Customization](../customization) for the full tile format and token list.
