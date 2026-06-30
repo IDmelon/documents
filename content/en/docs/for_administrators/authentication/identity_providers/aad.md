@@ -71,7 +71,13 @@ You will need the values provided in the newly opened window to set up **Entra I
 
 ## Finishing IDmelon Configuration as SP
 
-- Scroll down and copy the values from **Entra ID** to the **IDmelon Authentication Panel** as shown in the images.
+- Scroll down and copy the values from **Entra ID** to the **IDmelon Authentication Panel** as shown in the images and save the configuration.
 
 ![AAD Window 9](/images/vendor/sso/aad/aad_09.png)
 ![AAD IDmelon 3](/images/vendor/sso/aad/aad_14.png)
+
+- Navigate to **Authentication>Authentication Profile** section in the IDmelon Panel and select **External** in the **Identity Provider** section as shown below.
+
+![AAD IDmelon 4](/images/vendor/sso/aad/aad_15.png)
+
+- Now, users are able to log in to the IDmelon Panel through Entra SSO.
