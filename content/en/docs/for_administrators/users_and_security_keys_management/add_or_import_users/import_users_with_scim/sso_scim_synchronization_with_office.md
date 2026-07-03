@@ -225,18 +225,18 @@ IDmelon supports assigning predefined workspace administrator roles to users and
 
 The following predefined roles can be assigned via SCIM:
 
-| Role Value *(use exactly as shown — case-sensitive)* | Display Name                     | Description |
+| Role Value *(use exactly as shown — case-sensitive)* | Display Name *(use exactly as shown — case-sensitive)*                     | Description |
 |------------------------------------------------------|----------------------------------|-------------|
-| `GlobalAdministrator`                                | Global Administrator             | Full access to all workspace settings, users, devices, and configurations. Equivalent to workspace owner-level access for day-to-day administration. |
-| `AuthenticationAdministrator`                        | Authentication Administrator     | Can manage users' security keys and passkeys, view authentication activities, and configure authentication policies. Cannot access billing or global workspace settings. |
-| `BillingAdministrator`                               | Billing Administrator            | Can view and manage billing information, subscription plans, and payment details for the workspace. |
-| `ConditionalAccessAdministrator`                     | Conditional Access Administrator | Can configure conditional access policies, manage organization units, and control access rules within the workspace. |
+| `GlobalAdministrator`                                | `GlobalAdministrator`             | Full access to all workspace settings, users, devices, and configurations. Equivalent to workspace owner-level access for day-to-day administration. |
+| `AuthenticationAdministrator`                        | `AuthenticationAdministrator`     | Can manage users' security keys and passkeys, view authentication activities, and configure authentication policies. Cannot access billing or global workspace settings. |
+| `BillingAdministrator`                               | `BillingAdministrator`            | Can view and manage billing information, subscription plans, and payment details for the workspace. |
+| `ConditionalAccessAdministrator`                     | `ConditionalAccessAdministrator` | Can configure conditional access policies, manage organization units, and control access rules within the workspace. |
 
 ### Step 1 - Define App Roles in Azure
 
-1. Go to **Azure Portal** → **App Registrations** → select your IDmelon application → **App roles**
+1. Go to **App Registrations** → select your IDmelon SCIM application → **App roles**
 2. Click **Create app role** for each role listed above and fill in:
-   * **Display name**: e.g. `Global Administrator`
+   * **Display name**: e.g. `GlobalAdministrator` *(must match exactly — case-sensitive)*
    * **Allowed member types**: `Users/Groups`
    * **Value**: e.g. `GlobalAdministrator` *(must match exactly — case-sensitive)*
    * **Enable this app role**: checked
@@ -246,7 +246,7 @@ The following predefined roles can be assigned via SCIM:
 
 ### Step 2 - Configure Attribute Mapping
 
-1. Go to **Enterprise Application** → **Provisioning** → **Edit Attribute Mappings** → **Provision Microsoft Entra ID Users**
+1. Go to **Enterprise Applications** → select your IDmelon SCIM application → **Provisioning** → **Edit Attribute Mappings** → **Provision Microsoft Entra ID Users**
 2. Find the attribute `roles[primary eq "True"].value` and click **Edit**
 3. Set the following and click **OK**, then **Save**:
 
@@ -260,7 +260,7 @@ The following predefined roles can be assigned via SCIM:
 
 ### Step 3 - Assign a Role to a User or Group
 
-1. Go to **Enterprise Application** → **Users and groups** → **Add user/group**
+1. Go to **Enterprise Applications** → select your IDmelon SCIM application → **Users and groups** → **Add user/group**
 2. Select the user or group
 3. In **Select a role**, choose one of the four IDmelon roles
 4. Click **Assign**
@@ -271,7 +271,7 @@ On the next provisioning cycle (or via **Provision on demand**), IDmelon will au
 
 To remove an admin role from a user without removing the user:
 
-1. Go to **Enterprise Application** → **Users and groups**
+1. Go to **Enterprise Applications** → select your IDmelon SCIM application → **Users and groups**
 2. Select the user → **Edit assignment**
 3. Change the role to **Default Access** (no role)
 4. Trigger a sync via **Provision on demand**
