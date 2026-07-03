@@ -22,7 +22,7 @@ June 25, 2026
 
 - User lifecycle management just got a lot easier! Now, admins can set their Panel's SCIM deprovisioning policy to suspend disabled users and re-activate them once re-enabled in Entra/Okta. Users suspended via SCIM will remain suspended in the IDmelon Panel for a configurable period of time before they are permanently deleted
 - Predefined admin roles are now available on IDmelon! These can be assigned through SCIM ([docs](/docs/for_administrators/users_and_security_keys_management/add_or_import_users/import_users_with_scim/sso_scim_synchronization_with_office/#assigning-administrator-roles-via-scim)) or manually from the Panel itself
-- Instead of adding workspace administrators one by one, admin rights can now be assigned to a group of users 
+- Instead of adding workspace administrators one by one, admin rights can now be assigned to a group of users
 
 ### IDmelon Panel 2.178.0
 
