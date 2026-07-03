@@ -34,11 +34,12 @@ When using shared or generic accounts, it is common for multiple users to access
 ![Shared Account Diagram](/images/vendor/shared_pcs/shared_account_01.svg)
 
 Traditional shared credentials, such as common passwords, can create significant security and auditability challenges. IDmelon eliminates these issues by:
+
 1) Allowing users to use their own credentials to access shared accounts, and
 2) Creating a log trail that shows the credential used to access the shared account at that point in time
 
 To set up a shared account, please refer to [this document](/docs/for_administrators/users_and_security_keys_management/configure_a_shared_user_account/setup_a_shared_account/).
 
-After setting a up a shared account, please follow [this document](/docs/for_administrators/users_and_security_keys_management/configure_a_shared_user_account/manage_the_use_of_a_shared_security_key/) to ensure that users access the correct shared account in the right workstation. 
+After setting a up a shared account, please follow [this document](/docs/for_administrators/users_and_security_keys_management/configure_a_shared_user_account/manage_the_use_of_a_shared_security_key/) to ensure that users access the correct shared account in the right workstation.
 
 > **Note**: For on-prem AD environments using IDmelon's FCP, it is recommended for admins to set the shared account's password in the IDmelon Panel. This way, users do not have to enter the shared account's password themselves.
