@@ -3,7 +3,7 @@ title: "Shared PCs"
 description: ""
 lead: ""
 date: 2023-09-20T15:18:44+03:30
-lastmod: 2023-09-20T15:18:44+03:30
+lastmod: 2026-07-03T15:18:44+03:30
 draft: false
 images: []
 menu:
@@ -13,13 +13,33 @@ weight: 61000
 toc: true
 ---
 
-Steps to import devices from Entra ID:
+## Shared Workstations with Individual Accounts
 
-1. Log in to the admin panel of your system and navigate to the **Devices** section. This is the area where you manage devices and their associated settings.
-2. Click on **AD Connected Computers** under the **Devices** section, and then locate and click on the button labeled **Import Entra ID-Connected Devices**. This action initiates the process of importing devices that are already joined to Entra ID.
-3. After clicking on **Import Entra ID-Connected Devices**, you will be prompted to choose the Entra ID account that you want to connect to your system.
-4. **Sign-In (if needed):** Depending on the configuration and security settings, you might need to sign in to your Entra ID account for authentication purposes. This step ensures that you have the necessary permissions to access and import devices.
-5. **Redirection:** Once you’ve selected the Entra ID account and completed any required sign-in steps, you will be redirected back to your admin panel.
-6. **View Added Devices:** In the admin panel, navigate to the **AD Connected Computers** section under **Devices**. Here, you will find the devices that you’ve successfully imported from Entra ID.
+For environments where individual accounts are used on shared PCs, no additional configurations are required outside of IDmelon's standard security key and passkey onboarding processes. To log in to a shared workstation with their own account is to have their existing identifier enrolled in IDmelon with their passkey.
 
-By following these steps, you’ll be able to seamlessly import devices from Entra ID into your system. This functionality is particularly useful for scenarios where you want to leverage Entra ID-connected devices for various purposes, such as defining security key policies to control access to specific devices. Keep in mind that you might need to provide the necessary permissions and authentication to establish the connection between IDmelon admin panel and Entra ID.
+Because IDmelon transforms existing identifiers into security keys, there is no need to onboard every user on every device in their environment. Additionally, there is no limit to the number of users that can use each device.
+
+As a result:
+
+- After onboarding, users can access all devices within the environment with their individual account
+- There is no individual onboarding needed for every device
+- There is no limit in the number of users allowed to log in to a workstation
+
+> **Note**: For on-prem AD environments using IDmelon's FCP, users are required to enter their password the first time they use their security key to log in. Afterward, the user does not have to re-enter their password for any other workstation within the same environment.
+
+## Shared Workstations with Generic Accounts
+
+When using shared or generic accounts, it is common for multiple users to access different shared accounts from various workstations. This scenario is illustrated in the diagram below.
+
+![Shared Account Diagram](/images/vendor/shared_pcs/shared_account_01.svg)
+
+Traditional shared credentials, such as common passwords, can create significant security and auditability challenges. IDmelon eliminates these issues by:
+
+1) Allowing users to use their own credentials to access shared accounts, and
+2) Creating a log trail that shows the credential used to access the shared account at that point in time
+
+To set up a shared account, please refer to [this document](/docs/for_administrators/users_and_security_keys_management/configure_a_shared_user_account/setup_a_shared_account/).
+
+After setting a up a shared account, please follow [this document](/docs/for_administrators/users_and_security_keys_management/configure_a_shared_user_account/manage_the_use_of_a_shared_security_key/) to ensure that users access the correct shared account in the right workstation.
+
+> **Note**: For on-prem AD environments using IDmelon's FCP, it is recommended for admins to set the shared account's password in the IDmelon Panel. This way, users do not have to enter the shared account's password themselves.
