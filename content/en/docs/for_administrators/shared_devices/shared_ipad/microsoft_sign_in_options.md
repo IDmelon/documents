@@ -21,12 +21,15 @@ For the type, allowed values, and default of every key, see
 
 ## `use_msal`
 
-Turns on Microsoft Entra (MSAL) login. The setup page sets `use_msal` and `azure_client_id`
-(the two keys MSAL needs).
+Turns on Microsoft Entra (MSAL) login. The setup page sets `use_msal`, `azure_client_id`,
+and `azure_tenant_id` (the keys MSAL needs).
 
-## Lock sign-in to one tenant
+## Tenant ID
 
-`azure_tenant_id` is optional. Absent = `common`. Set it to lock sign-in to one tenant.
+`azure_tenant_id` is set alongside `azure_client_id` in the standard
+[Set up a shared iPad](../set_up_a_shared_ipad) flow — copy it from the same Entra app
+registration. Left out, it defaults to `common`, which allows sign-in from any Microsoft
+tenant, not just yours.
 
 ```xml
 <key>azure_tenant_id</key>

@@ -73,8 +73,8 @@ Cause: Microsoft (MSAL) sign-in is off or misconfigured.
 Fix:
 
 1. Set `use_msal` to `true` — the on-switch for Microsoft sign-in.
-2. Set `azure_client_id` to your Entra app registration's Application (client) ID — the only
-   Microsoft key the iPad needs; skip `azure_tenant_id` (defaults to `common`).
+2. Set `azure_client_id` to your Entra app registration's Application (client) ID, and
+   `azure_tenant_id` to its Directory (tenant) ID.
 3. Add the redirect URI `msauth.com.idmelon.idmelon-2://auth` to the Entra app registration.
 4. Assign both SSO extension profiles — Microsoft Entra and IDmelon — to the device.
 5. Install Microsoft Authenticator — the MSAL flow depends on it.

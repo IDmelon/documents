@@ -53,11 +53,12 @@ don't use Microsoft apps. See [Set up a shared iPad](../set_up_a_shared_ipad).
 **`use_msal`** — turns on Microsoft Entra (MSAL) login; the on-switch.  
 Boolean · Default: `false` · set `true` to enable Microsoft sign-in
 
-**`azure_client_id`** — your Entra app (client) id; the only required Microsoft key.  
+**`azure_client_id`** — your Entra app (client) id.  
 String · Default: none · the application GUID
 
-**`azure_tenant_id`** — OPTIONAL. Your Entra tenant.  
-String · Default: `common` · set it only to lock sign-in to a single tenant
+**`azure_tenant_id`** — your Entra tenant (directory) id. The standard
+[Set up a shared iPad](../set_up_a_shared_ipad) flow sets it alongside `azure_client_id`.  
+String · Default: `common` · left out, sign-in isn't locked to your tenant
 
 **`microsoft_sp_name`** — label shown for the Microsoft service provider.  
 String · Default: `entra_id` · any name

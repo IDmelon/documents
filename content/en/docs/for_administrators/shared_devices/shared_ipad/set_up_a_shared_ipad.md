@@ -19,13 +19,15 @@ home screen, and open Teams or Outlook without a second login.
 
 > Most teams connect Microsoft sign-in so Teams, Outlook, and My Apps open as the same
 > person, and it's included in the steps below. If your users never open Microsoft apps,
-> skip the steps marked **Microsoft** and leave the `use_msal` and `azure_client_id` lines
-> out of the payload in Step 4.
+> skip the steps marked **Microsoft** and leave the `use_msal`, `azure_client_id`, and
+> `azure_tenant_id` lines out of the payload in Step 4.
 
 ## Before you start
 
 - The iPad runs **iPadOS 17 or later** and is already enrolled in Microsoft Intune
   (supervised recommended).
+- **For Microsoft sign-in:** when you enroll the iPad, set its **Enrollment type**
+  (User Affinity) to **Enroll with Microsoft Entra shared mode profile**.
 - **IDmelon Authenticator** is in your Intune app catalog.
 - You can sign in to the [IDmelon Admin Panel](https://panel.idmelon.com) and
   [Microsoft Intune](https://intune.microsoft.com) — or you can ask someone who can.
@@ -59,13 +61,15 @@ This tells Microsoft to trust sign-ins coming from IDmelon on the iPad.
 3. Under **Redirect URI**, choose **Mobile and desktop applications** and enter:
    `msauth.com.idmelon.idmelon-2://auth`
 4. Register the app.
-5. Open **API permissions**, add the **Microsoft Graph** delegated permission
-   **User.Read**, then **Grant admin consent** if your tenant requires it.
-6. On the app's **Overview**, copy the **Application (client) ID** and keep it for Step 4.
+5. Open **API permissions** and add these **Microsoft Graph** delegated permissions:
+   **email**, **openid**, **profile**, and **User.Read**. Then **Grant admin consent** if
+   your tenant requires it.
+6. On the app's **Overview**, copy the **Application (client) ID** and the **Directory
+   (tenant) ID**, and keep both for Step 4.
 
-![Copying the client ID from the Entra app registration](/images/vendor/shared_ipads_new/shared_ipads_entra_app_registration_client_id.png)
+![Copying the client ID and tenant ID from the Entra app registration](/images/vendor/shared_ipads_new/shared_ipads_entra_app_registration_client_id.png)
 
-> Use the ID from your own app registration. Don't copy the one in the screenshot.
+> Use the IDs from your own app registration. Don't copy the ones in the screenshot.
 
 ## Step 3 — Add the apps in Intune
 
@@ -87,35 +91,72 @@ Now send the app its settings as a managed app configuration.
    app.
 3. Set **Configuration settings format** to **Enter XML data**.
 4. Paste the payload below.
-5. Set `api_key` to the key from Step 1, and set `azure_client_id` to the Application
-   (client) ID from Step 2.
+5. Set `api_key` to the key from Step 1. Set `azure_client_id` to the Application (client)
+   ID and `azure_tenant_id` to the Directory (tenant) ID, both from Step 2.
 6. Assign the policy to the same device group, then review and create.
 
 ```xml
 <dict>
   <key>api_key</key>
-  <string>YOUR_SHARED_MOBILE_API_KEY</string>
+  <string>YOUR_API_KEY</string>
+  <key>azure_client_id</key>
+  <string>YOUR_CLIENT_ID</string>
+  <key>azure_tenant_id</key>
+  <string>YOUR_TENANT_ID</string>
+  <key>shared_device_passkeys</key>
+  <true/>
+  <key>shared_authentication_backend</key>
+  <string>legacy</string>
   <key>shared_login_method</key>
   <dict>
     <key>type</key>
     <string>badge</string>
     <key>model</key>
-    <string>hub</string>
+    <string>auto</string>
   </dict>
+  <key>shortcut_list</key>
+  <array>
+    <dict>
+      <key>iconName</key>
+      <string>teams</string>
+      <key>title</key>
+      <string>Teams</string>
+      <key>url</key>
+      <string>msteams://</string>
+    </dict>
+    <dict>
+      <key>iconName</key>
+      <string>outlook</string>
+      <key>title</key>
+      <string>Outlook</string>
+      <key>url</key>
+      <string>ms-outlook://</string>
+    </dict>
+    <dict>
+      <key>iconName</key>
+      <string>myapps</string>
+      <key>title</key>
+      <string>My Apps</string>
+      <key>url</key>
+      <string>https://myapps.microsoft.com/?login_hint={email}</string>
+    </dict>
+  </array>
   <key>use_msal</key>
   <true/>
-  <key>azure_client_id</key>
-  <string>YOUR_APPLICATION_CLIENT_ID</string>
 </dict>
 ```
 
 > Change only the highlighted values — leave every other line exactly as it is.
 
+This default config also adds three home-screen shortcuts — **Teams**, **Outlook**, and
+**My Apps** — so people have somewhere to tap right after signing in. See
+[Home page Customization](../customization) to change or add tiles.
+
 Sign-in defaults to badge. To use face or another method, see
 [Login methods](../login_methods).
 
-> Not using Microsoft apps? Remove the `use_msal` and `azure_client_id` lines; keep
-> `api_key` and `shared_login_method`.
+> Not using Microsoft apps? Remove the `use_msal`, `azure_client_id`, and
+> `azure_tenant_id` lines; keep the rest.
 >
 > Running IDmelon on-premise? You'll also add `base_api_url`. See
 > [Configuration keys](../configuration_keys).
