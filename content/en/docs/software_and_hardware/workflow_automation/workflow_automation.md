@@ -95,7 +95,7 @@ When you choose **Application launch**, configure the following:
 - **Ignore previously running processes**: when enabled, the workflow triggers for each newly started instance, even while another instance is already running. When disabled, it triggers only when the application goes from *not running* to *running*.
 - **Execution limit**: how many times the workflow may run:
   - **No limit**: every time the trigger fires.
-  - **Once per login / unlock**: at most once per login or unlock session.
+  - **Once per login / unlock**: at most once per login session.
   - **Specific number of times**: a fixed number of runs that you enter.
 
 > **Note:** Setting the trigger condition only records *when* the workflow should run. For the workflow to actually run automatically, export it and then register it: use [`automationcli`](#registering-workflows-with-automationcli) for the **Application launch**, **Screen unlock**, and **User logon** triggers, or [Accesskey](#configuring-accesskey) for the **Security key presence (card tap)** and **Transparent unlock** triggers. See [Workflow Runner](#workflow-runner).
