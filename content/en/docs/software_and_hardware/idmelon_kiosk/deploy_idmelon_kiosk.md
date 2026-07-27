@@ -294,38 +294,83 @@ There are two deployment methods available:
 
 ### Automatically using script
 
-Below script can be used to copy the config.xml files to any Kiosk user profile. Save it as a ps1 (PowerShell script) file.
+Convert the **configs.xml** file into a base64 string using the following command:
 
 ```bash
-# Define the source file to copy
-$sourceFile = "C:\KioskProfile\configs.xml"  # Update this to the path of the file you want to copy
+# configs.xml: the config file path that you want to deploy on target PCs
+[Convert]::ToBase64String([IO.File]::ReadAllBytes('configs.xml')) | Set-Clipboard
+```
 
-# Define the base path for user profiles & get all user directories that start with "kioskUser0"
+Replace the generated base64 string in the following script and save the script as a  .ps1 (PowerShell script) file:
+
+```bash
+#region Configuration
+$configBase64   = 'PASTE_BASE64_HERE'
+$configFileName = 'configs.xml'
+$appPackage     = 'Hellokey.45853B8ADE74A_kxcedb3gts26c'
+$markerRelPath  = "AppData\Local\IDmelon\KioskConfig\$configFileName.deployed"
+#endregion
+
+$configBytes = [Convert]::FromBase64String($configBase64)
+
+# Version stamp derived from the payload itself.
+$sha = [System.Security.Cryptography.SHA256]::Create()
+try {
+    $configVersion = ([BitConverter]::ToString($sha.ComputeHash($configBytes)) -replace '-').Substring(0, 16)
+} finally {
+    $sha.Dispose()
+}
+Write-Output "Payload version: $configVersion"
+
 $profilesPath = "C:\Users"
-$kioskUserDirectories = Get-ChildItem -Path $profilesPath -Directory -Filter "kioskUser0*"
+$kioskUserDirectories = Get-ChildItem -Path $profilesPath -Directory -Filter "kioskUser*"
 
-# Loop through each kioskUser0 directory
+if ($kioskUserDirectories.Count -eq 0) {
+    Write-Output "No kioskUser* profiles found under $profilesPath"
+    exit 1
+}
+
+$copied = 0; $skipped = 0; $failures = 0
+
 foreach ($userDir in $kioskUserDirectories) {
-    # Define the target directory for this user
-    $targetDirectory = Join-Path -Path $userDir.FullName -ChildPath "AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState"
+    $name       = $userDir.Name
+    $markerFile = Join-Path -Path $userDir.FullName -ChildPath $markerRelPath
+    $targetDir  = Join-Path -Path $userDir.FullName -ChildPath "AppData\Local\Packages\$appPackage\LocalState"
+    $targetFile = Join-Path -Path $targetDir -ChildPath $configFileName
 
-    # Create the target directory if it doesn't exist
-    if (-not (Test-Path -Path $targetDirectory)) {
-        New-Item -Path $targetDirectory -ItemType Directory | Out-Null
-        Write-Host "Created directory for user $($userDir.Name) at: $targetDirectory"
+    # Skip if the recorded version matches AND the config is actually still there
+    if ((Test-Path -LiteralPath $markerFile) -and (Test-Path -LiteralPath $targetFile)) {
+        $recorded = (Get-Content -LiteralPath $markerFile -TotalCount 1 -ErrorAction SilentlyContinue)
+        if ($recorded -and $recorded.Trim() -eq $configVersion) {
+            Write-Output "[$name] Already at version $configVersion - skipping."
+            $skipped++
+            continue
+        }
+        Write-Output "[$name] Recorded version '$($recorded)' differs from '$configVersion' - updating."
     }
 
-    # Define the target file path
-    $targetFile = Join-Path -Path $targetDirectory -ChildPath (Split-Path -Path $sourceFile -Leaf)
-
-    # Copy the file
     try {
-        Copy-Item -Path $sourceFile -Destination $targetFile -Force
-        Write-Host "File copied successfully for user $($userDir.Name) to: $targetFile"
+        New-Item -Path $targetDir -ItemType Directory -Force | Out-Null
+        [System.IO.File]::WriteAllBytes($targetFile, $configBytes)
+
+        # Marker written only after a successful copy
+        New-Item -Path (Split-Path -Path $markerFile -Parent) -ItemType Directory -Force | Out-Null
+        Set-Content -LiteralPath $markerFile -Encoding UTF8 -Value @(
+            $configVersion
+            "DeployedUtc = $((Get-Date).ToUniversalTime().ToString('o'))"
+            "Target      = $targetFile"
+        )
+
+        Write-Output "[$name] Deployed version $configVersion to: $targetFile"
+        $copied++
     } catch {
-        Write-Host "Failed to copy file for user $($userDir.Name): $_"
+        Write-Output "[$name] Failed: $_"
+        $failures++
     }
 }
+
+Write-Output "Summary: $copied deployed, $skipped skipped, $failures failed."
+if ($failures -gt 0) { exit 1 } else { exit 0 }
 ```
 
 #### Create a PowerShell script policy in Intune
