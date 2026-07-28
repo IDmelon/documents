@@ -3,7 +3,7 @@ title: "Workflow Automation"
 description: ""
 lead: ""
 date: 2025-12-14T11:07:06+03:30
-lastmod: 2025-12-14T11:07:06+03:30
+lastmod: 2026-07-22T11:07:06+03:30
 draft: false
 images: []
 type: docs
@@ -37,17 +37,71 @@ To import a previously saved workflow, click the `Import workflow` button and se
 ![Workflow Exportation](/images/vendor/workflow_automation/automation_app/workflow_export_import.png)
 > **Figure:** The specified buttons can be used to export/import a workflow.
 
+### Settings
+
+Open **Settings** from the toolbar at the top of the Workflow Editor to configure the application. The Settings panel is organized into the following groups.
+
+#### Updates
+
+- **Check for updates automatically**: when enabled, the app checks for a newer version on its own.
+- **Update channel**: which release channel to receive updates from:
+  - **Stable**: recommended; only tested, stable releases.
+  - **Latest**: the newest releases, which may be less thoroughly tested.
+- **Check for updates**: check for a new version immediately.
+
 #### Startup behavior for Workflow Runner
 
-In **Settings** (in the toolbar at the top of the Workflow Editor), the Workflow Runner startup behavior can be configured using one of these two options:
+The **Startup** option controls whether the Workflow Runner starts automatically with Windows:
 
-1. **Don't run at startup** — the Workflow Runner does not start automatically when the system starts.
-2. **Run at startup** — the Workflow Runner starts automatically when the system starts.
+1. **Don't run at startup**: the Workflow Runner does not start automatically when the system starts.
+2. **Run at startup**: the Workflow Runner starts automatically when the system starts.
 
 The default setting is **Run at startup**. Changing this setting (either disabling or re-enabling it) requires elevated access, so you must run Workflow Editor as administrator before changing it.
 
-![Workflow Runner startup setting](/images/vendor/workflow_automation/automation_app/settings_expanded.png)
-> **Figure:** The Workflow Runner startup behavior in the Settings panel.
+#### Java applications
+
+The **Enable Java Access Bridge** option controls whether the picker can capture UI elements from Java (Swing/AWT) applications:
+
+- **Disabled**: Java applications are not supported.
+- **Enabled for current user**: the Java Access Bridge is enabled for your account only.
+- **Enabled for all users**: the Java Access Bridge is enabled for every account on the computer. This requires administrator rights.
+
+> **Note**: After changing this option, restart any running Java applications so their UI elements become capturable.
+
+![Settings panel](/images/vendor/workflow_automation/automation_app/settings_expanded.png)
+> **Figure:** The Workflow Editor Settings panel.
+
+### Trigger condition
+
+The **trigger condition** determines *when* a workflow runs automatically. Set it using the **Trigger** button in the toolbar at the top of the Workflow Editor. The condition you choose is saved with the workflow.
+
+The available trigger conditions are:
+
+| Trigger condition                    | When the workflow runs                                           |
+| ------------------------------------ | ---------------------------------------------------------------- |
+| **Security key presence (card tap)** | A registered security key (badge/card) is tapped on the reader.  |
+| **Application launch**               | A specific application (process) starts.                         |
+| **Screen unlock**                    | The Windows session is unlocked.                                 |
+| **User logon**                       | The user logs on to Windows.                                     |
+| **Transparent unlock**               | The workstation is unlocked transparently with the security key. |
+
+> The default trigger condition is **Security key presence (card tap)**.
+
+#### Application launch options
+
+When you choose **Application launch**, configure the following:
+
+- **Process to watch for**: pick a running process or type its name without the `.exe` extension (for example, `notepad`).
+- **Ignore previously running processes**: when enabled, the workflow triggers for each newly started instance, even while another instance is already running. When disabled, it triggers only when the application goes from *not running* to *running*.
+- **Execution limit**: how many times the workflow may run:
+  - **No limit**: every time the trigger fires.
+  - **Once per login / unlock**: at most once per login session.
+  - **Specific number of times**: a fixed number of runs that you enter.
+
+> **Note:** Setting the trigger condition only records *when* the workflow should run. For the workflow to actually run automatically, export it and then register it: use [`automationcli`](#registering-workflows-with-automationcli) for the **Application launch**, **Screen unlock**, and **User logon** triggers, or [Accesskey](#configuring-accesskey) for the **Security key presence (card tap)** and **Transparent unlock** triggers. See [Workflow Runner](#workflow-runner).
+
+![Trigger condition window](/images/vendor/workflow_automation/automation_app/trigger_condition.png)
+> **Figure:** Choosing when the automation starts in the Trigger Condition window.
 
 ### Actions
 
@@ -57,6 +111,8 @@ There are two types of actions:
 2. **Non-element-based actions**: These actions are not tied to UI elements and perform operations directly on the system (e.g., running an application).
 
 Available actions are listed below.
+
+> **Tip:** Use the **Search actions** box above the actions list to quickly filter the available actions by name.
 
 #### Click on UI element
 
@@ -93,9 +149,11 @@ Fills a text field with the entered text.
 | UI element      | UI element | Yes      | -       | The target text field to populate   |
 | Text to fill-in | String     | Yes      | Empty   | The text to enter in the text field |
 
-> **Note**: This action can be applied only to Inputs.
+> **Note**: This action can be applied to text-bearing elements: **Input**, **Combo Box**, **Text**, **Div**, and **Custom**.
 >
 > **Note**: You can use [variables](#variables) instead of static strings. For more details, see [variables](#variables).
+>
+> **Note**: **Text to fill-in** can be marked as [secure text](#secure-text) so that its value is masked in the Workflow Editor.
 
 ![Populate text field action](/images/vendor/workflow_automation/automation_app/populate_text_field.png)
 > **Figure:** Populate text field action configuration.
@@ -165,6 +223,8 @@ Sends keys to the UI element that is currently focused.
 > **Note:** For the modifiers, the second key must be added inside a ({}) (e.g., {leftctrl}({A}) for the select all shortcut).
 >
 > **Note:** You can also use variables as a part of the text (See [Variables](#variables)).
+>
+> **Note:** **Text to send** can be marked as [secure text](#secure-text). While the value is masked, the modifier and special key combo boxes are disabled, because the masked field has no caret to insert the key into.
 
 Some common shortcuts:
 
@@ -243,6 +303,8 @@ Set the value of a new or existing variable, create a new variable or overwrite 
 | Value     | String/Int/Double | Yes      | Empty   | The value assigned to the variable |
 
 > **Note**: You can use [variables](#variables) in the form of %variable_name% for assigning values. For more details, see [variables](#variables).
+>
+> **Note**: **Value** can be marked as [secure text](#secure-text) so that it is masked in the Workflow Editor.
 
 ![Set variable action](/images/vendor/workflow_automation/automation_app/set_variable.png)
 ![Set variable action - 2](/images/vendor/workflow_automation/automation_app/set_variable_to_variable.png)
@@ -304,6 +366,8 @@ Interacts with the Windows clipboard. Use it to put text on the clipboard, clear
 | Bind to variable | String | No       | Empty              | The variable that receives the clipboard text (used with **Retrieve clipboard text**)                                         |
 
 > **Note**: **Clipboard text** applies only to **Set clipboard text**, and **Bind to variable** applies only to **Retrieve clipboard text**. **Clear clipboard content** needs no additional input.
+>
+> **Note**: **Clipboard text** can be marked as [secure text](#secure-text) so that it is masked in the Workflow Editor.
 
 ![Clipboard action - 1](/images/vendor/workflow_automation/automation_app/clipboard_1.png)
 ![Clipboard action - 2](/images/vendor/workflow_automation/automation_app/clipboard_2.png)
@@ -311,7 +375,7 @@ Interacts with the Windows clipboard. Use it to put text on the clipboard, clear
 
 #### Call Accesskey function
 
-Calls an Accesskey function and retrieves its result.
+Calls an Accesskey function and retrieves its result. Select a function from the **Function name** drop-down; the window then shows that function's **Description**, its **Inputs**, and its **Outputs**.
 
 **Input Parameters:**
 
@@ -319,9 +383,25 @@ Calls an Accesskey function and retrieves its result.
 | ------------- | ------ | -------- | ------- | ----------------------------------- |
 | Function name | String | Yes      | Empty   | The Accesskey function name to call |
 
+**Function inputs and outputs:**
+
+The **Inputs** depend on the selected function. Each input shows its data type in parentheses (for example, `String`, `Int32`, `Boolean`), and required inputs are marked with a red asterisk (`*`). The control used depends on the type:
+
+- **Boolean** inputs are shown as a **checkbox** (for example, *Onboard If Doesn't Exist*).
+- Other types (such as `String` and `Int32`) are shown as a **text field**.
+
+Functions that authenticate the user also expose these inputs:
+
+- **Wait for Security Key Presence** (Boolean): when checked, the call waits for the user to tap their security key before it runs.
+- **Security Key Presence Timeout (Seconds)** (Int32): how long the call waits for that tap before it times out.
+
+The function's **Outputs** are stored in variables (shown as badges in the **Outputs** row, for example `username` and `password`) that you can use in later actions. See [Variables](#variables).
+
 > **Note**: To test the function and see the result, after selecting the function and filling the required inputs, click on the **Test** button next to the function's drop-down.
 >
 > **Note**: A badge (or a card) must be cached during execution. So you need to tap your badge on the reader before testing this action.
+>
+> **Note**: If Accesskey fails to process the request, the workflow does not stop. The error details returned by Accesskey are stored in the workflow [variables](#variables), so you can check them with an [If](#if) action and decide how to continue.
 
 ![Call accesskey function action](/images/vendor/workflow_automation/automation_app/call_accesskey_function.png)
 > **Figure:** Call accesskey function action configuration.
@@ -340,6 +420,33 @@ Executes some custom PowerShell script and retrieves its output into a variable.
 ![Run powershell script action](/images/vendor/workflow_automation/automation_app/run_powershell_script.png)
 > **Figure:** Run powershell script action configuration.
 
+#### Display message
+
+Shows a message dialog to the user and, optionally, captures which button they click into a variable.
+
+**Input Parameters:**
+
+| Parameter             | Type            | Required | Default      | Description                                                                                    |
+| --------------------- | --------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| Title                 | String          | No       | Empty        | The dialog title. Supports [variables](#variables) like `%VariableName%`                       |
+| Message               | String          | No       | Empty        | The message body. Supports [variables](#variables)                                             |
+| Icon                  | Enum            | Yes      | Information  | Allowed: Information, Warning, Error                                                           |
+| Buttons               | Enum            | Yes      | OK           | Allowed: OK, Cancel, Dismiss, OK / Cancel, Yes / No, Yes / No / Cancel, Retry / Cancel         |
+| Default button        | Enum            | Yes      | First button | The button focused by default: First button, Second button, Third button                       |
+| Position              | Enum            | Yes      | Center       | Where the dialog appears on screen (Center, Top, Bottom, the four corners, and the side edges) |
+| Auto-close (s)        | Number (Double) | No       | 0            | Seconds before the dialog closes on its own. Leave empty or `0` to wait for the user           |
+| Always on top         | Boolean         | No       | false        | Keep the dialog above other windows                                                            |
+| Don't wait for result | Boolean         | No       | false        | Show the dialog and continue the workflow immediately, without waiting for it to close         |
+| Output variable       | Variable        | No       | Empty        | Stores the clicked button's text (empty if the dialog is dismissed or times out)               |
+
+> **Note**: Use the **Output variable** with an [If](#if) action to branch the workflow based on which button the user clicked (for example, run different actions for **Yes** and **No**).
+>
+> **Note**: **Don't wait for result** is available only for the single-button dialogs (**OK**, **Cancel**, and **Dismiss**), because their outcome is known in advance. When it is enabled, **Output variable** is disabled.
+
+![Display message action](/images/vendor/workflow_automation/automation_app/display_message_1.png)
+![Display message action](/images/vendor/workflow_automation/automation_app/display_message_2.png)
+> **Figure:** Display message action configuration.
+
 #### Conditional Actions
 
 Conditional actions are workflow steps that execute only when specific conditions are met. They are useful for tasks like checking the value of a variable, verifying whether an element exists on screen, or controlling the flow of automation based on dynamic criteria.
@@ -356,7 +463,11 @@ Checks if two values match.
 | Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
 | Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
-> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty, Is defined, Is not defined.
+>
+> **Note**: The **Is empty**, **Is not empty**, **Is defined**, and **Is not defined** operators take no second operand, so the second operand field is hidden when you select one of them.
+>
+> **Note**: Use **Is defined** or **Is not defined** to check whether a variable exists before you read it. With the other operators, the action fails when the first operand is not a defined variable.
 
 ![If action](/images/vendor/workflow_automation/automation_app/if.png)
 > **Figure:** If conditional action configuration.
@@ -373,7 +484,7 @@ Starts a block of actions that run only if earlier `If` or `else if` checks fail
 | Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
 | Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
-> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty, Is defined, Is not defined.
 
 #### Else
 
@@ -397,6 +508,20 @@ Checks whether a UI element exists on the screen.
 
 ![If UI element exists action](/images/vendor/workflow_automation/automation_app/if_UI_element_exists.png)
 > **Figure:** If UI element exists action configuration.
+
+#### If file exists
+
+Checks whether a file exists at a given path, and runs the nested actions when the condition is met.
+
+**Input Parameters:**
+
+| Parameter | Type   | Required | Default | Description                                                      |
+| --------- | ------ | -------- | ------- | ---------------------------------------------------------------- |
+| File path | String | Yes      | Empty   | Full path of the file to check. Supports [variables](#variables) |
+| If file   | Enum   | Yes      | Exist   | Allowed: Exist, Doesn't exist                                    |
+
+![If file exists action](/images/vendor/workflow_automation/automation_app/if_file_exists.png)
+> **Figure:** If file exists action configuration.
 
 #### Loops
 
@@ -431,7 +556,7 @@ Iterates a block of actions as long as a specific condition proves to be true.
 | Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
 | Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
-> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty, Is defined, Is not defined.
 
 ##### Next loop
 
@@ -456,6 +581,21 @@ Reads a CSV file from your PC or system and loads it into a data table variable.
 
 ![Read CSV from file action](/images/vendor/workflow_automation/automation_app/read_csv_from_file.png)
 > **Figure:** Read CSV from file action configuration.
+
+#### Read text from file
+
+Reads the entire content of a text file into a variable.
+
+**Input Parameters:**
+
+| Parameter        | Type     | Required | Default | Description                                                                                                            |
+| ---------------- | -------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------- |
+| File path        | String   | Yes      | Empty   | Full path of the text file to read. Supports [variables](#variables) (or use the select-file button on the right)      |
+| Encoding         | Enum     | Yes      | UTF-8   | Character encoding used to read the file. Allowed: System default, UTF-8, Unicode, Unicode (Big-Endian), ASCII, UTF-32 |
+| Bind to variable | Variable | Yes      | Empty   | The variable that receives the file's text content                                                                     |
+
+![Read text from file action](/images/vendor/workflow_automation/automation_app/read_from_file.png)
+> **Figure:** Read text from file action configuration.
 
 #### Find in data table
 
@@ -492,6 +632,22 @@ Runs another subflow from the same workflow. Use this action to reuse a shared s
 
 ![Run subflow action](/images/vendor/workflow_automation/automation_app/run_subflow.png)
 > **Figure:** Run subflow action configuration.
+
+### Secure text
+
+Some action fields hold values that should not stay visible on screen, such as a password or a PIN. These fields have a **lock** icon on their right side. Click the icon to display the value as secure text; click it again to display it as plain text. The lock icon is highlighted while the field is masked, and the field's content is shown as `••••••` both in the action window and in the flow description.
+
+The fields that support secure text are:
+
+- **Text to fill-in** in the [Populate text field](#populate-text-field) action.
+- **Text to send** in the [Send keys](#send-keys) action.
+- **Value** in the [Set variable](#set-variable) action.
+- **Clipboard text** in the [Clipboard](#clipboard) action.
+
+> **Note**: Displaying a value as secure text only masks it on screen. The value is still stored in the workflow file as plain text and is **not** encrypted.
+
+![Secure text](/images/vendor/workflow_automation/automation_app/secure_text.png)
+> **Figure:** A field whose value is displayed as secure text.
 
 ### Variables
 
@@ -596,6 +752,10 @@ Use **Inspect** when hovering is difficult or when you need more precise selecti
 ![UI element picker](/images/vendor/workflow_automation/automation_app/UI_element_picker.png)
 > **Figure:** The UI element picker environment.
 
+#### Java application support
+
+The picker can also capture UI elements from **Java (Swing/AWT) applications** through the **Java Access Bridge**. Enable it during installation, or later from the [Settings panel](#java-applications), where you can choose to enable it for the current user or for all users.
+
 #### Supported UI elements
 
 The supported UI elements are listed below:
@@ -610,6 +770,7 @@ The supported UI elements are listed below:
 - Text
 - Image
 - Menu
+- Menu Bar
 - Menu Item
 - Tree
 - Tree Item
@@ -618,7 +779,23 @@ The supported UI elements are listed below:
 - List
 - List Item
 - Data Item
+- Data Grid
+- Table
+- Header
 - Header Item
+- Tool Bar
+- Status Bar
+- Title Bar
+- Scroll Bar
+- Progress Bar
+- Slider
+- Thumb
+- Tooltip
+- Window
+- Pane
+- Group
+- Div
+- Custom
 
 #### UI Element Selector
 
@@ -635,6 +812,8 @@ To edit selectors of a UI element, double-click on the element that exists in th
 > **Note**: To exclude an element from the search operation, **uncheck** it. When you uncheck a step in the elements list, that step is **removed from the effective selector path**. The saved path only includes **active** steps. Use this when an intermediate container is optional, duplicated, or unstable.
 >
 > **Note**: To exclude an attribute from matching during search, **uncheck** it. When you uncheck an attribute, that step **remains** in the path, but matching **ignores** that property. Only attributes that are **enabled** and have a **value** participate in the search.
+>
+> **Note**: The **Ordinal** attribute identifies an element by its **position** among sibling elements that match the same selector. Enable it only when a selector still matches more than one element and you need to target a specific one (for example, the second matching row). Prefer more distinctive attributes first, because ordinal positions can change if the interface layout changes.
 
 **Guidance:** Disable a **whole element** when the hierarchy level is wrong or unnecessary. Disable an **attribute** when the property is volatile (titles, generated IDs) but the element itself is still the right node type and position in the tree.
 
@@ -807,22 +986,74 @@ When you create a subflow, you choose how it handles [variables](#variables):
 ![Subflows Example](/images/vendor/workflow_automation/automation_app/subflows.png)
 > **Figure:** A subflow that runs Google Chrome.
 
+### Report an issue
+
+If something does not work as expected, you can send a report to IDmelon support from the app. Click the **Help** button in the toolbar at the top of the Workflow Editor and select **Report an Issue**.
+
+In the **Report an Issue** window:
+
+1. Describe the problem in the **What went wrong?** box. This field is required.
+2. Leave **Include application logs** selected to attach the IDmelon Accesskey and Workflow Automation logs.
+3. Optionally select **Include workflows**, then tick the workflows you want to attach as `.idwf` packages.
+4. Click **Send**.
+
+The report is delivered through IDmelon Accesskey.
+
+> **Note**: Attached workflows may contain sensitive data, so review your selection before sending.
+>
+> **Note**: If the report cannot be sent, it is saved as a `.zip` archive in the **IDWA_temp** folder on your desktop, and the app offers to open the containing folder so that you can email the archive to `support@idmelon.com` yourself.
+
 ## Workflow Runner
 
-Workflow Runner is a tool for running the workflow when the Accesskey Automate Access command triggers.
+Workflow Runner is a Windows **service** (**IDmelon Workflow Runner**) that runs your registered workflows automatically, based on each workflow's [trigger condition](#trigger-condition). It is installed together with Workflow Automation, runs in the background for all users, and starts with Windows.
 
-> The app exists in the installation directory in: **C:\Program Files\IDmelon\Workflow Automation\WorkflowRunner.exe**
+To make a workflow run automatically:
+
+1. In the Workflow Editor, set the workflow's [trigger condition](#trigger-condition).
+2. [Export](#export-a-workflow) the workflow as a `.json` file.
+3. Register the exported workflow so the runner picks it up, using the method that matches its trigger:
+   - **Application launch**, **Screen unlock**, or **User logon**: register with [`automationcli`](#registering-workflows-with-automationcli).
+   - **Security key presence (card tap)** or **Transparent unlock**: register through Accesskey (see [Configuring Accesskey](#configuring-accesskey)).
+
+> You can control whether the runner starts with Windows from the Settings panel (see [Startup behavior for Workflow Runner](#startup-behavior-for-workflow-runner)).
+
+### Registering workflows with automationcli
+
+`automationcli` is a command-line tool, installed with Workflow Automation and available on the system `PATH`, that registers exported workflows to run on their [trigger condition](#trigger-condition). Registering and removing workflows affects all users on the machine, so **run these commands as an administrator**.
+
+| Command                                                               | Description                                                                                                        |
+| --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| `automationcli workflows add --path "PATH.json" [--user "NAME"]`      | Register a workflow. Use `--user` to scope it to a specific Windows user; omit it to apply to all users.           |
+| `automationcli workflows remove [--path "PATH.json"] [--user "NAME"]` | Remove a registered workflow. Without `--path`, it lists the registered workflows so you can choose one to remove. |
+| `automationcli workflows list`                                        | List the registered workflows with their user scope and trigger condition.                                         |
+| `automationcli workflows reset`                                       | Clear the list of registered workflows.                                                                            |
+
+Example:
+
+```bash
+automationcli workflows add --path "C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json"
+```
+
+> **Note**: `automationcli` handles the **Application launch**, **Screen unlock**, and **User logon** triggers, which the runner watches for directly. The **Security key presence (card tap)** and **Transparent unlock** triggers are driven by Accesskey instead, see [Configuring Accesskey](#configuring-accesskey).
 
 ### Configuring Accesskey
 
-To run a workflow on the security key presence (card tap) trigger, do the following steps:
+Use Accesskey to register a workflow for the **Security key presence (card tap)** or **Transparent unlock** trigger.
 
 1. Export the desired workflow from the Workflow Editor.
 
-2. Enter the following command in PowerShell to activate the automation.
+2. In PowerShell, run the command that matches the workflow's trigger condition to activate the automation.
+
+   For the **Security key presence (card tap)** trigger:
 
    ```bash
    accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "PATH_TO_WORKFLOW_FILE"
+   ```
+
+   For the **Transparent unlock** trigger, add the `--trigger-condition onTransparentUnlock` option:
+
+   ```bash
+   accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "PATH_TO_WORKFLOW_FILE" --trigger-condition onTransparentUnlock
    ```
 
    > To disable the automation, enter the following command in PowerShell:
