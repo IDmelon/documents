@@ -149,9 +149,11 @@ Fills a text field with the entered text.
 | UI element      | UI element | Yes      | -       | The target text field to populate   |
 | Text to fill-in | String     | Yes      | Empty   | The text to enter in the text field |
 
-> **Note**: This action can be applied only to Inputs.
+> **Note**: This action can be applied to text-bearing elements: **Input**, **Combo Box**, **Text**, **Div**, and **Custom**.
 >
 > **Note**: You can use [variables](#variables) instead of static strings. For more details, see [variables](#variables).
+>
+> **Note**: **Text to fill-in** can be marked as [sensitive text](#sensitive-text) so that its value is masked in the Workflow Editor.
 
 ![Populate text field action](/images/vendor/workflow_automation/automation_app/populate_text_field.png)
 > **Figure:** Populate text field action configuration.
@@ -221,6 +223,8 @@ Sends keys to the UI element that is currently focused.
 > **Note:** For the modifiers, the second key must be added inside a ({}) (e.g., {leftctrl}({A}) for the select all shortcut).
 >
 > **Note:** You can also use variables as a part of the text (See [Variables](#variables)).
+>
+> **Note:** **Text to send** can be marked as [sensitive text](#sensitive-text). While the value is masked, the modifier and special key combo boxes are disabled, because the masked field has no caret to insert the key into.
 
 Some common shortcuts:
 
@@ -299,6 +303,8 @@ Set the value of a new or existing variable, create a new variable or overwrite 
 | Value     | String/Int/Double | Yes      | Empty   | The value assigned to the variable |
 
 > **Note**: You can use [variables](#variables) in the form of %variable_name% for assigning values. For more details, see [variables](#variables).
+>
+> **Note**: **Value** can be marked as [sensitive text](#sensitive-text) so that it is masked in the Workflow Editor.
 
 ![Set variable action](/images/vendor/workflow_automation/automation_app/set_variable.png)
 ![Set variable action - 2](/images/vendor/workflow_automation/automation_app/set_variable_to_variable.png)
@@ -360,6 +366,8 @@ Interacts with the Windows clipboard. Use it to put text on the clipboard, clear
 | Bind to variable | String | No       | Empty              | The variable that receives the clipboard text (used with **Retrieve clipboard text**)                                         |
 
 > **Note**: **Clipboard text** applies only to **Set clipboard text**, and **Bind to variable** applies only to **Retrieve clipboard text**. **Clear clipboard content** needs no additional input.
+>
+> **Note**: **Clipboard text** can be marked as [sensitive text](#sensitive-text) so that it is masked in the Workflow Editor.
 
 ![Clipboard action - 1](/images/vendor/workflow_automation/automation_app/clipboard_1.png)
 ![Clipboard action - 2](/images/vendor/workflow_automation/automation_app/clipboard_2.png)
@@ -392,6 +400,8 @@ The function's **Outputs** are stored in variables (shown as badges in the **Out
 > **Note**: To test the function and see the result, after selecting the function and filling the required inputs, click on the **Test** button next to the function's drop-down.
 >
 > **Note**: A badge (or a card) must be cached during execution. So you need to tap your badge on the reader before testing this action.
+>
+> **Note**: If Accesskey fails to process the request, the workflow does not stop. The error details returned by Accesskey are stored in the workflow [variables](#variables), so you can check them with an [If](#if) action and decide how to continue.
 
 ![Call accesskey function action](/images/vendor/workflow_automation/automation_app/call_accesskey_function.png)
 > **Figure:** Call accesskey function action configuration.
@@ -416,19 +426,22 @@ Shows a message dialog to the user and, optionally, captures which button they c
 
 **Input Parameters:**
 
-| Parameter       | Type            | Required | Default      | Description                                                                                    |
-| --------------- | --------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------- |
-| Title           | String          | No       | Empty        | The dialog title. Supports [variables](#variables) like `%VariableName%`                       |
-| Message         | String          | No       | Empty        | The message body. Supports [variables](#variables)                                             |
-| Icon            | Enum            | Yes      | Information  | Allowed: Information, Warning, Error                                                           |
-| Buttons         | Enum            | Yes      | OK           | Allowed: OK, Cancel, Dismiss, OK / Cancel, Yes / No, Yes / No / Cancel, Retry / Cancel         |
-| Default button  | Enum            | Yes      | First button | The button focused by default: First button, Second button, Third button                       |
-| Position        | Enum            | Yes      | Center       | Where the dialog appears on screen (Center, Top, Bottom, the four corners, and the side edges) |
-| Auto-close (s)  | Number (Double) | No       | 0            | Seconds before the dialog closes on its own. Leave empty or `0` to wait for the user           |
-| Always on top   | Boolean         | No       | false        | Keep the dialog above other windows                                                            |
-| Output variable | Variable        | No       | Empty        | Stores the clicked button's text (empty if the dialog is dismissed or times out)               |
+| Parameter             | Type            | Required | Default      | Description                                                                                    |
+| --------------------- | --------------- | -------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| Title                 | String          | No       | Empty        | The dialog title. Supports [variables](#variables) like `%VariableName%`                       |
+| Message               | String          | No       | Empty        | The message body. Supports [variables](#variables)                                             |
+| Icon                  | Enum            | Yes      | Information  | Allowed: Information, Warning, Error                                                           |
+| Buttons               | Enum            | Yes      | OK           | Allowed: OK, Cancel, Dismiss, OK / Cancel, Yes / No, Yes / No / Cancel, Retry / Cancel         |
+| Default button        | Enum            | Yes      | First button | The button focused by default: First button, Second button, Third button                       |
+| Position              | Enum            | Yes      | Center       | Where the dialog appears on screen (Center, Top, Bottom, the four corners, and the side edges) |
+| Auto-close (s)        | Number (Double) | No       | 0            | Seconds before the dialog closes on its own. Leave empty or `0` to wait for the user           |
+| Always on top         | Boolean         | No       | false        | Keep the dialog above other windows                                                            |
+| Don't wait for result | Boolean         | No       | false        | Show the dialog and continue the workflow immediately, without waiting for it to close         |
+| Output variable       | Variable        | No       | Empty        | Stores the clicked button's text (empty if the dialog is dismissed or times out)               |
 
 > **Note**: Use the **Output variable** with an [If](#if) action to branch the workflow based on which button the user clicked (for example, run different actions for **Yes** and **No**).
+>
+> **Note**: **Don't wait for result** is available only for the single-button dialogs (**OK**, **Cancel**, and **Dismiss**), because their outcome is known in advance. When it is enabled, **Output variable** is disabled.
 
 ![Display message action](/images/vendor/workflow_automation/automation_app/display_message_1.png)
 ![Display message action](/images/vendor/workflow_automation/automation_app/display_message_2.png)
@@ -450,7 +463,11 @@ Checks if two values match.
 | Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
 | Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
-> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty, Is defined, Is not defined.
+>
+> **Note**: The **Is empty**, **Is not empty**, **Is defined**, and **Is not defined** operators take no second operand, so the second operand field is hidden when you select one of them.
+>
+> **Note**: Use **Is defined** or **Is not defined** to check whether a variable exists before you read it. With the other operators, the action fails when the first operand is not a defined variable.
 
 ![If action](/images/vendor/workflow_automation/automation_app/if.png)
 > **Figure:** If conditional action configuration.
@@ -467,7 +484,7 @@ Starts a block of actions that run only if earlier `If` or `else if` checks fail
 | Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
 | Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
-> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty, Is defined, Is not defined.
 
 #### Else
 
@@ -539,7 +556,7 @@ Iterates a block of actions as long as a specific condition proves to be true.
 | Operator       | Enum          | Yes      | Equal to (=) | Comparison rule between first and second operands    |
 | Second operand | String/Number | Yes      | Empty        | The second value, variable, or expression to compare |
 
-> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty.
+> **Allowed operators:** Equal to (=), Not equal to (!=), Greater than (>), Greater than or equal to (>=), Less than (<), Less than or equal to (<=), Contains, Does not contain, Starts with, Ends with, Is empty, Is not empty, Is defined, Is not defined.
 
 ##### Next loop
 
@@ -615,6 +632,19 @@ Runs another subflow from the same workflow. Use this action to reuse a shared s
 
 ![Run subflow action](/images/vendor/workflow_automation/automation_app/run_subflow.png)
 > **Figure:** Run subflow action configuration.
+
+### Sensitive text
+
+Some action fields hold values that should not stay visible on screen, such as a password or a PIN. These fields have a **secure text** icon on their right side. Click the icon to switch the field between plain and masked display; click it again to reveal the value. While a field is masked, its content is shown as `••••••` both in the action window and in the flow description.
+
+The fields that support sensitive text are:
+
+- **Text to fill-in** in the [Populate text field](#populate-text-field) action.
+- **Text to send** in the [Send keys](#send-keys) action.
+- **Value** in the [Set variable](#set-variable) action.
+- **Clipboard text** in the [Clipboard](#clipboard) action.
+
+> **Note**: Marking a value as sensitive only masks it on screen. The value is still stored in the workflow file as plain text and is **not** encrypted.
 
 ### Variables
 
@@ -737,6 +767,7 @@ The supported UI elements are listed below:
 - Text
 - Image
 - Menu
+- Menu Bar
 - Menu Item
 - Tree
 - Tree Item
@@ -745,7 +776,23 @@ The supported UI elements are listed below:
 - List
 - List Item
 - Data Item
+- Data Grid
+- Table
+- Header
 - Header Item
+- Tool Bar
+- Status Bar
+- Title Bar
+- Scroll Bar
+- Progress Bar
+- Slider
+- Thumb
+- Tooltip
+- Window
+- Pane
+- Group
+- Div
+- Custom
 
 #### UI Element Selector
 
@@ -935,6 +982,23 @@ When you create a subflow, you choose how it handles [variables](#variables):
 
 ![Subflows Example](/images/vendor/workflow_automation/automation_app/subflows.png)
 > **Figure:** A subflow that runs Google Chrome.
+
+### Report an issue
+
+If something does not work as expected, you can send a report to IDmelon support from the app. Click the **Help** button in the toolbar at the top of the Workflow Editor and select **Report an Issue**.
+
+In the **Report an Issue** window:
+
+1. Describe the problem in the **What went wrong?** box. This field is required.
+2. Leave **Include application logs** selected to attach the IDmelon Accesskey and Workflow Automation logs.
+3. Optionally select **Include workflows**, then tick the workflows you want to attach as `.idwf` packages.
+4. Click **Send**.
+
+The report is delivered through IDmelon Accesskey.
+
+> **Note**: Attached workflows may contain sensitive data, so review your selection before sending.
+>
+> **Note**: If the report cannot be sent, it is saved as a `.zip` archive in the **IDWA_temp** folder on your desktop, and the app offers to open the containing folder so that you can email the archive to `support@idmelon.com` yourself.
 
 ## Workflow Runner
 
