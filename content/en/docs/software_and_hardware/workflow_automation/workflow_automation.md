@@ -153,7 +153,7 @@ Fills a text field with the entered text.
 >
 > **Note**: You can use [variables](#variables) instead of static strings. For more details, see [variables](#variables).
 >
-> **Note**: **Text to fill-in** can be marked as [sensitive text](#sensitive-text) so that its value is masked in the Workflow Editor.
+> **Note**: **Text to fill-in** can be marked as [secure text](#secure-text) so that its value is masked in the Workflow Editor.
 
 ![Populate text field action](/images/vendor/workflow_automation/automation_app/populate_text_field.png)
 > **Figure:** Populate text field action configuration.
@@ -224,7 +224,7 @@ Sends keys to the UI element that is currently focused.
 >
 > **Note:** You can also use variables as a part of the text (See [Variables](#variables)).
 >
-> **Note:** **Text to send** can be marked as [sensitive text](#sensitive-text). While the value is masked, the modifier and special key combo boxes are disabled, because the masked field has no caret to insert the key into.
+> **Note:** **Text to send** can be marked as [secure text](#secure-text). While the value is masked, the modifier and special key combo boxes are disabled, because the masked field has no caret to insert the key into.
 
 Some common shortcuts:
 
@@ -304,7 +304,7 @@ Set the value of a new or existing variable, create a new variable or overwrite 
 
 > **Note**: You can use [variables](#variables) in the form of %variable_name% for assigning values. For more details, see [variables](#variables).
 >
-> **Note**: **Value** can be marked as [sensitive text](#sensitive-text) so that it is masked in the Workflow Editor.
+> **Note**: **Value** can be marked as [secure text](#secure-text) so that it is masked in the Workflow Editor.
 
 ![Set variable action](/images/vendor/workflow_automation/automation_app/set_variable.png)
 ![Set variable action - 2](/images/vendor/workflow_automation/automation_app/set_variable_to_variable.png)
@@ -367,7 +367,7 @@ Interacts with the Windows clipboard. Use it to put text on the clipboard, clear
 
 > **Note**: **Clipboard text** applies only to **Set clipboard text**, and **Bind to variable** applies only to **Retrieve clipboard text**. **Clear clipboard content** needs no additional input.
 >
-> **Note**: **Clipboard text** can be marked as [sensitive text](#sensitive-text) so that it is masked in the Workflow Editor.
+> **Note**: **Clipboard text** can be marked as [secure text](#secure-text) so that it is masked in the Workflow Editor.
 
 ![Clipboard action - 1](/images/vendor/workflow_automation/automation_app/clipboard_1.png)
 ![Clipboard action - 2](/images/vendor/workflow_automation/automation_app/clipboard_2.png)
@@ -633,18 +633,21 @@ Runs another subflow from the same workflow. Use this action to reuse a shared s
 ![Run subflow action](/images/vendor/workflow_automation/automation_app/run_subflow.png)
 > **Figure:** Run subflow action configuration.
 
-### Sensitive text
+### Secure text
 
-Some action fields hold values that should not stay visible on screen, such as a password or a PIN. These fields have a **secure text** icon on their right side. Click the icon to switch the field between plain and masked display; click it again to reveal the value. While a field is masked, its content is shown as `••••••` both in the action window and in the flow description.
+Some action fields hold values that should not stay visible on screen, such as a password or a PIN. These fields have a **lock** icon on their right side. Click the icon to display the value as secure text; click it again to display it as plain text. The lock icon is highlighted while the field is masked, and the field's content is shown as `••••••` both in the action window and in the flow description.
 
-The fields that support sensitive text are:
+The fields that support secure text are:
 
 - **Text to fill-in** in the [Populate text field](#populate-text-field) action.
 - **Text to send** in the [Send keys](#send-keys) action.
 - **Value** in the [Set variable](#set-variable) action.
 - **Clipboard text** in the [Clipboard](#clipboard) action.
 
-> **Note**: Marking a value as sensitive only masks it on screen. The value is still stored in the workflow file as plain text and is **not** encrypted.
+> **Note**: Displaying a value as secure text only masks it on screen. The value is still stored in the workflow file as plain text and is **not** encrypted.
+
+![Secure text](/images/vendor/workflow_automation/automation_app/secure_text.png)
+> **Figure:** A field whose value is displayed as secure text.
 
 ### Variables
 
