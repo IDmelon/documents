@@ -21,7 +21,10 @@ Android Enterprise devices using **Microsoft Intune**, specifically optimized fo
 
 - A Microsoft Intune license and administrative access to
   the [Microsoft Intune admin center](https://intune.microsoft.com/).
-- Android Enterprise enrolled devices (Dedicated, Fully Managed, or Corporate-owned with Work Profile).
+- Android Enterprise enrolled devices (Dedicated, Fully Managed, or Corporate-owned with Work Profile). Shared devices
+  are usually enrolled as **Dedicated devices (COSU)**. For instructions on enrolling a device in each of these modes,
+  see Microsoft's
+  [Android device enrollment guide for Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-enrollment/android/guide).
 - The IDmelon Authenticator app added to your Managed Google Play Store.
 - An active administrator account for the [IDmelon Panel](https://panel.idmelon.com).
 
@@ -50,7 +53,58 @@ organization.
 
 > Keep this key secure. It allows the app to authenticate with your workspace.
 
-## Configuration Details
+## Step-by-Step Setup Instructions
+
+1. Add IDmelon Authenticator to Intune
+
+   ![alt](/images/vendor/shared_android/create_app.jpg)
+
+    1. Navigate to Apps > Android > Create.
+
+    2. Select Managed Google Play app as the App type.
+
+    3. Search for IDmelon Authenticator (com.vancosys.authenticator.business).
+
+    4. Approve and sync the app to your Intune environment.
+
+    5. Click on Refresh, Select the app and assign it as Required for desired users/groups.
+
+2. Create the App Configuration Policy
+
+   ![alt](/images/vendor/shared_android/create_config.jpg)
+
+    1. Go to Apps > Android > Configuration > Create > Managed devices.
+
+    2. Basics:
+
+       ![alt](/images/vendor/shared_android/create_config_basics.jpg)
+
+        - Name: IDmelon Android App Configuration.
+
+        - Platform: Android Enterprise.
+
+        - Profile Type: All Profile Types (or specific to your deployment).
+
+        - Targeted App: Select IDmelon Authenticator.
+
+    3. Settings:
+
+        - Set Configuration settings format to Use configuration designer.
+
+        - Click Add to pick the keys you need. At minimum, select `api_key` and `shared_device_mode`. Add any optional
+          keys that your deployment requires (for example, `shared_login_method`, `shortcut_list`, `auto_logout`,
+          `use_msal`, and `azure_client_id`).
+
+        - Enter the values described in
+          the [IDmelon Authenticator configuration](#idmelon-authenticator-configuration) section below.
+
+3. Deployment (Assignments)
+
+    1. Under the Assignments tab, include the Device Groups that represent your shared hardware.
+
+    2. Review and Create.
+
+## IDmelon Authenticator Configuration
 
 To enable shared functionality and link the app to your workspace, you must apply a **Managed Configuration** using the
 parameters below. Only `shared_device_mode` and `api_key` are required; the remaining keys are optional and depend on
@@ -82,17 +136,21 @@ The `shared_login_method` key defines how a user signs in on the shared device. 
 }
 ```
 
-**Face** — the user signs in with face authentication. Provide the base URL of your face authentication service in
-`config.base_url`:
+**Face** — the user signs in with face authentication. Provide the connection details of your Matcher Server in
+`config`:
 
 ```json
 {
     "type": "face",
     "config": {
-        "base_url": "https://your-face-service.com"
+        "base_url": "https://your-matcher-server.com",
+        "api_key": "your-matcher-server-api-key"
     }
 }
 ```
+
+- `base_url` — the base URL of your Matcher Server.
+- `api_key` — the API key the app uses to authenticate with the Matcher Server.
 
 ### Home screen shortcuts
 
@@ -143,7 +201,8 @@ Microsoft Entra app registration that you create for IDmelon Authenticator. The 
 
 6. Click **Register**.
 
-7. Open the new app registration and go to **Authentication > Add a platform**.
+7. On the registered application, navigate to **Authentication > Add a Redirect URI**, and then continue with the
+   remaining steps.
 
 8. Select **Android** and enter the following values:
 
@@ -165,53 +224,3 @@ Microsoft Entra app registration that you create for IDmelon Authenticator. The 
 
 Place the copied **Application (client) ID** into the `azure_client_id` key in your managed app configuration, and set
 `use_msal` to `true`. Use the client ID from your own Entra app registration — do not reuse the example value.
-
-## Step-by-Step Setup Instructions
-
-1. Add IDmelon Authenticator to Intune
-
-   ![alt](/images/vendor/shared_android/create_app.jpg)
-
-    1. Navigate to Apps > Android > Create.
-
-    2. Select Managed Google Play app as the App type.
-
-    3. Search for IDmelon Authenticator (com.vancosys.authenticator.business).
-
-    4. Approve and sync the app to your Intune environment.
-
-    5. Click on Refresh, Select the app and assign it as Required for desired users/groups.
-
-2. Create the App Configuration Policy
-
-   ![alt](/images/vendor/shared_android/create_config.jpg)
-
-    1. Go to Apps > Android > Configuration > Create > Managed devices.
-
-    2. Basics:
-
-       ![alt](/images/vendor/shared_android/create_config_basics.jpg)
-
-        - Name: IDmelon Android App Configuration.
-
-        - Platform: Android Enterprise.
-
-        - Profile Type: All Profile Types (or specific to your deployment).
-
-        - Targeted App: Select IDmelon Authenticator.
-
-    3. Settings:
-
-        - Set Configuration settings format to Use configuration designer.
-
-        - Click Add to pick the keys you need. At minimum, select `api_key` and `shared_device_mode`. Add any optional
-          keys from the table above that your deployment requires (for example, `shared_login_method`, `shortcut_list`,
-          `auto_logout`, `use_msal`, and `azure_client_id`).
-
-        - Enter the values provided in the table above.
-
-3. Deployment (Assignments)
-
-    1. Under the Assignments tab, include the Device Groups that represent your shared hardware.
-
-    2. Review and Create.
