@@ -55,7 +55,7 @@ lqipWidth = "20x"
 smallLimit = "300"
 
 # Footer
-footer = "© <a class=\"text-muted\" href=\"https://www.idmelon.com/\">IDmelon</a> 2025"
+footer = "© <a class=\"text-muted\" href=\"https://www.idmelon.com/\">IDmelon</a> 2026"
 
 # Feed
 copyRight = "Copyright (c) 2020-2021 Henk Verlinde"
