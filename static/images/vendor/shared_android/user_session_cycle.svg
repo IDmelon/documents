@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="620" viewBox="0 0 900 620" role="img" aria-label="A repeating cycle: sign in to the device, sign in to apps and sites, sign out, session cleared, then the next user starts again." font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="cycle-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+  <rect x="0.5" y="0.5" width="899" height="619" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+  <circle cx="450" cy="310" r="150" fill="#f8fafc"/>
+  <path d="M 481 163 A 150 150 0 0 1 597 279" fill="none" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#cycle-arrow)"/>
+  <path d="M 597 341 A 150 150 0 0 1 481 457" fill="none" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#cycle-arrow)"/>
+  <path d="M 419 457 A 150 150 0 0 1 303 341" fill="none" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#cycle-arrow)"/>
+  <path d="M 303 279 A 150 150 0 0 1 419 163" fill="none" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#cycle-arrow)"/>
+  <text x="450" y="302" text-anchor="middle" font-size="16" fill="#94a3b8">Repeats for</text>
+  <text x="450" y="324" text-anchor="middle" font-size="16" fill="#94a3b8">every user</text>
+  <circle cx="450" cy="160" r="28" fill="#3b82f6"/>
+  <text x="450" y="160" dy="6" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">1</text>
+  <text x="450" y="86" text-anchor="middle" font-size="17" font-weight="600" fill="#0f172a">Sign in to the device</text>
+  <text x="450" y="108" text-anchor="middle" font-size="14" fill="#64748b">badge tap or face</text>
+  <circle cx="600" cy="310" r="28" fill="#22c55e"/>
+  <text x="600" y="310" dy="6" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">2</text>
+  <text x="644" y="304" font-size="17" font-weight="600" fill="#0f172a">Sign in to apps and sites</text>
+  <text x="644" y="326" font-size="14" fill="#64748b">passkey or saved password</text>
+  <circle cx="450" cy="460" r="28" fill="#f59e0b"/>
+  <text x="450" y="460" dy="6" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">3</text>
+  <text x="450" y="518" text-anchor="middle" font-size="17" font-weight="600" fill="#0f172a">Sign out</text>
+  <text x="450" y="540" text-anchor="middle" font-size="14" fill="#64748b">manually, or by auto logout</text>
+  <circle cx="300" cy="310" r="28" fill="#8b5cf6"/>
+  <text x="300" y="310" dy="6" text-anchor="middle" font-size="18" font-weight="600" fill="#ffffff">4</text>
+  <text x="256" y="304" text-anchor="end" font-size="17" font-weight="600" fill="#0f172a">Session cleared</text>
+  <text x="256" y="326" text-anchor="end" font-size="14" fill="#64748b">passkeys and passwords removed</text>
+</svg>

@@ -1,96 +1,39 @@
 ---
-title: "Configure Shared Mode with Intune"
-description: "Enroll shared Android devices in Intune, install IDmelon Authenticator, and configure Shared Device Mode"
-lead: "Enroll shared Android devices in Intune, install IDmelon Authenticator, and configure Shared Device Mode"
+title: "Deploy and Configure IDmelon Authenticator"
+description: "Install IDmelon Authenticator on shared Android devices and apply the Shared Device Mode configuration"
+lead: "Install IDmelon Authenticator on shared Android devices and apply the Shared Device Mode configuration"
 date: 2024-07-20T14:40:56+01:00
-lastmod: 2026-07-31T00:00:00+00:00
+lastmod: 2026-07-31T00:00:00+03:30
 draft: false
 images: [ ]
 menu:
     docs:
         parent: "android_shared_device"
 type: docs
-weight: 321100
+weight: 321200
 toc: true
 ---
 
-This guide covers the whole path an administrator works through: enrolling shared Android devices in **Microsoft
-Intune**, force-installing **IDmelon Authenticator** on them, and configuring the app for **Shared Device Mode**.
-
-Shared devices are normally enrolled as **Android Enterprise dedicated devices (COSU)**. They belong to the
-organization rather than to a person, so apps and policies are targeted at **device groups**, and only apps assigned as
-**Required** ever reach the device.
+This page installs **IDmelon Authenticator** on your enrolled shared devices and configures it for **Shared Device
+Mode**, and it documents every configuration key the app supports.
 
 ## Before you start
 
-- Devices running **Android 8.0 or later** with Google Mobile Services (GMS) available. For the enrollment types and
-  what each one is for, see Microsoft's
-  [Android device enrollment guide for Microsoft Intune](https://learn.microsoft.com/en-us/intune/device-enrollment/android/guide).
+- Shared devices already enrolled in Intune, and the device group they belong to. Both come from
+  [Enroll Shared Devices in Intune](/docs/for_administrators/shared_devices/android_shared_device/enroll_devices_in_intune/).
+  Everything on this page is assigned to that group.
 - Administrative access to the [Microsoft Intune admin center](https://intune.microsoft.com/).
-- Administrative access to the [Microsoft Entra admin center](https://entra.microsoft.com/), if you use MSAL.
 - An administrator account for the [IDmelon Panel](https://panel.idmelon.com), with permission to create API keys.
-- The hardware for your login method:
+- Administrative access to the [Microsoft Entra admin center](https://entra.microsoft.com/), if you use MSAL.
+- What your login method needs:
   - **Badge** — devices with built-in NFC, or an IDmelon bridge (central hub) to read badges.
   - **Face** — the base URL and API key of your Matcher Server.
 
-> If your shared devices are already enrolled in Android Enterprise, start at
-> [Step 4](#step-4--add-idmelon-authenticator-to-intune).
-
-## Step 1 — Connect Intune to Managed Google Play
-
-Without this connection you cannot approve or assign any Android Enterprise app. You do this once per tenant. See
-[Connect your Intune account to your Managed Google Play account](https://learn.microsoft.com/en-us/intune/device-enrollment/android/connect-managed-google-play).
-
-## Step 2 — Create the enrollment policy and device group
-
-1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com/).
-
-2. Go to **Devices > Enrollment**, select the **Android** tab, and under **Enrollment Profiles** choose
-   **Corporate-owned dedicated devices**.
-
-3. Select **Create policy** and enter the basics:
-
-    - **Name:** A name you can recognize later, such as `Shared Android - Front Desk`.
-
-    - **Token type:** Choose the type that matches your deployment:
-
-        - **Corporate-owned dedicated device** — the standard dedicated device token.
-
-        - **Corporate-owned dedicated device with Microsoft Entra ID shared mode** — the same, but Microsoft
-          Authenticator is also installed and placed in Microsoft Entra shared device mode during enrollment. Choose
-          this one if your deployment uses [MSAL](#signing-in-to-microsoft-apps-with-msal) for single sign-in and
-          single sign-out across Microsoft apps.
-
-    - **Token expiration date:** Set a date that fits your rollout and your security policy.
-
-4. Finish the wizard and select **Create**. Intune generates an enrollment token as a 20-digit string and a QR code.
-   You can view it later under the policy, using the **Token** option.
-
-5. Create the device group that receives the app and the configuration. A dynamic group keeps itself up to date:
-
-    - Go to **Groups > All groups > New group**.
-
-    - **Group type:** Security. **Membership type:** Dynamic Device.
-
-    - Add the dynamic rule **Property** `enrollmentProfileName` **Equals** the name you gave the enrollment policy.
-
-## Step 3 — Enroll the devices
-
-1. Factory reset each device. This step is required for dedicated device enrollment.
-
-2. Enroll the device with the token from Step 2, using NFC, the QR code, a token string, Google Zero Touch, or Samsung
-   Knox Mobile Enrollment. For the steps for each method, see
-   [Enroll dedicated, fully managed, or corporate-owned work profile devices](https://learn.microsoft.com/en-us/intune/device-enrollment/android/ref-corporate-methods).
-
-3. Confirm the device appears in **Devices > All devices** and that it landed in the device group from Step 2.
-
-The Microsoft Intune app is installed automatically during enrollment and cannot be removed.
-
-## Step 4 — Add IDmelon Authenticator to Intune
+## Step 1 — Add IDmelon Authenticator to Intune
 
 ![Adding IDmelon Authenticator as a Managed Google Play app in Intune](/images/vendor/shared_android/create_app.jpg)
 
-1. Go to **Apps > All Apps > Create**.
+1. Go to **Apps > Android > Create**.
 
 2. Under **Store app**, select **Managed Google Play app**, then choose **Select**.
 
@@ -98,12 +41,14 @@ The Microsoft Intune app is installed automatically during enrollment and cannot
 
 4. Approve the app and select **Sync** to sync it into Intune, then select **Refresh** to see it in the app list.
 
-5. Open the app, go to **Properties > Assignments > Edit**, and add your shared device group under **Required**.
+5. Open the app, go to **Properties > Assignments > Edit**, and add the device group you created in
+   [Enroll Shared Devices in Intune](/docs/for_administrators/shared_devices/android_shared_device/enroll_devices_in_intune/#step-3--create-the-device-group)
+   under **Required**.
 
 > On dedicated devices, only apps assigned as **Required** are installed. An app assigned as *Available* never
 > appears, because there is no user to install it from the store.
 
-## Step 5 — Create the Shared Mobile API key
+## Step 2 — Create the Shared Mobile API key
 
 The API key links the app to your IDmelon workspace. Create it before you build the configuration policy.
 
@@ -129,7 +74,7 @@ The API key links the app to your IDmelon workspace. Create it before you build 
 > workspace, and it may not be displayed again. For more information, see
 > [API Key Management](/docs/for_administrators/authentication/api_key_management/).
 
-## Step 6 — Create the app configuration policy
+## Step 3 — Create the app configuration policy
 
 ![Creating an app configuration policy for managed devices in Intune](/images/vendor/shared_android/create_config.jpg)
 
@@ -176,9 +121,15 @@ The API key links the app to your IDmelon workspace. Create it before you build 
     - If a key does not appear in the designer, switch **Configuration settings format** to **Enter JSON data** and
       supply the same keys there.
 
-5. Assignments — assign the policy to the same **device group** you used for the app in Step 4.
+5. Credential provider — enable it on the **Settings** page. Android blocks third-party credential providers by
+   default, so without it the app cannot sign users in to native apps and websites with their passkeys on **Android 14
+   and later**. On earlier versions, passkeys are unavailable and users sign in with password autofill instead.
 
-6. Review and create.
+   ![Settings page of the app configuration policy, with permissions, configuration keys, and Credential Provider enabled](/images/vendor/shared_android/configs.png)
+
+6. Assignments — assign the policy to the same **device group** you used for the app in Step 1.
+
+7. Review and create.
 
 > Use literal values rather than Intune's user-based variables (such as user principal name or mail). A dedicated
 > device is not associated with a user, so those variables have nothing to resolve to.
@@ -192,7 +143,7 @@ your deployment.
 | Key                    | Type          | Required    | Description                                                                                                                                                                |
 |------------------------|---------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `shared_device_mode`   | Boolean       | Yes         | Set to `true`. Enables multi-user optimization and session clearing.                                                                                                       |
-| `api_key`              | String        | Yes         | Your unique Shared Mobile API key for workspace authentication. See [Step 5](#step-5--create-the-shared-mobile-api-key).                                                   |
+| `api_key`              | String        | Yes         | Your unique Shared Mobile API key for workspace authentication. See [Step 2](#step-2--create-the-shared-mobile-api-key).                                                   |
 | `shared_login_method`  | String (JSON) | No          | Defines how the shared-device user signs in — by badge or by face. See [Shared login method](#shared-login-method).                                                        |
 | `built_in_nfc`         | Boolean       | No          | Whether to use the device's built-in NFC to tap the badge. When `false`, only the bridge (central hub) can be used to read badges.                                         |
 | `shortcut_list`        | String (JSON) | No          | App and website shortcuts displayed on the home screen. See [Home screen shortcuts](#home-screen-shortcuts).                                                               |
@@ -233,7 +184,7 @@ bridge.
 
 - `base_url` — the base URL of your Matcher Server.
 - `api_key` — the API key the app uses to authenticate with the Matcher Server. This is **not** the same key as the
-  Shared Mobile API key from [Step 5](#step-5--create-the-shared-mobile-api-key).
+  Shared Mobile API key from [Step 2](#step-2--create-the-shared-mobile-api-key).
 
 ### Home screen shortcuts
 
@@ -262,7 +213,7 @@ Android native application through its URL scheme. Provide a JSON array of objec
 - `url` — a website URL (for example, `https://github.com`) or an Android app URL scheme (for example, `msteams://`).
 
 Any app you target with a shortcut must also be installed on the device. Assign it as **Required** to the same device
-group, the same way you assigned IDmelon Authenticator in [Step 4](#step-4--add-idmelon-authenticator-to-intune).
+group, the same way you assigned IDmelon Authenticator in [Step 1](#step-1--add-idmelon-authenticator-to-intune).
 
 ## Signing in to Microsoft apps with MSAL
 
@@ -329,8 +280,16 @@ Run through this list on one enrolled device before you roll out to the rest of 
 3. Confirm the signed-in identity appears, along with the shortcut tiles from `shortcut_list`.
 4. Open a shortcut and confirm the target app or site launches.
 5. If `use_msal` is `true`, confirm the Microsoft app opens without a second full sign-in.
-6. If `auto_logout` is set, leave the device idle and confirm the session ends after the configured number of minutes.
-7. Sign out and confirm the next user starts from a clean session.
+6. On Android 14 or later, open an app or website that accepts passkeys and confirm IDmelon Authenticator is offered
+   as the credential provider.
+7. If `auto_logout` is set, leave the device idle and confirm the session ends after the configured number of minutes.
+8. Sign out and confirm the next user starts from a clean session.
+
+## Next step
+
+The app is deployed and configured. To control which apps the device exposes, and to lock it into a kiosk, continue
+with
+[Home Screen and Kiosk Experience](/docs/for_administrators/shared_devices/android_shared_device/home_screen_and_kiosk/).
 
 ## Troubleshooting
 
@@ -345,4 +304,5 @@ Run through this list on one enrolled device before you roll out to the rest of 
 | A tapped badge belongs to a user who is not enrolled   | Set `self_service_url` so the device opens your self-service enrollment page instead of failing.                                                                                            |
 | Microsoft apps ask for credentials again after sign-in | Verify `use_msal` is `true` and `azure_client_id` matches your own Entra app registration, including the package name and signature hash on the Android platform entry.                     |
 | A shortcut tile does nothing                           | The target app must be installed on the device, and the URL scheme must be correct.                                                                                                        |
+| Passkeys do not work in apps or websites               | The device must run Android 14 or later, and **Credential provider** in the configuration policy must allow IDmelon Authenticator. Android blocks third-party providers until you do. On Android 13 and earlier, users sign in with password autofill instead. |
 | Changes to the policy do not reach the device          | Configuration is read when the app starts. Sync the device from Intune, then force-stop and reopen IDmelon Authenticator.                                                                   |
