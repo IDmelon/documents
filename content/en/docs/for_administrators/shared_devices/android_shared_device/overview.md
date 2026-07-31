@@ -29,6 +29,27 @@ This section covers that deployment with **Microsoft Intune**, from an unenrolle
 - **Shortcut tiles** for the apps and sites they need, published from Intune.
 - **Microsoft apps without a second sign-in**, if you enable MSAL.
 
+This is what it looks like on the device:
+
+<div style="display:flex;flex-wrap:wrap;gap:1rem;margin:1.5rem 0;">
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/idmelon_badge.png" alt="IDmelon Authenticator in shared mode, asking the user to tap their card on the reader" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Badge sign-in</figcaption>
+  </figure>
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/idmelon_face.png" alt="IDmelon Authenticator in shared mode, showing the Face Login screen" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Face sign-in</figcaption>
+  </figure>
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/idmelon_shortcuts.png" alt="A signed-in user with shortcut tiles for Okta, Teams, and Github" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Shortcut tiles</figcaption>
+  </figure>
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/idmelon_passkeys.png" alt="The passkeys available to the signed-in user" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Passkeys</figcaption>
+  </figure>
+</div>
+
 What is available for app and website sign-in depends on the Android version:
 
 | Capability                       | Android 14 and later | Android 13 and earlier |
