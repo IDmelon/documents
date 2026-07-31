@@ -756,47 +756,6 @@ Use **Inspect** when hovering is difficult or when you need more precise selecti
 
 The picker can also capture UI elements from **Java (Swing/AWT) applications** through the **Java Access Bridge**. Enable it during installation, or later from the [Settings panel](#java-applications), where you can choose to enable it for the current user or for all users.
 
-#### Supported UI elements
-
-The supported UI elements are listed below:
-
-- Button
-- Input
-- Hyperlink
-- Check Box
-- Combo Box
-- Radio Button
-- Split Button
-- Text
-- Image
-- Menu
-- Menu Bar
-- Menu Item
-- Tree
-- Tree Item
-- Tab
-- Tab Item
-- List
-- List Item
-- Data Item
-- Data Grid
-- Table
-- Header
-- Header Item
-- Tool Bar
-- Status Bar
-- Title Bar
-- Scroll Bar
-- Progress Bar
-- Slider
-- Thumb
-- Tooltip
-- Window
-- Pane
-- Group
-- Div
-- Custom
-
 #### UI Element Selector
 
 UI elements are organized in a hierarchical tree structure, where each element is represented as a node with parent–child relationships. The root node typically corresponds to the application window, and all interface components—such as panels, buttons, and text fields—are arranged beneath it in nested layers. To access or interact with a specific element, the automation process must traverse the correct path through the tree, starting from the root and moving step by step down to the target node.
@@ -1061,61 +1020,6 @@ Use Accesskey to register a workflow for the **Security key presence (card tap)*
    > ```bash
    > accesskeycli workflow-automation -t automation-app -r
    > ```
-
-### Test Workflow
-
-When you have configured everything in the previous section, the workflow must be run when you tap your badge on the reader.
-
-## Workflow Runner CLI
-
-Workflow Runner CLI is a tool for running a workflow directly from the command line. This method can be used in Accesskey scripts.
-
-### Arguments
-
-| Argument               | Value                      |
-| ---------------------- | -------------------------- |
-| \-\-workflow-path (-w) | The workflow path          |
-| \-\-variables (-v)     | Variables as a JSON string |
-
-To run a workflow using the command line, enter the following command in PowerShell:
-
-```bash
-workflowrunnercli -w "WORKFLOW_JSON_FILE_PATH"
-# Example
-workflowrunnercli -w "C:\workflows\login.json"
-```
-
-Pass variables to the workflow as a JSON string using **-v** in the command line.
-
-```bash
-workflowrunnercli -w "C:\workflows\login.json" -v "{\"username\": \"xyz\"}"
-```
-
-> See [Variables](#variables) for details.
-
-### Using the Workflow Runner CLI in the Accesskey script
-
-You can run workflows directly using the Workflow Runner CLI in the Accesskey scripts. Do the following steps to run the workflow on the badge tap.
-
-1. Export the desired workflow from the Workflow Editor.
-
-2. Make a new text file, fill it with the following lines, and save it as a **.ps1** file.
-
-   ```bash
-   workflowrunnercli -w "WORKFLOW_JSON_FILE_PATH"
-   ```
-
-3. Enter the following command in PowerShell to activate the automation.
-
-   ```bash
-   accesskey config access-automation set --trigger-condition onSecurityKeyPresence --script-path "PS1_SCRIPT_PATH"
-   ```
-
-    > To disable the automation, enter the following command in PowerShell:
-    >
-    > ```bash
-    > accesskey config access-automation remove all
-    > ```
 
 ## Uninstalling Workflow Automation
 
