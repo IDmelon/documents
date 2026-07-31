@@ -50,7 +50,14 @@ single-purpose stations and little else.
 
 ## Set up multi-app kiosk mode
 
-In this mode, **Managed Home Screen** replaces the device launcher, and the apps you list run on top of it.
+In this mode, **Managed Home Screen** replaces the device launcher, and the apps you list run on top of it. Users
+still sign in through IDmelon Authenticator with a badge tap or face authentication, and if you set `use_msal`,
+IDmelon then signs them in to the Microsoft apps on the device automatically. IDmelon stays the only place a user
+signs in.
+
+The result on the device — only the apps you allowed, with IDmelon Authenticator among them:
+
+<p><img src="/images/vendor/shared_android/mhs_ui.png" alt="Managed Home Screen on a shared device, showing IDmelon, Intune, Outlook, Teams, and Edge" style="width:28%;" /></p>
 
 ### Step 1 — Install the apps the kiosk will show
 
@@ -68,10 +75,12 @@ Every app that appears in the kiosk — including Managed Home Screen itself —
 
 1. Sign in to the [Microsoft Intune admin center](https://intune.microsoft.com/).
 
-2. Go to **Devices > Manage devices > Configuration > Create > New policy**.
+2. Go to **Devices > Android > Configuration**, then select **Create > New Policy**.
 
-3. Set **Platform** to **Android Enterprise**, and under **Fully Managed, Dedicated, and Corporate-Owned Work
-   Profile** choose **Device restrictions**. Select **Create**.
+3. Set **Platform** to **Android Enterprise** and **Profile type** to **Templates**. Under **Fully Managed,
+   Dedicated, and Corporate-Owned Work Profile** choose **Device restrictions**, then select **Create**.
+
+   ![Creating an Android Enterprise device restrictions profile in Intune](/images/vendor/shared_android/kiosk_config_add.jpg)
 
 4. Give the policy a name such as `Shared Android - Kiosk`, then continue to **Configuration settings**.
 
@@ -84,10 +93,8 @@ Every app that appears in the kiosk — including Managed Home Screen itself —
     - **Add:** select each app that belongs on the home screen — Managed Home Screen, IDmelon Authenticator, and every
       shortcut target.
 
-   The app list also has an **Allow without sign in** column. It only takes effect if you turn on the Managed Home
-   Screen sign-in screen in Step 3, and it does nothing on its own. Keep the app list here rather than in the Managed
-   Home Screen app configuration policy — both write the same list, and configuring it in two places leads to
-   conflicts.
+   Keep the app list here rather than in the Managed Home Screen app configuration policy: both write the same list,
+   and configuring it in two places leads to conflicts.
 
 6. Set **Leave kiosk mode** to **Enable** and set a **Leave kiosk mode code** — a 4 to 6 digit PIN. This is how an
    administrator temporarily leaves the kiosk to service the device. Without it, a locked device is hard to work on.
@@ -97,69 +104,32 @@ Every app that appears in the kiosk — including Managed Home Screen itself —
 To leave the kiosk on a device, press the back button repeatedly until **Exit kiosk** appears, enter the PIN, and open
 **Managed Home Screen** again when you are done to relock the device.
 
-### Step 3 — Choose how users reach the apps
+### Step 3 — Customize Managed Home Screen (optional)
 
-Managed Home Screen can either show the apps immediately, or ask the user to sign in to the home screen first. Both are
-configured in an app configuration policy for **Managed Home Screen**:
+Managed Home Screen has settings of its own — grid size, wallpaper, screen saver, organization logo, and automatic
+sign-out. They live in an app configuration policy rather than the profile you just created:
 
 1. Go to **Apps > Configuration > Create > Managed devices**.
 
 2. Set **Platform** to **Android Enterprise** and choose **Managed Home Screen** as the targeted app.
 
-3. Configure the mode you want, using the configuration designer or the JSON editor.
+3. Set the values you need, then assign the policy to the shared device group.
 
-4. Assign the policy to the shared device group.
-
-#### Mode 1 — without Managed Home Screen sign-in
-
-Leave **Enable sign in** off. This is the default.
-
-The home screen shows IDmelon Authenticator and the other apps as soon as the device starts. The user signs in through
-IDmelon Authenticator with a badge tap or face authentication, and if you set `use_msal`, IDmelon then signs them in to
-the Microsoft apps on the device. IDmelon remains the only place a user signs in.
-
-#### Mode 2 — with Managed Home Screen sign-in
-
-Set **Enable sign in** to `true`. Managed Home Screen then shows its own sign-in screen and keeps the apps hidden until
-the user signs in.
-
-On a shared device this needs one more thing, because the user has to reach IDmelon Authenticator *before* they can
-sign in anywhere:
-
-- In this policy, set **Sign in type** to **Microsoft Entra ID**, so that signing in to Managed Home Screen also signs
-  the user in to the other apps on the device that participate in Microsoft Entra shared device mode.
-
-- Back in the **device restrictions** profile from Step 2, tick **Allow without sign in** for **IDmelon
-  Authenticator** in the kiosk app list. In the Managed Home Screen JSON this is the same as
-  `app_available_prior_to_sign_in: true` inside that app's entry in the `applications` array, next to its `package`
-  key — but set it in one place only, not both.
-
-The user opens IDmelon Authenticator from the sign-in screen, authenticates with a badge or face, uses it to sign in
-to Managed Home Screen, and the apps appear.
-
-Three things to expect in this mode:
-
-- Apps allowed before sign-in are **not shown as tiles**. They open from an entry point on the **top bar** of the
-  sign-in screen.
-- Users must sign in again after every device reboot.
-- If your device restrictions profile enables the **Home and Overview buttons**, or shows system notifications in the
-  status bar, users can skip past the sign-in screen.
-
-### Step 4 — Customize Managed Home Screen (optional)
-
-The same app configuration policy carries the rest of the Managed Home Screen settings — grid size, wallpaper, screen
-saver, organization logo, session PIN, and automatic sign-out. For the full list, see Microsoft's
+For the full list of settings, see Microsoft's
 [Configure the Microsoft Managed Home Screen app](https://learn.microsoft.com/en-us/intune/app-management/configuration/configure-managed-home-screen).
+
+> One setting to stay away from: **Enable sign in** puts a Managed Home Screen sign-in screen in front of the apps.
+> IDmelon Authenticator cannot fill passkeys while that screen is shown, so this deployment does not support it. It is
+> off by default — leave it that way.
 
 ## Validate on a test device
 
 1. Sync the test device and wait for the policies to arrive.
 2. Confirm the device starts into Managed Home Screen rather than the stock launcher.
-3. In Mode 2, confirm the sign-in screen appears and that IDmelon Authenticator can be opened from it.
-4. Sign in through IDmelon Authenticator with a badge or face.
-5. Confirm IDmelon Authenticator and every allowed app appear, and that nothing else is reachable.
-6. Open each shortcut tile and confirm its target launches.
-7. Confirm the **Exit kiosk** PIN works for administrators.
+3. Confirm IDmelon Authenticator and every allowed app are visible, and that nothing else is reachable.
+4. Sign in through IDmelon Authenticator with a badge or face, and confirm passkeys can be used.
+5. Open each shortcut tile and confirm its target launches.
+6. Confirm the **Exit kiosk** PIN works for administrators.
 
 ## Troubleshooting
 
@@ -167,10 +137,8 @@ saver, organization logo, session PIN, and automatic sign-out. For the full list
 |---------|---------------|
 | The device still shows the stock launcher | Managed Home Screen must be assigned as **Required** to the device group, and the device restrictions policy must target the same group. |
 | An app is missing from the kiosk | The app must be both assigned as **Required** and listed under **Device experience > Add**. Doing only one of the two is the usual cause. |
-| Users reach the sign-in screen but cannot open IDmelon Authenticator | In Mode 2, IDmelon Authenticator must have **Allow without sign in** ticked. Without it there is no way to sign in at all. |
-| **Allow without sign in** is ticked but no apps are reachable before sign-in | Three usual causes: **Enable sign in** is not `true` in the Managed Home Screen app configuration policy, so there is no sign-in screen for it to apply to; the apps are behind the **top bar** entry point rather than shown as tiles; or the app list is configured in both the device restrictions profile and the app configuration policy, and the two conflict. |
-| Signing in to Managed Home Screen does not sign the user in to other apps | **Sign in type** must be **Microsoft Entra ID**, and the other apps must participate in Microsoft Entra shared device mode. |
-| Users skip past the Managed Home Screen sign-in screen | Check the **Enabled System Navigation Features** and **System notifications and information** settings in the device restrictions profile. |
+| The device asks users to sign in to Managed Home Screen | **Enable sign in** must be off in the Managed Home Screen app configuration policy. Passkeys cannot be filled while that screen is shown, so users get stuck with no way to sign in. |
+| Microsoft apps ask for credentials after the user signs in to IDmelon | Check `use_msal` and `azure_client_id` in the IDmelon Authenticator configuration policy. |
 | A shortcut tile opens nothing | The target app is not in the kiosk app list, or its URL scheme is wrong. Under single-app kiosk, only website shortcuts can open. |
 | Administrators cannot service the device | **Leave kiosk mode** must be enabled and a PIN set before the device is locked down. |
 
