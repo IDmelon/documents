@@ -18,8 +18,8 @@ This guide explains how to import your required resources, including users, grou
 ## Creating and Obtaining a Token
 
 1. Go to the IDmelon panel and click on **Settings** from the **Workspace** section.
-2. On the **Settings** page, click on the **API Key Management** section and then click the **Create** button.
-3. Choose a desired name for the token in the **Token Name** section and then click the **Next** option.
+2. On the **Authentication** page, click on the **API Key Management** section and then click the **New API Key** button.
+3. Choose a desired name for the token in the **Name** section, select the key type as **Admin**, and then click the **Next** option.
 4. Copy the displayed token value.
 
 ## Downloading the Tool
