@@ -14,6 +14,19 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.186.0
+
+July 6, 2026
+
+#### New Features
+
+- 
+- Polski? Deutsch? Now, self-service customization supports these languages as well.
+
+#### Bug Fixes
+
+- 
+
 ### IDmelon Panel 2.183.0
 
 June 25, 2026
