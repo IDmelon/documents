@@ -27,13 +27,22 @@ home screen, and open Teams or Outlook without a second login.
 - The iPad runs **iPadOS 17 or later** and is already enrolled in Microsoft Intune
   (supervised recommended).
 - **For Microsoft sign-in:** when you enroll the iPad, set its **Enrollment type**
-  (User Affinity) to **Enroll with Microsoft Entra shared mode profile**.
+  (User Affinity) to **Enroll with Microsoft Entra ID shared mode**.
 - **IDmelon Authenticator** is in your Intune app catalog.
 - You can sign in to the [IDmelon Admin Panel](https://panel.idmelon.com) and
   [Microsoft Intune](https://intune.microsoft.com) — or you can ask someone who can.
 - **For Microsoft sign-in:** you can also sign in to
   [Microsoft Entra](https://entra.microsoft.com), and **Microsoft Authenticator** is in
   your Intune app catalog.
+
+![User affinity set to Enroll with Microsoft Entra shared mode](/images/vendor/shared_ipads_new/intune_panel_enrollment_profile_shared_mode.png)
+
+> Set **Shared iPad** to **No** in your Intune enrollment policy. Microsoft doesn't
+> support using it together with Microsoft sign-in, and turning it off later means
+> factory-resetting every iPad.
+>
+> The same goes for user affinity itself: Microsoft doesn't allow it to be changed on an
+> existing enrollment policy, so get it right before you enroll.
 
 ## Step 1 — Create your Shared Mobile API key
 
@@ -61,10 +70,36 @@ This tells Microsoft to trust sign-ins coming from IDmelon on the iPad.
 3. Under **Redirect URI**, choose **Mobile and desktop applications** and enter:
    `msauth.com.idmelon.idmelon-2://auth`
 4. Register the app.
-5. Open **API permissions** and add these **Microsoft Graph** delegated permissions:
-   **email**, **openid**, **profile**, and **User.Read**. Then **Grant admin consent** if
-   your tenant requires it.
-6. On the app's **Overview**, copy the **Application (client) ID** and the **Directory
+5. Open **Authentication** and check the redirect URI is listed under the **iOS / macOS**
+   platform. It must not also appear under **Web** or **Single-page application**.
+
+   ![The redirect URI under the iOS / macOS platform](/images/vendor/shared_ipads_new/shared_ipads_entra_redirect_uri.png)
+
+6. Still in **Authentication**, open the **Settings** tab and turn **Allow public client
+   flows** on. (On the older portal view: **Advanced settings > Allow public client
+   flows**.)
+
+   ![Allow public client flows set to Enabled](/images/vendor/shared_ipads_new/shared_ipads_entra_public_client_flows.png)
+
+   > Leave this off and sign-in fails at the last step with
+   > `AADSTS7000218`. The iPad app is a mobile app, so Microsoft has to be told not to ask
+   > it for a client secret. See [Troubleshooting](../troubleshooting).
+
+7. Open **API permissions** and add these four **Microsoft Graph** delegated permissions:
+
+   | Permission | Why it's needed |
+   | --- | --- |
+   | `openid` | Lets people sign in with their Microsoft account. |
+   | `profile` | Tells the app who signed in. |
+   | `email` | Adds the person's email address to their sign-in details. |
+   | `User.Read` | Lets the app read the signed-in person's own profile, nobody else's. |
+
+   Then select **Grant admin consent**. You approve once here, so users never see a
+   permission prompt — nobody can approve one on a shared device.
+
+   ![All four Graph permissions granted](/images/vendor/shared_ipads_new/shared_ipads_entra_api_permissions.png)
+
+8. On the app's **Overview**, copy the **Application (client) ID** and the **Directory
    (tenant) ID**, and keep both for Step 4.
 
 ![Copying the client ID and tenant ID from the Entra app registration](/images/vendor/shared_ipads_new/shared_ipads_entra_app_registration_client_id.png)
@@ -78,7 +113,9 @@ This tells Microsoft to trust sign-ins coming from IDmelon on the iPad.
 3. **Microsoft:** add **Microsoft Authenticator** the same way. Microsoft sign-in runs
    through it, so it must be on the device. (Skip it only if your team doesn't use Microsoft
    apps.)
-4. Assign both apps to the device group that holds your shared iPads.
+4. Assign both apps to the device group that holds your shared iPads, with assignment type
+   **Required** so they install without anyone signing in. Microsoft Authenticator has to be
+   the volume-purchased (Apple VPP) copy for that to work.
 
 ![Adding IDmelon Authenticator in Intune](/images/vendor/shared_ipads_new/intune_panel_apps_idmelon.png)
 
@@ -191,6 +228,10 @@ shared-iPad device group.
    - `device_registration` (String) = `{{DEVICEREGISTRATION}}`
 6. Assign the profile to your shared-iPad device group, then review and create.
 
+![Microsoft Entra ID extension with shared device mode on](/images/vendor/shared_ipads_new/intune_panel_sso_extension_microsoft.png)
+
+![The four Additional configuration keys](/images/vendor/shared_ipads_new/intune_panel_sso_extension_additional_config.png)
+
 ### IDmelon SSO extension
 
 Create a second **Device features** profile for IDmelon.
@@ -204,6 +245,8 @@ Create a second **Device features** profile for IDmelon.
 3. Under **URLs**, add:
    - `https://panel.idmelon.com/auth/sign-in`
 4. Assign the profile to your shared-iPad device group, then review and create.
+
+![The IDmelon redirect extension profile](/images/vendor/shared_ipads_new/intune_panel_sso_extension_idmelon.png)
 
 ## Step 6 — **Microsoft** — Set Microsoft Authenticator to shared device mode
 
