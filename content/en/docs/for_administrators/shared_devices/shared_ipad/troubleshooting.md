@@ -82,6 +82,40 @@ Fix:
 Full walkthrough: [Set up a shared iPad](../set_up_a_shared_ipad). Values:
 [Configuration keys](../configuration_keys).
 
+## Sign-in ends with "client_assertion or client_secret" (AADSTS7000218)
+
+**The badge or face works, the Microsoft page accepts the person, and then sign-in fails.
+The log shows `AADSTS7000218: The request body must contain the following parameter:
+'client_assertion' or 'client_secret'`.**
+
+Cause: the Entra app registration is set up as a web app, so Microsoft asks the iPad for a
+client secret. A mobile app never has one.
+
+Fix:
+
+1. In [Microsoft Entra](https://entra.microsoft.com), open **App registrations** and select
+   the app whose id is in `azure_client_id`.
+2. Go to **Authentication > Settings** and turn **Allow public client flows** on. (Older
+   portal view: **Advanced settings > Allow public client flows**.)
+3. On the same page, check `msauth.com.idmelon.idmelon-2://auth` is listed under the
+   **iOS / macOS** platform and not under **Web** or **Single-page application**.
+4. Re-sync the device and reopen IDmelon Authenticator.
+
+![Allow public client flows set to Enabled](/images/vendor/shared_ipads_new/shared_ipads_entra_public_client_flows.png)
+
+## Sign-in stops on a consent or "Need admin approval" screen
+
+**The Microsoft page asks the user to approve permissions, and nobody can.**
+
+Cause: admin consent was never granted on the app registration.
+
+Fix:
+
+1. Open the app registration's **API permissions**.
+2. Confirm the four Microsoft Graph delegated permissions are there: `openid`, `profile`,
+   `email`, `User.Read`.
+3. Select **Grant admin consent** and confirm every row turns green.
+
 ## The Microsoft flow doesn't act shared
 
 **Sign-in works, but the account sticks between users.**
