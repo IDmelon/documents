@@ -119,6 +119,8 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
     <URLBlockList />
     <URLBarEditingEnabled>false</URLBarEditingEnabled>
 </Policies>
+<ForceNewTab>true</ForceNewTab>
+<CustomPagesURL auto_update="true"></CustomPagesURL>
 ```
 
 - **KioskURLs:** The addresses that must be opened when the kiosk app starts.
@@ -140,6 +142,7 @@ Editing the **configs.xml** file enables you to tailor the IDmelon Kiosk app to 
 - **UserInteractionMonitoringAppPath:** The path of the User Interaction Monitoring app. If the value of the `KioskIdleTimeoutSeconds` is set to 0, there is no need to set this address.
 - **KeepDisplayAwake:** Controls whether the system is allowed to follow normal power‑saving rules (default = false) or whether it should keep the display awake at all times.
 - **Policies:** Configurable rules that define the app’s behavior and user experience, such as allowed/blocked URLs, editing permissions, and security limits. (see [Policies](#policies) for more details)
+- **CustomPagesURL:** The address of your custom **Report Issue** pages package, so the kiosk can replace the built-in report dialog with your own HTML pages. Leave it empty to keep the built-in dialog. (see [Report Issue Custom Pages](#report-issue-custom-pages) for more details)
 
 #### Kiosk URLs
 
@@ -440,3 +443,227 @@ accesskeycli self-service-link -s [Self-Service URL]
 
 By executing this command, the system will automatically handle specific user scenarios.<br>
 If the user’s badge is **not enrolled**, they will be redirected to the designated enrollment page. Similarly, if the user exceeds the allowed number of incorrect PIN attempts, they will be automatically directed to the specified address for a **PIN reset**.
+
+## Report Issue Custom Pages
+
+By default, when a user taps the feedback (**?**) button or something goes wrong during sign-in, the kiosk shows its own built-in **Report Issue** dialog. You can replace that dialog with your own HTML pages — your wording, your branding, your fields — and the kiosk sends the submitted form to your support address exactly as it does for the built-in one.
+
+Each page is a plain HTML file. The kiosk serves the pages from a local virtual host, injects a small JavaScript bridge into them, and waits for the page to post the filled-in form back.
+
+If the page for an event is missing, the kiosk falls back to the built-in dialog, so a partial package is safe to deploy.
+
+### Supported pages
+
+| Page | Shown when |
+| ---- | ---------- |
+| `automation_failed.html` | The sign-in automation could not be completed |
+| `badge_locked.html` | The user's card is locked |
+| `badge_enrollment.html` | The card is not enrolled yet |
+| `report_issue.html` | The user pressed the feedback (**?**) button |
+
+These names are only the defaults — see [The manifest](#the-manifest) to use your own.
+
+> The Weblogin extension is told to report its errors to the kiosk automatically, but only when a page exists for at least one of the three failure events. A package carrying only `report_issue.html` leaves the extension to handle its own errors. You no longer need to set `sendErrorsToKiosk` in **extension_configs.json**.
+
+### Page structure
+
+The kiosk injects `window.idmelonKiosk` into every page before it loads:
+
+```js
+window.idmelonKiosk = {
+  eventType,                    // "OnAutomationFailed" | "OnBadgeLocked" | "OnEnrollmentNeeded" | "General"
+  details,                      // optional context string about what happened, or null
+  variables,                    // predefined values, e.g. { badgeId, userId } - always an object
+  onResult: null,               // assign a callback to receive the submission result
+  submitReport(form, options),  // send the report
+  close()                       // dismiss the page
+};
+```
+
+A complete minimal page:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Your card is locked</title>
+</head>
+<body>
+    <form id="reportForm">
+        <h1>Your card is locked</h1>
+        <p>Complete the form below and click <b>Send report</b> to notify the HelpDesk.</p>
+
+        <!-- data-idmelon-var fills this field in automatically, before your own scripts run -->
+        <label for="userId">User ID</label>
+        <input type="text" id="userId" data-idmelon-var="userId" disabled />
+
+        <label for="note">Note</label>
+        <textarea id="note"></textarea>
+
+        <button type="button" id="cancelButton">Not now</button>
+        <button type="submit">Send report</button>
+    </form>
+
+    <script>
+        document.getElementById("cancelButton").addEventListener("click", function () {
+            window.idmelonKiosk.close();
+        });
+
+        // Called by the kiosk once the report has been sent
+        window.idmelonKiosk.onResult = function (result) {
+            alert(result.success ? "Report sent." : result.message);
+            if (result.success) { window.idmelonKiosk.close(); }
+        };
+
+        document.getElementById("reportForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            window.idmelonKiosk.submitReport({
+                title: "IDmelon Kiosk - PIN Locked",
+                description: "The user's card is locked.",
+                form: {
+                    userId: document.getElementById("userId").value,
+                    note: document.getElementById("note").value
+                }
+            }, { includeScreenshot: false });
+        });
+    </script>
+</body>
+</html>
+```
+
+#### Using the variables
+
+The kiosk passes predefined values to the page in `window.idmelonKiosk.variables`. Two are available today:
+
+- `badgeId` — the card the event was raised for
+- `userId` — the signed-in user
+
+The simplest way to use them is to tag an element with `data-idmelon-var`. The kiosk fills it in before your own scripts run:
+
+```html
+<input type="text" id="userId" data-idmelon-var="userId" disabled />
+<span data-idmelon-var="badgeId"></span>
+```
+
+Inputs, textareas and selects get their `value` set; anything else gets its text. An element whose variable was **not** provided is left alone, so the default you ship keeps working. You can also read the object directly:
+
+```js
+var badge = window.idmelonKiosk.variables.badgeId || "";
+```
+
+There is no need to include the variables in your form — the kiosk appends them to every report under a **Badge Info** heading.
+
+#### The submitted form
+
+`submitReport(form, options)` takes any object you like; the whole thing is written into the report, so nothing is dropped. Field names become readable headings — `fullName` is shown as **Full Name**, `badge_number` as **Badge Number**.
+
+Three keys are treated specially at the top level:
+
+| Key | What it does |
+| --- | ------------ |
+| `title` or `subject` | Becomes the subject of the report email. Not repeated in the body. |
+| `description` | Written as a plain sentence, with no heading of its own. |
+| `form` | Shown under a **User's Form** heading — the fields the user filled in. |
+
+`options` accepts `includeScreenshot` only, and it defaults to `false`. The app logs and configuration are attached to every report regardless.
+
+The result of the submission is posted back to `window.idmelonKiosk.onResult` as `{ success, message }`. The kiosk never closes the page on its own — call `window.idmelonKiosk.close()` when you are done. A native close button is always available in the top-right corner as a fallback.
+
+### The manifest
+
+A package is a **manifest.json** file plus one folder per category:
+
+```shell
+manifest.json
+ReportIssue\
+    automation_failed.html
+    badge_locked.html
+    badge_enrollment.html
+    report_issue.html
+    assets\
+        report.css
+        logo.png
+```
+
+The manifest names the page that serves each event, so your files can be called anything:
+
+```json
+{
+    "manifest_version": "1.0.0",
+    "files_version": "1.0.0",
+    "Pages": {
+        "ReportIssue": {
+            "automation_failed": "automation_failed.html",
+            "badge_locked": "badge_locked.html",
+            "badge_enrollment": "badge_enrollment.html",
+            "report_issue": "report_issue.html"
+        }
+    }
+}
+```
+
+- **manifest_version:** The manifest layout. Only the major part is checked; the current version is `1`.
+- **files_version:** Your own version for the content. The kiosk logs it and otherwise ignores it. Bump it when you publish an update.
+- **Pages:** Category → page key → file name, relative to the category folder.
+
+Notes:
+
+- Page keys are `automation_failed`, `badge_locked`, `badge_enrollment` and `report_issue`, matched case-insensitively.
+- A page you leave out falls back to its default file name, so list only what you renamed.
+- A file name may sit in a subfolder (`en-us/locked.html`) but must stay inside the category folder and end in `.html`.
+- Only the `ReportIssue` folder is served to the browser, so the manifest itself is never reachable from a page.
+- Relative assets (`assets/report.css`, `logo.png`, …) placed next to the pages work as normal.
+
+The package is installed in the app's **LocalState** folder, so you can also copy it in by hand on a single PC:
+
+```shell
+    C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\CustomPages
+```
+
+### Publishing the package
+
+For more than a handful of PCs, publish the package as a **zip** and point the kiosks at it. Zip the **contents** of the package folder, so that `manifest.json` sits at the root of the archive:
+
+```shell
+manifest.json
+ReportIssue/report_issue.html
+ReportIssue/assets/report.css
+```
+
+The zip can be served from anywhere the kiosk PC can reach:
+
+| Source | Example |
+| ------ | ------- |
+| HTTPS | `https://files.contoso.com/kiosk/report-pages.zip` |
+| HTTP | `http://192.168.1.10/kiosk/report-pages.zip` |
+| Shared folder (UNC) | `\\192.168.1.10\Deploy\report-pages.zip` |
+| Local folder | `C:\Users\kioskUser0\AppData\Local\Packages\Hellokey.45853B8ADE74A_kxcedb3gts26c\LocalState\report-pages.zip` |
+
+> A shared folder is usually the least work on a domain-joined fleet: no web server to stand up, and the existing share permissions control who can read it. Prefer HTTPS or a share over plain HTTP, which is unauthenticated and open to tampering.
+
+Each kiosk fetches the package once per launch, in the background — the app starts whether or not the source is reachable. On a web server the check is a conditional `GET`, so an unchanged package costs a `304`; for a shared or local folder the size and modified time are compared.
+
+**A package is only installed if it is complete and valid.** It is downloaded, extracted to a staging folder and checked before anything replaces the live pages, so a truncated download, the wrong zip, or a manifest pointing at missing files all leave the running pages untouched. A package is refused when it:
+
+- has no usable `manifest.json` at its root,
+- maps no page that actually exists under `ReportIssue`,
+- contains a file type that is not markup or an asset (`.exe`, `.ps1`, `.dll`, …),
+- contains a path that would escape the folder,
+- is over 20 MB zipped, 100 MB extracted, or 1000 files.
+
+Every outcome is written to the app log, so a rejected package is visible on the machine.
+
+To roll out a change: edit the files, bump `files_version`, re-zip, and replace it at the same address. Kiosks pick it up the next time they launch.
+
+### Configuring the package source
+
+Add the address to the kiosk configuration (Refer to [Configurations](#step-3-configure-the-kiosk-settings)):
+
+```xml
+<CustomPagesURL auto_update="true">https://files.contoso.com/kiosk/report-pages.zip</CustomPagesURL>
+```
+
+- **Element value:** Where the zip lives — an `https://` or `http://` URL, a shared folder (`\\192.168.1.10\Deploy\report-pages.zip`), or a local path. Leave it empty to use whatever is already installed on the PC, or nothing at all.
+- **auto_update:** Set it to `false` to stop the kiosk fetching the package. Defaults to `true`.
