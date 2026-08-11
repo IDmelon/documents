@@ -3,7 +3,7 @@ title: "Deploy and Configure IDmelon Authenticator"
 description: "Install IDmelon Authenticator on shared Android devices and apply the Shared Device Mode configuration"
 lead: "Install IDmelon Authenticator on shared Android devices and apply the Shared Device Mode configuration"
 date: 2024-07-20T14:40:56+01:00
-lastmod: 2026-07-31T00:00:00+03:30
+lastmod: 2026-08-12T00:00:00+03:30
 draft: false
 images: [ ]
 menu:
@@ -113,7 +113,7 @@ The API key links the app to your IDmelon workspace. Create it before you build 
 
     - Select **Add** and pick the keys you need. At minimum, select `api_key` and `shared_device_mode`. Add any
       optional keys your deployment requires, for example `shared_login_method`, `shortcut_list`, `auto_logout`,
-      `use_msal`, and `azure_client_id`.
+      `use_msal`, `azure_client_id`, and `azure_tenant_id`.
 
     - Enter the values described in the
       [IDmelon Authenticator configuration](#idmelon-authenticator-configuration) section below.
@@ -153,6 +153,7 @@ your deployment.
 | `auto_logout`          | Integer       | No          | Automatically signs the user out after a fixed time, in minutes (e.g., `60` signs the user out after one hour).                                                            |
 | `use_msal`             | Boolean       | No          | Uses MSAL to sign the user in to Microsoft apps immediately after they sign in to IDmelon Authenticator. See [MSAL setup](#signing-in-to-microsoft-apps-with-msal).        |
 | `azure_client_id`      | String        | Conditional | Required when `use_msal` is `true`. The **Application (client) ID** from your Microsoft Entra app registration. See [MSAL setup](#signing-in-to-microsoft-apps-with-msal). |
+| `azure_tenant_id`      | String        | Conditional | Required when your Entra app registration is **single tenant**. The **Directory (tenant) ID** of your tenant, or one of `common`, `organizations`, `consumers`. Defaults to `common` when left empty. See [Choosing the supported account type](#choosing-the-supported-account-type). |
 
 ### Shared login method
 
@@ -221,7 +222,8 @@ Set `use_msal` to `true` to sign users in to Microsoft apps (such as Teams and O
 sign in to IDmelon Authenticator.
 
 When `use_msal` is `true`, `azure_client_id` is **mandatory**. This value is the **Application (client) ID** of a
-Microsoft Entra app registration that you create for IDmelon Authenticator. The next section walks through creating it.
+Microsoft Entra app registration that you create for IDmelon Authenticator. Depending on the account type you choose
+for that registration, you also need `azure_tenant_id`. The next section walks through creating it.
 
 ### Registering the Android app in Microsoft Entra
 
@@ -233,8 +235,12 @@ Microsoft Entra app registration that you create for IDmelon Authenticator. The 
 
 4. Enter a recognizable name such as `IDmelon-Authenticator-Shared-Android`.
 
-5. Under **Supported account types**, select the option that matches your tenant policy. In most deployments, this is
-   **Accounts in this organizational directory only**.
+5. Under **Supported account types**, select the option that matches your tenant policy. For most shared device
+   deployments this is **Single tenant only**, which is also the default. Note which option you choose — it decides
+   the value you set for `azure_tenant_id`. See
+   [Choosing the supported account type](#choosing-the-supported-account-type).
+
+   ![Choosing the supported account types when registering the app in Microsoft Entra](/images/vendor/shared_android/entra_app_reg.jpg)
 
 6. Click **Register**.
 
@@ -247,6 +253,8 @@ Microsoft Entra app registration that you create for IDmelon Authenticator. The 
 
     - **Signature hash:** `w6OyxDHFH36OaPPikqYmsRzWAFo=`
 
+   ![Entering the Android package name and signature hash to generate the redirect URI](/images/vendor/shared_android/entra_app_uri.jpg)
+
 9. Click **Configure**. Microsoft Entra generates the redirect URI for the app automatically.
 
 10. Go to **API permissions** and confirm that the delegated **User.Read** permission for **Microsoft Graph** is
@@ -255,12 +263,44 @@ Microsoft Entra app registration that you create for IDmelon Authenticator. The 
     add
     it.
 
-11. Click **Grant admin consent** for the tenant if your policy requires it.
+11. Click **Grant admin consent** for the tenant. This approves the permissions above once on behalf of every user, so
+    nobody is interrupted by a consent dialog at first sign-in — on a shared device that prompt would otherwise appear
+    for each new person who signs in.
 
-12. From the **Overview** page, copy the **Application (client) ID**.
+12. From the **Overview** page, copy the **Application (client) ID**. If you registered the app as single tenant, also
+    copy the **Directory (tenant) ID** shown directly below it — a GUID such as
+    `3f7a2c19-8b64-4de1-9a05-1c2d6e8f7b30`. The same value is available at any time under **Entra ID > Overview**.
 
-Place the copied **Application (client) ID** into the `azure_client_id` key in your managed app configuration, and set
-`use_msal` to `true`. Use the client ID from your own Entra app registration — do not reuse the example value.
+    ![Application (client) ID and Directory (tenant) ID on the app registration Overview page](/images/vendor/shared_android/entra_app_overview.jpg)
+
+Place the copied **Application (client) ID** into the `azure_client_id` key in your managed app configuration, put the
+**Directory (tenant) ID** into `azure_tenant_id`, and set `use_msal` to `true`. Use the values from your own Entra app
+registration — do not reuse the example values.
+
+### Choosing the supported account type
+
+**Supported account types** on the registration page controls which accounts Entra will let sign in. Each option maps to
+a different `azure_tenant_id` value, and the two must agree — the registration and the app configuration are describing
+the same audience from opposite ends.
+
+| Supported account types                             | Set `azure_tenant_id` to                                                       | Who can sign in                                    |
+|-----------------------------------------------------|--------------------------------------------------------------------------------|----------------------------------------------------|
+| **Single tenant only** — *your organization*        | Your **Directory (tenant) ID**, or a verified domain like `contoso.onmicrosoft.com` | Only accounts in your own tenant               |
+| **Multiple Entra ID tenants**                       | `organizations`                                                                | Work or school accounts from any tenant            |
+| **Any Entra ID Tenant + Personal Microsoft accounts** | `common`, or leave the key empty                                             | Work, school, and personal Microsoft accounts      |
+| **Personal accounts only**                          | `consumers`                                                                    | Personal Microsoft accounts only                   |
+
+> **If you chose Single tenant only, `azure_tenant_id` is mandatory.** Left empty, the app falls back to `common`, and
+> Entra rejects a single tenant application on that endpoint with error `AADSTS50194` — sign-in fails with *"not
+> configured as a multi-tenant application"*. This is the most common MSAL misconfiguration, because **Single tenant
+> only** is the default on the registration page.
+
+Pinning the app to one tenant also excludes guest (B2B) accounts invited from other tenants. If your shared devices must
+sign in guests, register the app under **Multiple Entra ID tenants** and set `azure_tenant_id` to `organizations`
+instead.
+
+Some tenants still show the earlier wording for these options — for example **Accounts in this organizational directory
+only** in place of **Single tenant only**. The mapping above is unchanged.
 
 ## Validate on a test device
 
@@ -303,6 +343,9 @@ with
 | Face login fails to reach the Matcher Server           | Verify `base_url` and `api_key` inside `shared_login_method.config`, and that the device network can reach the Matcher Server.                                                              |
 | A tapped badge belongs to a user who is not enrolled   | Set `self_service_url` so the device opens your self-service enrollment page instead of failing.                                                                                            |
 | Microsoft apps ask for credentials again after sign-in | Verify `use_msal` is `true` and `azure_client_id` matches your own Entra app registration, including the package name and signature hash on the Android platform entry.                     |
+| MSAL sign-in fails with `AADSTS50194`, or "not configured as a multi-tenant application" | The registration is **Single tenant only** but `azure_tenant_id` is empty or set to `common`. Set it to your **Directory (tenant) ID**. See [Choosing the supported account type](#choosing-the-supported-account-type). |
+| MSAL sign-in fails with `AADSTS50020` for some users  | Those accounts are guests (B2B) from another tenant, and `azure_tenant_id` is pinned to a single tenant. Register the app for **Multiple Entra ID tenants** and use `organizations`.        |
+| The Microsoft account picker offers personal accounts | `azure_tenant_id` is empty or `common`, which admits personal Microsoft accounts. Set it to your **Directory (tenant) ID**, or to `organizations` for work and school accounts only.        |
 | A shortcut tile does nothing                           | The target app must be installed on the device, and the URL scheme must be correct.                                                                                                        |
 | Passkeys do not work in apps or websites               | The device must run Android 14 or later, and **Credential provider** in the configuration policy must allow IDmelon Authenticator. Android blocks third-party providers until you do. On Android 13 and earlier, users sign in with password autofill instead. |
 | Changes to the policy do not reach the device          | Configuration is read when the app starts. Sync the device from Intune, then force-stop and reopen IDmelon Authenticator.                                                                   |
