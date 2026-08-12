@@ -1022,7 +1022,7 @@ The report is delivered through IDmelon Accesskey.
 
 A **chained workflows design** links several workflows together so that finishing one starts the next. Each workflow keeps its own actions and trigger condition, and the design decides the order they run in and what happens when one of them fails.
 
-Use it when a task is too large for a single workflow, or when the next step depends on whether the previous step succeeded — for example, sign in, then open an application on success, or show an error message on failure.
+Use it when a task is too large for a single workflow, or when the next step depends on whether the previous step succeeded. For example, sign in, then open an application on success, or show an error message on failure.
 
 ### Chained Workflows Designer
 
@@ -1032,20 +1032,14 @@ Designs are created in the **Chained Workflows Designer**, a separate app instal
 - Use the **Chained Workflows Designer** shortcut on the desktop or in the Start menu.
 - Double-click an existing `.idcwf` design file.
 
-The designer window has three parts:
-
-- **Workflows list** (left): every workflow found in the Workflow Editor, with its trigger condition. Use the **refresh** button to reload the list after you add or change workflows.
-- **Canvas** (center): the design itself.
-- **Toolbar** (top): **New**, **Open**, **Save**, **Save As**, **Validate**, and the zoom controls.
-
 ![Chained Workflows Designer](/images/vendor/workflow_automation/automation_app/chained_workflows_designer.png)
 > **Figure:** The Chained Workflows Designer with a design on the canvas.
 
 #### Building a design
 
-The canvas always contains two fixed rectangles, **Start** and **Finish**. Between them you place the workflows:
+The canvas (designer pane) always contains two fixed rectangles, **Start** and **Finish**. Between them you place the workflows:
 
-1. Drag a workflow from the list onto the canvas. It appears as a rectangle.
+1. Drag (or double-click) a workflow from the list onto the canvas. It appears as a rectangle.
 2. Hover over a rectangle and drag from one of its edge points to another rectangle to connect them.
 3. Connect **Start** to the workflow that begins the chain.
 4. Connect the last workflow to **Finish**.
@@ -1063,7 +1057,7 @@ Connect each output to whichever workflow should run next; you can leave an outp
 
 #### Entry workflows
 
-A workflow connected directly from **Start** is an **entry workflow**: it is the one that can start the chain on its own, using its own [trigger condition](#trigger-condition). Every other workflow in the design runs only when a connection leads to it, no matter what its own trigger condition is.
+A workflow connected directly from **Start** is an **entry workflow**: it is the one that can start the chain on its own, using its own [trigger condition](#trigger-condition). It can use any trigger condition except **None**. A connection from **Start** only arms the workflow with its own trigger, and **None** never fires, so a **None** workflow placed there would never run. Every other workflow in the design runs only when a connection leads to it, no matter what its own trigger condition is.
 
 Connecting **Start** to more than one workflow creates several independent entries, each starting its own chain when its trigger fires.
 
@@ -1092,6 +1086,8 @@ To put a design into service, register it with [`automationcli`](#registering-a-
 ```bash
 automationcli chained set --path "C:\ProgramData\IDmelon\Workflow Automation\workflows\sample.idcwf"
 ```
+
+Add `--user "NAME"` to apply the design to a single Windows user instead of every user on the machine.
 
 The Workflow Runner then arms only the design's entry workflows. When an entry's trigger fires, the chain runs one workflow at a time, following the **On Success** and **On Failure** connections until it reaches **Finish** or runs out of connections.
 
