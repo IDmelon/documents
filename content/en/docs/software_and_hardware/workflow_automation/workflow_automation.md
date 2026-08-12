@@ -77,15 +77,25 @@ The **trigger condition** determines *when* a workflow runs automatically. Set i
 
 The available trigger conditions are:
 
-| Trigger condition                    | When the workflow runs                                           |
-| ------------------------------------ | ---------------------------------------------------------------- |
-| **Security key presence (card tap)** | A registered security key (badge/card) is tapped on the reader.  |
-| **Application launch**               | A specific application (process) starts.                         |
-| **Screen unlock**                    | The Windows session is unlocked.                                 |
-| **User logon**                       | The user logs on to Windows.                                     |
-| **Transparent unlock**               | The workstation is unlocked transparently with the security key. |
+| Trigger condition                    | When the workflow runs                                                               |
+| ------------------------------------ | ------------------------------------------------------------------------------------ |
+| **Security key presence (card tap)** | A registered security key (badge/card) is tapped on the reader.                      |
+| **Application launch**               | A specific application (process) starts.                                             |
+| **Screen unlock**                    | The Windows session is unlocked.                                                     |
+| **User logon**                       | The user logs on to Windows.                                                         |
+| **Transparent unlock**               | The workstation is unlocked transparently with the security key.                     |
+| **None**                             | Never on its own; runs only inside a [chained workflows](#chained-workflows) design. |
 
 > The default trigger condition is **Security key presence (card tap)**.
+
+#### Interrupting a running workflow
+
+Only one workflow runs at a time. When you choose **Security key presence (card tap)** or **Application launch**, the **Stop a running workflow to start this one** option controls what happens if another workflow is still running:
+
+- **Enabled** (the default): the running workflow is stopped and this one starts.
+- **Disabled**: the running workflow is left alone and this trigger is skipped.
+
+The other trigger conditions always stop the running workflow.
 
 #### Application launch options
 
@@ -99,6 +109,8 @@ When you choose **Application launch**, configure the following:
   - **Specific number of times**: a fixed number of runs that you enter.
 
 > **Note:** Setting the trigger condition only records *when* the workflow should run. For the workflow to actually run automatically, export it and then register it: use [`automationcli`](#registering-workflows-with-automationcli) for the **Application launch**, **Screen unlock**, and **User logon** triggers, or [Accesskey](#configuring-accesskey) for the **Security key presence (card tap)** and **Transparent unlock** triggers. See [Workflow Runner](#workflow-runner).
+>
+> **Note:** A workflow whose trigger condition is **None** is not registered on its own. It runs only as a step in a [chained workflows](#chained-workflows) design.
 
 ![Trigger condition window](/images/vendor/workflow_automation/automation_app/trigger_condition.png)
 > **Figure:** Choosing when the automation starts in the Trigger Condition window.
@@ -251,6 +263,8 @@ Executes an application.
 | After application launch | Enum   | Yes      | Continue immediately | Continue immediately, Wait for application to load, Wait for application to close |
 
 > If you want to use the **ExitCode** variable for next actions, set the **After application launch** option to **Wait for application to load**.
+>
+> **Note**: **Application path**, **Command line arguments**, and **Working folder** all support [variables](#variables) like `%VariableName%`.
 
 ![Run application action](/images/vendor/workflow_automation/automation_app/run_application.png)
 > **Figure:** Run application action configuration.
@@ -263,13 +277,16 @@ Updates the state of one or more windows that match the specified search criteri
 
 | Parameter        | Type       | Required | Default              | Description                                                                                  |
 | ---------------- | ---------- | -------- | -------------------- | -------------------------------------------------------------------------------------------- |
-| Find window mode | Enum       | Yes      | By window UI element | Allowed: By window UI element, By title or class                                             |
+| Find window mode | Enum       | Yes      | By window UI element | Allowed: By window UI element, By title or class, By window handle                           |
 | Window           | UI element | No       | Empty                | Target window UI element (used when mode is **By window UI element**)                        |
 | Window title     | String     | No       | Empty                | Window title (used when mode is **By title or class**), supports wildcards `?` and `*`       |
 | Window class     | String     | No       | Empty                | Window class (used when mode is **By title or class**), supports wildcards `?` and `*`       |
+| Window handle    | Variable   | No       | Empty                | The variable holding the window handle (used when mode is **By window handle**)              |
 | Window action    | Enum       | Yes      | Focus on window      | Allowed: Focus on window, Move to background, Maximize window, Minimize window, Close window |
 
 > **Note:** If multiple windows match the criteria, use **When multiple match** to control whether the action is applied to the first match only or to all matches.
+>
+> **Note:** In **By window handle** mode, pick one of the `WindowHandle` variables created by this workflow's [Display message](#display-message) actions, or type your own variable name. See [Window handle variables](#window-handle-variables).
 
 ##### Wildcards
 
@@ -442,6 +459,8 @@ Shows a message dialog to the user and, optionally, captures which button they c
 > **Note**: Use the **Output variable** with an [If](#if) action to branch the workflow based on which button the user clicked (for example, run different actions for **Yes** and **No**).
 >
 > **Note**: **Don't wait for result** is available only for the single-button dialogs (**OK**, **Cancel**, and **Dismiss**), because their outcome is known in advance. When it is enabled, **Output variable** is disabled.
+>
+> **Note**: When **Don't wait for result** is enabled, the action also stores the dialog's window handle in a `WindowHandle` variable, so a later [Window control](#window-control) action can close the dialog. See [Window handle variables](#window-handle-variables).
 
 ![Display message action](/images/vendor/workflow_automation/automation_app/display_message_1.png)
 ![Display message action](/images/vendor/workflow_automation/automation_app/display_message_2.png)
@@ -579,6 +598,8 @@ Reads a CSV file from your PC or system and loads it into a data table variable.
 | Trim fields          | Boolean  | No       | false   | If enabled, trims leading/trailing spaces for each field value                                                     |
 | Store result in      | Variable | Yes      | Empty   | Name of the variable that receives the output DataTable                                                            |
 
+> **Note**: **CSV file path** supports [variables](#variables) like `%VariableName%`.
+
 ![Read CSV from file action](/images/vendor/workflow_automation/automation_app/read_csv_from_file.png)
 > **Figure:** Read CSV from file action configuration.
 
@@ -633,6 +654,18 @@ Runs another subflow from the same workflow. Use this action to reuse a shared s
 ![Run subflow action](/images/vendor/workflow_automation/automation_app/run_subflow.png)
 > **Figure:** Run subflow action configuration.
 
+#### Exit subflow
+
+Ends the current subflow immediately and returns to the flow that called it. The remaining actions of the subflow are skipped, and the caller continues with the action after its [Run subflow](#run-subflow) action.
+
+**Input Parameters:**
+
+No inputs needed.
+
+> **Note:** This action ends only the current subflow, not the whole workflow; to stop the workflow entirely, use [Stop flow](#stop-flow).
+>
+> **Note:** This action can be used only in a subflow. It appears in the actions list while a subflow tab is selected, and it cannot be added to the **Main** flow. Copying it into Main is skipped as well.
+
 ### Secure text
 
 Some action fields hold values that should not stay visible on screen, such as a password or a PIN. These fields have a **lock** icon on their right side. Click the icon to display the value as secure text; click it again to display it as plain text. The lock icon is highlighted while the field is masked, and the field's content is shown as `••••••` both in the action window and in the flow description.
@@ -672,6 +705,12 @@ To increase/decrease the value of a numeric variable, select the `Increase varia
 #### Predefined variables
 
 The variables `CardId` and `UserId` are reserved; one is the ID of the card tapped on the reader, and the other is the username of the card’s owner.
+
+##### Window handle variables
+
+Variable names that start with `WindowHandle` are reserved for window handles and cannot be used as ordinary variable names.
+
+When a [Display message](#display-message) action has **Don't wait for result** enabled, the workflow continues while the dialog stays open, so the dialog needs to be closed later. The action stores the dialog's window handle in a numbered `WindowHandle` variable: `WindowHandle1` for the first such action in the workflow, `WindowHandle2` for the next, and so on. To close that dialog, add a [Window control](#window-control) action, set **Find window mode** to **By window handle**, select the matching `WindowHandle` variable, and set **Window action** to **Close window**.
 
 #### Variable scope
 
@@ -713,6 +752,23 @@ Syntax:
 Examples:
 `X[0]['id']` -> `123`
 `X[0][1]` -> `abc`
+
+#### Insert a variable into a field
+
+Fields that accept variables have a **variable** icon on their right side. Click it to open the list of the variables defined in the workflow, filter the list with the search box, and select one to insert it into the field wrapped in `%` (for example, `%username%`) at the cursor position. This saves typing the name and avoids typos.
+
+> **Note**: Fields that also support [secure text](#secure-text) show the variable icon next to the lock icon, and the picker works whether the value is displayed as plain or secure text.
+
+#### Shared variables
+
+In the **Variables** panel, each variable has a **Shared** checkbox. Shared variables are passed to the next workflows in a [chained workflows](#chained-workflows) design: when the workflow finishes, the values of its shared variables travel along the connections and become available to the workflows that run after it.
+
+> **Note**: Sharing a variable only matters inside a chained design. In a workflow that runs on its own, the setting has no effect.
+>
+> **Note**: The trigger context variables `UserId` and `CardId` always take precedence over incoming shared variables with the same name.
+
+![Shared variables](/images/vendor/workflow_automation/automation_app/shared_variables.png)
+> **Figure:** Marking a variable as shared in the Variables panel.
 
 ### UI Elements
 
@@ -962,6 +1018,85 @@ The report is delivered through IDmelon Accesskey.
 >
 > **Note**: If the report cannot be sent, it is saved as a `.zip` archive in the **IDWA_temp** folder on your desktop, and the app offers to open the containing folder so that you can email the archive to `support@idmelon.com` yourself.
 
+## Chained Workflows
+
+A **chained workflows design** links several workflows together so that finishing one starts the next. Each workflow keeps its own actions and trigger condition, and the design decides the order they run in and what happens when one of them fails.
+
+Use it when a task is too large for a single workflow, or when the next step depends on whether the previous step succeeded. For example, sign in, then open an application on success, or show an error message on failure.
+
+### Chained Workflows Designer
+
+Designs are created in the **Chained Workflows Designer**, a separate app installed with Workflow Automation. You can open it in three ways:
+
+- Click the **Chained workflows** button in the toolbar at the top of the Workflow Editor.
+- Use the **Chained Workflows Designer** shortcut on the desktop or in the Start menu.
+- Double-click an existing `.idcwf` design file.
+
+![Chained Workflows Designer](/images/vendor/workflow_automation/automation_app/chained_workflows_designer.png)
+> **Figure:** The Chained Workflows Designer with a design on the canvas.
+
+#### Building a design
+
+The canvas (designer pane) always contains two fixed rectangles, **Start** and **Finish**. Between them you place the workflows:
+
+1. Drag (or double-click) a workflow from the list onto the canvas. It appears as a rectangle.
+2. Hover over a rectangle and drag from one of its edge points to another rectangle to connect them.
+3. Connect **Start** to the workflow that begins the chain.
+4. Connect the last workflow to **Finish**.
+
+Scroll to zoom, and drag the background to pan.
+
+Every workflow rectangle has two outputs:
+
+| Output         | When it is followed                          |
+| -------------- | -------------------------------------------- |
+| **On Success** | The workflow finished successfully.          |
+| **On Failure** | The workflow ended with a failure.           |
+
+Connect each output to whichever workflow should run next; you can leave an output unconnected if nothing should follow it.
+
+#### Entry workflows
+
+A workflow connected directly from **Start** is an **entry workflow**: it is the one that can start the chain on its own, using its own [trigger condition](#trigger-condition). It can use any trigger condition except **None**. A connection from **Start** only arms the workflow with its own trigger, and **None** never fires, so a **None** workflow placed there would never run. Every other workflow in the design runs only when a connection leads to it, no matter what its own trigger condition is.
+
+Connecting **Start** to more than one workflow creates several independent entries, each starting its own chain when its trigger fires.
+
+For a workflow that should never start on its own, set its trigger condition to **None** in the Workflow Editor. Such a workflow runs only through the chain, and it is the only kind that can be placed on the canvas more than once.
+
+#### Validating a design
+
+Click **Validate** to check the design before you save it. Validation reports errors that prevent the design from running, such as:
+
+- The design contains a loop and would run forever.
+- A workflow file referenced by a rectangle no longer exists.
+- A workflow (other than one with the **None** trigger) is placed more than once.
+- Two workflows use the same single-instance trigger condition (**Security key presence (card tap)**, **Screen unlock**, **Transparent unlock**, or **User logon**).
+- Two **Application launch** workflows watch the same process.
+
+It also reports warnings for things that are allowed but probably unintended, such as a workflow that cannot be reached from **Start**, or one with no path to **Finish**.
+
+#### Saving a design
+
+**Save** writes the design as an `.idcwf` package. The package is self-contained: it holds the design plus a copy of every workflow it uses, so it can be moved to another computer without the original workflow files.
+
+### Running a chained workflows design
+
+To put a design into service, register it with [`automationcli`](#registering-a-chained-workflows-design):
+
+```bash
+automationcli chained set --path "C:\ProgramData\IDmelon\Workflow Automation\workflows\sample.idcwf"
+```
+
+Add `--user "NAME"` to apply the design to a single Windows user instead of every user on the machine.
+
+The Workflow Runner then arms only the design's entry workflows. When an entry's trigger fires, the chain runs one workflow at a time, following the **On Success** and **On Failure** connections until it reaches **Finish** or runs out of connections.
+
+[Shared variables](#shared-variables) travel along the connections, so a workflow can pass values to the workflows that run after it.
+
+> **Note**: A chained design and individually registered workflows cannot be active at the same time. While a design is set, individually registered workflows are ignored and `automationcli workflows add` is blocked. Remove the design to go back to running workflows individually.
+>
+> **Note**: You can set one design per Windows user, or a single design for all users, but not both at once.
+
 ## Workflow Runner
 
 Workflow Runner is a Windows **service** (**IDmelon Workflow Runner**) that runs your registered workflows automatically, based on each workflow's [trigger condition](#trigger-condition). It is installed together with Workflow Automation, runs in the background for all users, and starts with Windows.
@@ -974,7 +1109,20 @@ To make a workflow run automatically:
    - **Application launch**, **Screen unlock**, or **User logon**: register with [`automationcli`](#registering-workflows-with-automationcli).
    - **Security key presence (card tap)** or **Transparent unlock**: register through Accesskey (see [Configuring Accesskey](#configuring-accesskey)).
 
+To run several workflows one after another instead of individually, register a [chained workflows](#chained-workflows) design (see [Registering a chained workflows design](#registering-a-chained-workflows-design)).
+
 > You can control whether the runner starts with Windows from the Settings panel (see [Startup behavior for Workflow Runner](#startup-behavior-for-workflow-runner)).
+
+### While a workflow is running
+
+When the runner starts a workflow, an animated spinner appears in the Windows notification area, with a **Workflow is running** message above it and the workflow's name in its menu. To end the run before it finishes, right-click the spinner and select **Stop workflow**.
+
+> **Note**: The spinner appears only when a user is signed in with a desktop available. Stopping a workflow this way is not treated as a failure of the workflow.
+>
+> **Note**: In a [chained workflows](#chained-workflows) design, stopping a workflow this way stops the whole chain. The **On Failure** connections are not followed, because the stop is a user decision rather than a workflow failure.
+
+![Workflow running indicator](/images/vendor/workflow_automation/automation_app/workflow_running_indicator.png)
+> **Figure:** The running workflow indicator and its Stop workflow menu.
 
 ### Registering workflows with automationcli
 
@@ -994,6 +1142,35 @@ automationcli workflows add --path "C:\ProgramData\IDmelon\Workflow Automation\W
 ```
 
 > **Note**: `automationcli` handles the **Application launch**, **Screen unlock**, and **User logon** triggers, which the runner watches for directly. The **Security key presence (card tap)** and **Transparent unlock** triggers are driven by Accesskey instead, see [Configuring Accesskey](#configuring-accesskey).
+
+### Registering a chained workflows design
+
+Use the `chained` commands to choose which [chained workflows](#chained-workflows) design the runner executes.
+
+| Command                                                           | Description                                                                                                |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `automationcli chained set --path "DESIGN.idcwf" [--user "NAME"]` | Set the design to run. Use `--user` to scope it to a specific Windows user; omit it to apply to all users. |
+| `automationcli chained remove [--user "NAME"]`                    | Remove the design registered for a user, or the all-users design when `--user` is omitted.                 |
+| `automationcli chained reset`                                     | Remove all registered designs.                                                                             |
+| `automationcli chained show`                                      | Show the designs that are currently set.                                                                   |
+
+Example:
+
+```bash
+automationcli chained set --path "C:\ProgramData\IDmelon\Workflow Automation\workflows\sample.idcwf"
+```
+
+> **Note**: Setting a design disables individually registered workflows, and an all-users design cannot be combined with per-user designs.
+
+### Managing the Workflow Runner service
+
+Use the `service` commands to control the **IDmelon Workflow Runner** service, for example after changing a registration. These commands must be run as an administrator.
+
+| Command                         | Description                          |
+| ------------------------------- | ------------------------------------ |
+| `automationcli service start`   | Start the Workflow Runner service.   |
+| `automationcli service stop`    | Stop the Workflow Runner service.    |
+| `automationcli service restart` | Restart the Workflow Runner service. |
 
 ### Configuring Accesskey
 
