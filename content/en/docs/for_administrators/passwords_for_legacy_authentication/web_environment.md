@@ -48,13 +48,13 @@ Click the IDmelon WebLogin icon in the toolbar. Under Reader Driver Connection S
 
 Each application credential is onboarded once. After that, the user never types the username or password again.
 
-1.	Navigate to the sign-in page of the target web application.
+1. Navigate to the sign-in page of the target web application.
 
-2.	Click into the username field. Because no credential has been onboarded for this site yet, the IDmelon WebLogin dialog opens automatically.
+2. Click into the username field. Because no credential has been onboarded for this site yet, the IDmelon WebLogin dialog opens automatically.
 
-3.	Enter the username and password for the application.
+3. Enter the username and password for the application.
 
-4.	Leave **Require User Verification** enabled and enter the PIN of your security key, then click **Submit**.
+4. Leave **Require User Verification** enabled and enter the PIN of your security key, then click **Submit**.
 
 ![alt](/images/vendor/weblogin/password_enrollment.png)
 
