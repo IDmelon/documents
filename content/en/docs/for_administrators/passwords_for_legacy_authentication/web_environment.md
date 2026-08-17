@@ -13,7 +13,7 @@ weight: 67000
 toc: true
 ---
 
-For web applications that do not support passkeys, users are able to use the **tap-to-login** solution with the IDmelon card reader driver, IDmelon WebLogin browser extension, and a web password which can be assigned to the card owner from the IDmelon panel or onboarding from the desired web application. 
+For web applications that do not support passkeys, users are able to use the **tap-to-login** solution with the IDmelon card reader driver, IDmelon WebLogin browser extension, and a web password which can be assigned to the card owner from the IDmelon panel or onboarding from the desired web application.
 
 ## Install and Configure the WebLogin Extension
 
@@ -46,28 +46,28 @@ Click the IDmelon WebLogin icon in the toolbar. Under Reader Driver Connection S
 
 ## First-Time Credential Onboarding
 
-Each application credential is onboarded once. After that, the user never types the username or password again. 
+Each application credential is onboarded once. After that, the user never types the username or password again.
 
-1.	Navigate to the sign-in page of the target web application. 
+1.	Navigate to the sign-in page of the target web application.
 
-2.	Click into the username field. Because no credential has been onboarded for this site yet, the IDmelon WebLogin dialog opens automatically. 
+2.	Click into the username field. Because no credential has been onboarded for this site yet, the IDmelon WebLogin dialog opens automatically.
 
-3.	Enter the username and password for the application. 
+3.	Enter the username and password for the application.
 
 4.	Leave **Require User Verification** enabled and enter the PIN of your security key, then click **Submit**.
 
 ![alt](/images/vendor/weblogin/password_enrollment.png)
 
-**What happens next.**  The credential is saved to the user's IDmelon workspace and bound to the security key. To remove it later, sign in to the IDmelon panel — it cannot be deleted from the browser. Enter the credentials carefully, because an incorrect value has to be removed from the panel before it can be replaced. 
+**What happens next.**  The credential is saved to the user's IDmelon workspace and bound to the security key. To remove it later, sign in to the IDmelon panel — it cannot be deleted from the browser. Enter the credentials carefully, because an incorrect value has to be removed from the panel before it can be replaced.
 
 ## Everyday Use -- Tap to Log In
 
 Once the credential is onboarded, signing in takes two actions.
 
-1. Open the application's sign-in page and click into the username field. 
+1. Open the application's sign-in page and click into the username field.
 
-2. Tap your contactless card on the reader. 
+2. Tap your contactless card on the reader.
 
 3. Enter your security key PIN when prompted and click **OK**.
 
-The username and password fields are populated automatically and the form is submitted. This is how IDmelon delivers passwordless sign-in for applications that do not support passkeys — the password still exists, but the user never sees it, types it, or needs to remember it. 
+The username and password fields are populated automatically and the form is submitted. This is how IDmelon delivers passwordless sign-in for applications that do not support passkeys — the password still exists, but the user never sees it, types it, or needs to remember it.
