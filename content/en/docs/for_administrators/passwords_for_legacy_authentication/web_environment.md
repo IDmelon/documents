@@ -13,16 +13,61 @@ weight: 67000
 toc: true
 ---
 
-In the web environment, users are able to use the **tap-to-login** solution for website accounts by the use of IDmelon card reader driver, IDmelon WebLogin Chrome extension and a Web Password which is assigned to the card owner in corresponding workspace in IDmelon panel.
-While a webpage which contains credential forms is loaded and a registered card is tapped, if a web password for that URL exists for the card owner, it will be filled automatically.
-In case the owner has no passwords for that URL, an onboarding prompt comes up to let the user add a web password for that URL immediately. This password will be saved for the card owner in IDmelon panel and can be used for later tap to login attempts.
+For web applications that do not support passkeys, users are able to use the **tap-to-login** solution with the IDmelon card reader driver, IDmelon WebLogin browser extension, and a web password which can be assigned to the card owner from the IDmelon panel or onboarding from the desired web application.
 
-### Step by step guide
+## Install and Configure the WebLogin Extension
 
-1. Install IDmelon card reader driver.
-2. Install IDmelon WebLogin extension from Chrome web store.
-3. Navigate to the login page of the website for which you want to add a password and tap the card to start the onboarding procedure; Or you can add a new Web password through your workspace in IDmelon panel where you need to enter the URL of the login page. To make sure you have entered the right URL, click on the Extension icon in your browser while being in the login page and copy the URL which it recognizes.
+The following steps are performed by the end user, or by desktop support on the user's behalf. Microsoft Edge is used throughout this guide.
 
-> **Note:** Each password can require user verification to be filled. When the user verification is enabled for a password, the card PIN will be asked before filling the credentials.
->
-> **Note:** To enable user verification for a password, either toggle the corresponding button in the IDmelon Admin Panel or enter the security key PIN in the PC onboarding prompt.
+### Install the Extension in Microsoft Edge
+
+Download the extension from the [IDmelon downloads page](https://idmelon.com/docs/downloads) > Workflow and Automation > WebLogin Extension.
+
+1. Install the IDmelon WebLogin extension in Microsoft Edge.
+2. Pin the extension to teh toolbar so its status icon is always visible.
+
+### Allow the Extension in InPrivate Mode
+
+Open the Extensions menu in the toolbar, click on the three dots (...) next to IDmelon WebLogin, and select Manage extension.
+
+![alt](/images/vendor/weblogin/manage_extension.png)
+
+On the extension details page, turn on Allow in InPrivate and, if your applications require it, Allow access to file URLs. Leave Site access set to On all sites so WebLogin can detect sign-in forms wherever they appear.
+
+![alt](/images/vendor/weblogin/inprivate_setting.png)
+
+### Confirm the Card Reader is Connected
+
+Click the IDmelon WebLogin icon in the toolbar. Under Reader Driver Connection Status you should see a green check mark and the word Connected. The footer should also confirm that the extension is connected to your organization's server.
+
+![alt](/images/vendor/weblogin/driver_connection_status.png)
+
+**If the status is not green:** check that the reader is plugged in, that the IDmelon Reader Driver is installed and running, and that the driver has been pointed at the driver has been pointed at the correct server (US, EU, on-prem).
+
+## First-Time Credential Onboarding
+
+Each application credential is onboarded once. After that, the user never types the username or password again.
+
+1. Navigate to the sign-in page of the target web application.
+
+2. Click into the username field. Because no credential has been onboarded for this site yet, the IDmelon WebLogin dialog opens automatically.
+
+3. Enter the username and password for the application.
+
+4. Leave **Require User Verification** enabled and enter the PIN of your security key, then click **Submit**.
+
+![alt](/images/vendor/weblogin/password_enrollment.png)
+
+**What happens next.**  The credential is saved to the user's IDmelon workspace and bound to the security key. To remove it later, sign in to the IDmelon panel — it cannot be deleted from the browser. Enter the credentials carefully, because an incorrect value has to be removed from the panel before it can be replaced.
+
+## Everyday Use -- Tap to Log In
+
+Once the credential is onboarded, signing in takes two actions.
+
+1. Open the application's sign-in page and click into the username field.
+
+2. Tap your contactless card on the reader.
+
+3. Enter your security key PIN when prompted and click **OK**.
+
+The username and password fields are populated automatically and the form is submitted. This is how IDmelon delivers passwordless sign-in for applications that do not support passkeys — the password still exists, but the user never sees it, types it, or needs to remember it.
