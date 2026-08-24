@@ -14,6 +14,19 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.186.0
+
+July 6, 2026
+
+#### New Features
+
+- A new tab has appeared! Manage all workflows from the Provisioning tab to streamline user onboarding and passkey provisioning.
+- Polski? Deutsch? Now, self-service customization supports these languages as well.
+
+#### Bug Fixes
+
+- Discrepancies between number of security keys shown in the Users tab and the actual number of security keys has been fixed.
+
 ### IDmelon Panel 2.183.0
 
 June 25, 2026
