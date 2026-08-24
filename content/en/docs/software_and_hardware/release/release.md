@@ -14,6 +14,16 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.192.4
+
+August 18, 2026
+
+#### Bug Fixes
+
+- Fixes to Microsoft passkeys for Entra GCC High environments.
+- Password autofill for shared mobile has been fixed.
+- Admins of multiple Organization Units can be easily identified as roles are shown in separate rows.
+
 ### IDmelon Panel 2.192.0
 
 July 29, 2026
