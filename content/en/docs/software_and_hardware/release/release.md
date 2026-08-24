@@ -14,6 +14,24 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.192.0
+
+July 29, 2026
+
+#### New Features & Improvements
+
+- IDmelon now supports integrations with Entra GCC High environments.
+- Looking to export authentication logs in CSV or PDF formats? Admins can now do this from the /dashboard/users and /dashboard/credential-reports pages.
+- When a Microsoft passkey is deleted from IDmelon, this one is automatically deleted on Entra ID.
+- Improvements to use passkeys offline have been implemented.
+- Improvements to the new Provisioning tab have been made to better steamline user onboarding and passkey provisioning.
+
+#### Bug Fixes
+
+- Smartphone security key activation via identity verification was failing. This issue has now been fixed.
+- Passkey provisioning workflows were unexpectedly showing a "user not found" error for users outside of the workflow group. This issue has been fixed.
+- In-app purchases from IDmelon Authenticator app for personal accounts has been fixed after payments were not being validated correctly.
+
 ### IDmelon Panel 2.186.0
 
 July 6, 2026
