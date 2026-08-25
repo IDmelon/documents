@@ -422,16 +422,14 @@ Run the below command in either Command Prompt or PowerShell to configure login-
 With Command Prompt:
 
 ```cmd
-accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u https://myapps.microsoft.com?login_hint=${UserId} -m passkey
+accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u "https://myapps.microsoft.com?login_hint={UserId}" -m passkey
 ```
 
 With PowerShell:
 
 ```powershell
-accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u https://myapps.microsoft.com?login_hint='${UserId}' -m passkey
+accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u "https://myapps.microsoft.com?login_hint={UserId}" -m passkey
 ```
-
-*Note: Since the login_hint attribute is passed as a parameter, PowerShell requires the ${} syntax to be enclosed in single quotes, like '${UserId}'.*
 
 ## Step 5: Set the Self-Service URL (Optional)
 
