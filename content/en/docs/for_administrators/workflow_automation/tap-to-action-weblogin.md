@@ -32,14 +32,14 @@ First, install the latest version of the desired reader (AccessKey) and then the
 To switch to automation mode, you must first enter the following command in a PowerShell.
 
 ```shell
-accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u https://myapps.microsoft.com?login_hint=${UserId} -m passkey
+accesskeycli workflow-automation -s -t weblogin-extension -a login-logout -u "https://myapps.microsoft.com?login_hint={UserId}" -m passkey
 ```
 
 - `-s`: To activate automation and configure it.
 - `-t weblogin-extension`: This value is always fixed.
 - `-a login-logout`: To set the automation actions. In this case, both the login and logout procedures can be
   automated. (Other possible actions: `-a login` , `-a logout`)
-- `-u https://myapps.microsoft.com?login_hint=${UserId}`: To set the target URL. In this case, we set the Microsoft 365
+- `-u "https://myapps.microsoft.com?login_hint={UserId}"`: To set the target URL. In this case, we set the Microsoft 365
   URL.
 - `-m passkey`: Method of automation which can be passkey or password
 
