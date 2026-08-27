@@ -26,9 +26,9 @@ August 27, 2026
 
 #### Bug Fixes
 
-- Card activation via email workflows are back to normal.
-- Small fixes to security keys of Platform type have been made.
+- Card activation via email workflows were failing to send emails. This issue has been fixed.
 - The Microsoft passkey provisioning workflow was not activating for users not imported from Entra. The workflow will now run for all users regardless of where they were imported.
+- Small fixes to security keys of Platform type have been made.
 
 ### IDmelon Panel 2.192.4
 
