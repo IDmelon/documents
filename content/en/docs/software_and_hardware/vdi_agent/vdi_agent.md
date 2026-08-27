@@ -87,17 +87,15 @@ Then set **Self-Service URL** to that address.
 
 This field is optional. If you leave it empty, an unenrolled badge shows the **This badge is not enrolled.** error as before.
 
-When the agent opens the portal, it appends the tapped badge ID to the configured URL as the `id` query parameter:
-
 ### Self-Service Enrollment User Experience
 
 1. The user taps a badge that is not enrolled.
-2. The agent opens the self-service portal in an in-app window titled **Enroll your badge**, with the badge ID already passed to the page. The tap screen behind it shows a notice that the enrollment page is open.
+2. The agent opens the self-service portal in an in-app window titled **Enroll your badge**.
 3. The user completes the enrollment steps on the portal.
 4. The user selects **Back to Home** to close the enrollment window. This also works as a cancel, if the user decides not to enroll.
 5. The agent returns to the tap screen. The user taps the badge again to sign in.
 
-> **Note:** The enrollment window uses its own browser session, which is cleared when the window closes, so nothing carries over to the next user. Badge taps are ignored while the enrollment window is open.
+> **Note:** Badge taps are ignored while the enrollment window is open.
 
 ## VDI Mode
 
