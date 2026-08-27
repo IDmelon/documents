@@ -14,6 +14,22 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.
+
+August 27, 2026
+
+#### New Features & Improvements
+
+- Dashboard + Home = Our new Panel landing page. Find user analytics, new provisioning tasks' status, and quick actions from your Panel's home page.
+- Activity logs have a new look. Find more information about your users' activity logs by clicking on the plus (+) icon to the left of the log record.
+- Like activity logs, passkeys have a plus (+) icon to the left of the record with more information on the passkey.
+
+#### Bug Fixes
+
+- Card activation via email workflows were failing to send emails. This issue has been fixed.
+- The Microsoft passkey provisioning workflow was not activating for users not imported from Entra. The workflow will now run for all users regardless of where they were imported.
+- Small fixes to security keys of Platform type have been made.
+
 ### IDmelon Panel 2.192.4
 
 August 18, 2026
@@ -30,11 +46,11 @@ July 29, 2026
 
 #### New Features & Improvements
 
-- IDmelon now supports integrations with Entra GCC High environments.
 - Looking to export authentication logs in CSV or PDF formats? Admins can now do this from the /dashboard/users and /dashboard/credential-reports pages.
 - When a Microsoft passkey is deleted from IDmelon, this one is automatically deleted on Entra ID.
 - Improvements to use passkeys offline have been implemented.
 - Improvements to the new Provisioning tab have been made to better steamline user onboarding and passkey provisioning.
+- IDmelon now supports integrations with Entra GCC High environments
 
 #### Bug Fixes
 
