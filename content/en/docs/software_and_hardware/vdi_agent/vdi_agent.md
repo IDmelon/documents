@@ -54,6 +54,48 @@ If the badge ID is read in the wrong order, enable **Reverse Byte Order**.
 - **Workspace ID:** Optional. Use this when requests should be scoped to a specific IDmelon workspace.
 - **API Key:** Optional. Required only when your workspace enforces authenticated clients (Admin Panel > Authentication > API Key Management (API Key Type: Clients)).
 - **Base URL:** Optional. Use this for on-premise environments.
+- **Self-Service URL:** Optional. The self-service enrollment portal opened in-app when a tapped badge is not enrolled yet. See [Self-Service Badge Enrollment](#self-service-badge-enrollment).
+
+## Self-Service Badge Enrollment
+
+When a user taps a badge that is not enrolled yet, the agent can open your self-service enrollment portal in an in-app window. The user enrolls the badge on the spot and then taps again to sign in.
+
+This works the same way in VDI Mode and Kiosk Mode.
+
+For background on the enrollment flow itself, see [Self-Service Enrollment Flow](/docs/for_administrators/users_and_security_keys_management/security_key_enrollment_flows/self_service_enrollment_flow/).
+
+The **Self-Service URL** in the agent must be configured for this to work.
+
+### Agent Configuration
+
+First, get the address of your self-service enrollment page from the IDmelon Admin Panel.
+
+On the IDmelon Admin Panel, navigate to **Security keys** and select the blue button named **Workflows** on the top-right side. Choose **Self-Service actions**, and copy the generated URL:
+
+```shell
+Security keys > Workflows > Self-Service actions
+```
+
+![Self-Service URL-1](/images/vendor/vdi_agent/IDmelon_Agent/self_service_url_1.png)
+![Self-Service URL-2](/images/vendor/vdi_agent/IDmelon_Agent/self_service_url_2.png)
+![Self-Service URL-3](/images/vendor/vdi_agent/IDmelon_Agent/self_service_url_3.png)
+
+Then set **Self-Service URL** to that address.
+
+- On Windows and Linux, open the app menu, select **Configuration**, and fill in **Self-Service URL**.
+- On IGEL OS, set it from `IGEL Setup > Apps > IDmelon Agent > Agent Settings > Self-Service URL`.
+
+This field is optional. If you leave it empty, an unenrolled badge shows the **This badge is not enrolled.** error as before.
+
+### Self-Service Enrollment User Experience
+
+1. The user taps a badge that is not enrolled.
+2. The agent opens the self-service portal in an in-app window titled **Enroll your badge**.
+3. The user completes the enrollment steps on the portal.
+4. The user selects **Back to Home** to close the enrollment window. This also works as a cancel, if the user decides not to enroll.
+5. The agent returns to the tap screen. The user taps the badge again to sign in.
+
+> **Note:** Badge taps are ignored while the enrollment window is open.
 
 ## VDI Mode
 
@@ -107,6 +149,14 @@ After the remote session is active, the user can tap the badge again to disconne
 Alternatively, use **Disconnect** from the app menu.
 
 ![Disconnect Option](/images/vendor/vdi_agent/IDmelon_Agent/disconnect_option.png)
+
+### Auto-Launch for a Single Desktop
+
+On Omnissa Horizon, if the signed-in user is entitled to exactly one desktop, the agent starts that desktop directly instead of leaving the user on the Horizon client's desktop list.
+
+If the user is entitled to more than one desktop, the Horizon client opens its desktop list as usual and the user picks one.
+
+This behavior is automatic and requires no configuration. It applies to Horizon only; Citrix sessions are not affected.
 
 ### SSO Integration with IDmelon
 
