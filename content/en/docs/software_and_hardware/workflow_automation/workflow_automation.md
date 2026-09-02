@@ -3,7 +3,7 @@ title: "Workflow Automation"
 description: ""
 lead: ""
 date: 2025-12-14T11:07:06+03:30
-lastmod: 2026-07-22T11:07:06+03:30
+lastmod: 2026-08-31T11:07:06+03:30
 draft: false
 images: []
 type: docs
@@ -82,15 +82,22 @@ The available trigger conditions are:
 | **Security key presence (card tap)** | A registered security key (badge/card) is tapped on the reader.                      |
 | **Application launch**               | A specific application (process) starts.                                             |
 | **Screen unlock**                    | The Windows session is unlocked.                                                     |
+| **Screen lock**                      | The Windows session is locked.                                                       |
 | **User logon**                       | The user logs on to Windows.                                                         |
 | **Transparent unlock**               | The workstation is unlocked transparently with the security key.                     |
+| **Transparent lock**                 | The workstation is locked transparently with the security key.                       |
+| **Window appear**                    | A window matching the criteria you define appears on the desktop.                    |
 | **None**                             | Never on its own; runs only inside a [chained workflows](#chained-workflows) design. |
 
 > The default trigger condition is **Security key presence (card tap)**.
+>
+> **Note:** Setting the trigger condition only records *when* the workflow should run. For the workflow to actually run automatically, export it and then register it: use [`automationcli`](#registering-workflows-with-automationcli) for the **Application launch**, **Screen unlock**, **Screen lock**, **User logon**, and **Window appear** triggers, or [Accesskey](#configuring-accesskey) for the **Security key presence (card tap)**, **Transparent unlock**, and **Transparent lock** triggers. See [Workflow Runner](#workflow-runner).
+>
+> **Note:** A workflow whose trigger condition is **None** is not registered on its own. It runs only as a step in a [chained workflows](#chained-workflows) design.
 
 #### Interrupting a running workflow
 
-Only one workflow runs at a time. When you choose **Security key presence (card tap)** or **Application launch**, the **Stop a running workflow to start this one** option controls what happens if another workflow is still running:
+Only one workflow runs at a time. When you choose **Security key presence (card tap)**, **Application launch**, or **Window appear**, the **Stop a running workflow to start this one** option controls what happens if another workflow is still running:
 
 - **Enabled** (the default): the running workflow is stopped and this one starts.
 - **Disabled**: the running workflow is left alone and this trigger is skipped.
@@ -103,14 +110,44 @@ When you choose **Application launch**, configure the following:
 
 - **Process to watch for**: pick a running process or type its name without the `.exe` extension (for example, `notepad`).
 - **Ignore previously running processes**: when enabled, the workflow triggers for each newly started instance, even while another instance is already running. When disabled, it triggers only when the application goes from *not running* to *running*.
-- **Execution limit**: how many times the workflow may run:
-  - **No limit**: every time the trigger fires.
-  - **Once per login / unlock**: at most once per login session.
-  - **Specific number of times**: a fixed number of runs that you enter.
 
-> **Note:** Setting the trigger condition only records *when* the workflow should run. For the workflow to actually run automatically, export it and then register it: use [`automationcli`](#registering-workflows-with-automationcli) for the **Application launch**, **Screen unlock**, and **User logon** triggers, or [Accesskey](#configuring-accesskey) for the **Security key presence (card tap)** and **Transparent unlock** triggers. See [Workflow Runner](#workflow-runner).
+#### Window appear options
+
+When you choose **Window appear**, describe the window to watch for. The criteria are combined, so a window must satisfy all of the ones you fill in:
+
+- **Pick an open window**: an optional shortcut. Choosing a window that is open right now fills in the fields below with its values, which you can then adjust.
+- **Process**: pick a running process or type its name without the `.exe` extension.
+- **Window title**: the text to compare against the window's title, together with the match mode next to it:
+
+  | Match mode   | How the title is compared                                                                     |
+  | ------------ | --------------------------------------------------------------------------------------------- |
+  | **Contains** | The title must contain this text. This is the default; leave the title empty to match any.    |
+  | **Exact**    | The whole title must match.                                                                   |
+  | **Wildcard** | `*` matches any text and `?` matches any single character (for example, `* - Google Chrome`). |
+  | **Regex**    | A .NET regular expression, matched anywhere in the title.                                     |
+
+  All of the modes ignore case.
+
+- **Advanced** → **Window class** (optional): the Win32 class name, for example `Chrome_WidgetWin_1`. Use it to tell a main application window apart from its dialogs and pop-ups.
+- **Ignore windows that are already open**: when enabled (the default), every window opened from now on runs the workflow, even while another matching window is already open. When disabled, the workflow runs only for the first matching window and does not run again until every matching window has closed.
+
+> **Note:** You must give at least one of **Process**, **Window title**, or **Window class**. A **Regex** title that is not a valid regular expression is rejected as well.
 >
-> **Note:** A workflow whose trigger condition is **None** is not registered on its own. It runs only as a step in a [chained workflows](#chained-workflows) design.
+> **Note:** Windows that were already open when the trigger is armed never start the workflow, whichever way **Ignore windows that are already open** is set. Switching tabs inside an application is not a new window either, so a browser that retitles itself as you browse does not run the workflow again.
+>
+> **Note:** Only the windows of the signed-in user are watched, so this trigger does not fire while nobody is signed in.
+
+#### Execution limit
+
+The **Execution limit** option is available for the **Application launch** and **Window appear** triggers, and controls how many times the workflow may run:
+
+- **No limit**: every time the trigger fires.
+- **Once per login / unlock**: at most once per login session.
+- **Specific number of times**: a fixed number of runs that you enter.
+
+#### Screen lock and Transparent lock
+
+The screen is locked while a **Screen lock** or **Transparent lock** workflow runs, so avoid actions that interact with the user interface, such as clicks, keystrokes, and UI element actions. They cannot reach the desktop and will fail. The Trigger Condition window shows a warning when you select one of these two conditions.
 
 ![Trigger condition window](/images/vendor/workflow_automation/automation_app/trigger_condition.png)
 > **Figure:** Choosing when the automation starts in the Trigger Condition window.
@@ -763,7 +800,11 @@ Fields that accept variables have a **variable** icon on their right side. Click
 
 In the **Variables** panel, each variable has a **Shared** checkbox. Shared variables are passed to the next workflows in a [chained workflows](#chained-workflows) design: when the workflow finishes, the values of its shared variables travel along the connections and become available to the workflows that run after it.
 
+A workflow also keeps its own shared variables between its own runs. When it runs again inside the same design, it starts with the values it shared the last time, so it can carry state (a counter, for example) from one run to the next. This applies to every workflow except one whose trigger condition is **None**, and the remembered values are discarded when the registered design changes or the Workflow Runner service restarts.
+
 > **Note**: Sharing a variable only matters inside a chained design. In a workflow that runs on its own, the setting has no effect.
+>
+> **Note**: Values arriving from a preceding workflow take precedence over the ones the workflow remembers from its own previous run.
 >
 > **Note**: The trigger context variables `UserId` and `CardId` always take precedence over incoming shared variables with the same name.
 
@@ -1070,8 +1111,10 @@ Click **Validate** to check the design before you save it. Validation reports er
 - The design contains a loop and would run forever.
 - A workflow file referenced by a rectangle no longer exists.
 - A workflow (other than one with the **None** trigger) is placed more than once.
-- Two workflows use the same single-instance trigger condition (**Security key presence (card tap)**, **Screen unlock**, **Transparent unlock**, or **User logon**).
+- Two workflows use the same single-instance trigger condition (**Security key presence (card tap)**, **Screen unlock**, **Screen lock**, **Transparent unlock**, **Transparent lock**, or **User logon**).
 - Two **Application launch** workflows watch the same process.
+- Two **Window appear** workflows watch for the same window.
+- A **Window appear** workflow has no window criteria, or its title is an invalid regular expression.
 
 It also reports warnings for things that are allowed but probably unintended, such as a workflow that cannot be reached from **Start**, or one with no path to **Finish**.
 
@@ -1106,8 +1149,8 @@ To make a workflow run automatically:
 1. In the Workflow Editor, set the workflow's [trigger condition](#trigger-condition).
 2. [Export](#export-a-workflow) the workflow as a `.json` file.
 3. Register the exported workflow so the runner picks it up, using the method that matches its trigger:
-   - **Application launch**, **Screen unlock**, or **User logon**: register with [`automationcli`](#registering-workflows-with-automationcli).
-   - **Security key presence (card tap)** or **Transparent unlock**: register through Accesskey (see [Configuring Accesskey](#configuring-accesskey)).
+   - **Application launch**, **Screen unlock**, **Screen lock**, **User logon**, or **Window appear**: register with [`automationcli`](#registering-workflows-with-automationcli).
+   - **Security key presence (card tap)**, **Transparent unlock**, or **Transparent lock**: register through Accesskey (see [Configuring Accesskey](#configuring-accesskey)).
 
 To run several workflows one after another instead of individually, register a [chained workflows](#chained-workflows) design (see [Registering a chained workflows design](#registering-a-chained-workflows-design)).
 
@@ -1141,7 +1184,9 @@ Example:
 automationcli workflows add --path "C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json"
 ```
 
-> **Note**: `automationcli` handles the **Application launch**, **Screen unlock**, and **User logon** triggers, which the runner watches for directly. The **Security key presence (card tap)** and **Transparent unlock** triggers are driven by Accesskey instead, see [Configuring Accesskey](#configuring-accesskey).
+> **Note**: `automationcli` handles the **Application launch**, **Screen unlock**, **Screen lock**, **User logon**, and **Window appear** triggers, which the runner watches for directly. The **Security key presence (card tap)**, **Transparent unlock**, and **Transparent lock** triggers are driven by Accesskey instead, see [Configuring Accesskey](#configuring-accesskey).
+>
+> **Note**: For a **Window appear** workflow, `automationcli workflows list` also shows the window criteria the workflow watches for and its execution limit.
 
 ### Registering a chained workflows design
 
@@ -1174,7 +1219,7 @@ Use the `service` commands to control the **IDmelon Workflow Runner** service, f
 
 ### Configuring Accesskey
 
-Use Accesskey to register a workflow for the **Security key presence (card tap)** or **Transparent unlock** trigger.
+Use Accesskey to register a workflow for the **Security key presence (card tap)**, **Transparent unlock**, or **Transparent lock** trigger.
 
 1. Export the desired workflow from the Workflow Editor.
 
@@ -1190,6 +1235,12 @@ Use Accesskey to register a workflow for the **Security key presence (card tap)*
 
    ```bash
    accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "PATH_TO_WORKFLOW_FILE" --trigger-condition onTransparentUnlock
+   ```
+
+   For the **Transparent lock** trigger, add the `--trigger-condition onTransparentLock` option:
+
+   ```bash
+   accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "PATH_TO_WORKFLOW_FILE" --trigger-condition onTransparentLock
    ```
 
    > To disable the automation, enter the following command in PowerShell:
