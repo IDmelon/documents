@@ -17,7 +17,7 @@ toc: true
 Client applications need to be able to access the following addresses and IP addresses,
 so you should configure your firewall settings to allow access to these addresses.
 
-You need to grant access to the following addresses:
+For users located outside the EU, please grant access to the following addresses:
 
 * https://authnapi.idmelon.com
 * https://skm.idmelon.com
@@ -26,6 +26,16 @@ You need to grant access to the following addresses:
 * https://idmp.idmelon.com
 * https://notify.idmelon.com
 * https://notifyservice.idmelon.com
+
+For customers located in the EU, please grant access to the following addresses instead:
+
+* https://authnapi.eu.idmelon.com
+* https://skm.eu.idmelon.com
+* https://panel.eu.idmelon.com
+* https://login.eu.idmelon.com
+* https://idmp.eu.idmelon.com
+* https://notify.eu.idmelon.com
+* https://notifyservice.eu.idmelon.com
 
 ## Firewall Configuration Reminder
 
