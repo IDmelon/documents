@@ -3,7 +3,7 @@ title: "Workflow Automation"
 description: ""
 lead: ""
 date: 2025-12-14T11:07:06+03:30
-lastmod: 2026-08-31T11:07:06+03:30
+lastmod: 2026-09-08T11:07:06+03:30
 draft: false
 images: []
 type: docs
@@ -128,6 +128,7 @@ When you choose **Window appear**, describe the window to watch for. The criteri
 
   All of the modes ignore case.
 
+- **Matching timeout (seconds)**: how long a newly opened window is given to take on the title you entered. Applications often open a window with a placeholder title and set the real one a moment later, so the window is not judged the instant it appears. The default is `10` seconds, and the value must be between `1` and `300`.
 - **Advanced** → **Window class** (optional): the Win32 class name, for example `Chrome_WidgetWin_1`. Use it to tell a main application window apart from its dialogs and pop-ups.
 - **Ignore windows that are already open**: when enabled (the default), every window opened from now on runs the workflow, even while another matching window is already open. When disabled, the workflow runs only for the first matching window and does not run again until every matching window has closed.
 
@@ -136,6 +137,8 @@ When you choose **Window appear**, describe the window to watch for. The criteri
 > **Note:** Windows that were already open when the trigger is armed never start the workflow, whichever way **Ignore windows that are already open** is set. Switching tabs inside an application is not a new window either, so a browser that retitles itself as you browse does not run the workflow again.
 >
 > **Note:** Only the windows of the signed-in user are watched, so this trigger does not fire while nobody is signed in.
+>
+> **Note:** The **Matching timeout** applies only to the title. A window whose **Process** or **Window class** does not fit is dismissed straight away, because those cannot change after the window is created.
 
 #### Execution limit
 
@@ -876,6 +879,22 @@ To edit selectors of a UI element, double-click on the element that exists in th
 > **Note**: If you want to create a workflow that is going to run on other systems, be careful when choosing the selector and attributes so that the values are not dependent on your system.
 > For example, when the root view of an element is a window, the title of that window is browser-tab-dependent, so you can uncheck the Name attribute to avoid mismatches.
 
+##### Editing the elements of a selector
+
+Besides checking and unchecking the captured steps, you can change the path itself. The **Elements** panel offers:
+
+- **Add element**: the **+** button next to the **Elements** heading inserts a new step below the selected one.
+- **Duplicate**, **Change**, and **Delete**: available from the three-dot menu at the end of each element row.
+- **Reorder**: drag an element row to a new position in the list.
+
+**Add element** and **Change** open a small editor window where you set the step's **Type** (the UI element type, such as **Window**, **Pane**, or **Button**) and its **Id**, **Class**, and **Name** attributes. Every other attribute stays in the **Attributes** panel of the selector window.
+
+> **Note**: When you change the type of an existing element, the attributes that the new type also has are carried over, and the ones it does not have are dropped.
+>
+> **Note**: The first and last elements are always part of the path: the first anchors the search and the last is the element the action works on. They cannot be unchecked, and adding, deleting, or reordering elements keeps this in step.
+>
+> **Note**: A selector must keep at least one element, so **Delete** is unavailable when only one is left.
+
 ##### Multiple selectors
 
 A single UI element can have more than one selector. This is useful when the same element can be identified in different ways depending on the situation (for example, the target app looks slightly different across versions, layouts, or machines). When the workflow runs, the enabled selectors are tried in order, and the first one that locates the element on screen is used.
@@ -1160,12 +1179,15 @@ To run several workflows one after another instead of individually, register a [
 
 When the runner starts a workflow, an animated spinner appears in the Windows notification area, with a **Workflow is running** message above it and the workflow's name in its menu. To end the run before it finishes, right-click the spinner and select **Stop workflow**.
 
+When the run ends, the spinner is replaced for a few seconds by a green check mark and a **Workflow completed** message, or a red cross and a **Workflow failed** message, before the icon disappears.
+
 > **Note**: The spinner appears only when a user is signed in with a desktop available. Stopping a workflow this way is not treated as a failure of the workflow.
 >
 > **Note**: In a [chained workflows](#chained-workflows) design, stopping a workflow this way stops the whole chain. The **On Failure** connections are not followed, because the stop is a user decision rather than a workflow failure.
 
-![Workflow running indicator](/images/vendor/workflow_automation/automation_app/workflow_running_indicator.png)
-> **Figure:** The running workflow indicator and its Stop workflow menu.
+![Workflow running indicator](/images/vendor/workflow_automation/automation_app/workflow_running_indicator_1.png)
+![Workflow completed indicator](/images/vendor/workflow_automation/automation_app/workflow_running_indicator_2.png)
+> **Figure:** The workflow indicator while the workflow runs, and when it finishes.
 
 ### Registering workflows with automationcli
 
@@ -1177,6 +1199,7 @@ When the runner starts a workflow, an animated spinner appears in the Windows no
 | `automationcli workflows remove [--path "PATH.json"] [--user "NAME"]` | Remove a registered workflow. Without `--path`, it lists the registered workflows so you can choose one to remove. |
 | `automationcli workflows list`                                        | List the registered workflows with their user scope and trigger condition.                                         |
 | `automationcli workflows reset`                                       | Clear the list of registered workflows.                                                                            |
+| `automationcli workflows refresh`                                     | Make the runner re-read every registered workflow and re-arm its trigger, without changing the registration.       |
 
 Example:
 
@@ -1186,7 +1209,9 @@ automationcli workflows add --path "C:\ProgramData\IDmelon\Workflow Automation\W
 
 > **Note**: `automationcli` handles the **Application launch**, **Screen unlock**, **Screen lock**, **User logon**, and **Window appear** triggers, which the runner watches for directly. The **Security key presence (card tap)**, **Transparent unlock**, and **Transparent lock** triggers are driven by Accesskey instead, see [Configuring Accesskey](#configuring-accesskey).
 >
-> **Note**: For a **Window appear** workflow, `automationcli workflows list` also shows the window criteria the workflow watches for and its execution limit.
+> **Note**: For a **Window appear** workflow, `automationcli workflows list` also shows the window criteria the workflow watches for, its matching timeout, and its execution limit.
+>
+> **Note**: Use `refresh` after you export a workflow over one that is already registered. The runner does not watch the workflow files themselves, so it keeps using the trigger condition it read last until you refresh it. The reload takes about a second, and it also re-reads a registered [chained workflows](#chained-workflows) design.
 
 ### Registering a chained workflows design
 
