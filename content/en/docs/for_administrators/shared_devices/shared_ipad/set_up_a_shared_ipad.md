@@ -70,8 +70,7 @@ This tells Microsoft to trust sign-ins coming from IDmelon on the iPad.
 3. Under **Redirect URI**, choose **Mobile and desktop applications** and enter:
    `msauth.com.idmelon.idmelon-2://auth`
 4. Register the app.
-5. Open **Authentication** and check the redirect URI is listed under the **iOS / macOS**
-   platform. It must not also appear under **Web** or **Single-page application**.
+5. Open **Authentication** and check the redirect URI is listed under the **iOS / macOS** platform. It must not also appear under **Web** or **Single-page application**.
 
    ![The redirect URI under the iOS / macOS platform](/images/vendor/shared_ipads_new/shared_ipads_entra_redirect_uri.png)
 
