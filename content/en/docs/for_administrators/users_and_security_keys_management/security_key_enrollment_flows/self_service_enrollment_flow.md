@@ -14,6 +14,15 @@ toc: true
 mermaid: true
 ---
 
+Outline:
+1. Create provisioning task
+2. Self-service link
+2.a. (Optional) Customize self-service
+3. Select identifiers
+4. Go through self-service
+
+Self-service enrollment allows for a user-led onboarding approach. Admins can find their workspace's self-service link by navigating to the Customization tab and clicking on the **Open in new tab** link 
+
 This page describes how to build a self-service enrollment flow that supports user-driven provisioning.
 
 ## Enrollment Flow Design
