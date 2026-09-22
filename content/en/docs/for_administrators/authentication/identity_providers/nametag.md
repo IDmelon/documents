@@ -60,17 +60,17 @@ In the left sidebar, under **Environment settings**, open **OAuth**.
 
 On this page set three things. Do not use **Organization settings > API keys**. That key is not the OAuth client secret.
 
-**Client ID**
+### Client ID
 
 Copy **Client ID** with the **Copy** button. This is the public part of the API credentials. Paste it into IDmelon **Client ID**.
 
-**Client Secret**
+### Client Secret
 
 If the table already has a key and its **Enabled** switch is on, you can reuse it only if you still have the full secret. The table shows a prefix, not the secret.
 
 Otherwise click **Create new API key**. Keep the default name, create the key, and copy the full value before you leave the dialog. Nametag shows it only once. That value is the IDmelon **Client secret**. Confirm the new row is **Enabled**.
 
-**Callback URL**
+### Callback URL
 
 Click **Create a callback URL**. Paste the **Callback URL** you copied from IDmelon and save it.
 
