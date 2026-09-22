@@ -3,7 +3,7 @@ title: "Microsoft Entra ID (OIDC)"
 description: "Integrate Microsoft Entra ID with IDmelon over OpenID Connect"
 lead: ""
 date: 2026-09-18T00:00:00+00:00
-lastmod: 2026-09-18T00:00:00+00:00
+lastmod: 2026-09-22T00:00:00+00:00
 draft: false
 images: []
 menu:
@@ -13,9 +13,11 @@ weight: 25
 toc: true
 ---
 
-In this document you are going to set up `Entra ID` as an external IdP to IDmelon over OpenID Connect. IDmelon is the relying party.
+In this document you are going to set up **Entra ID** as an external IdP to IDmelon over OpenID Connect. IDmelon is the relying party.
 
-This is not the SAML guide. SAML Entra ID is [Azure Active Directory (AAD)](../aad/). On the picker, use the **Entra ID** card tagged **OIDC**. Do not use the **Entra ID** card tagged **SAML 2.0**, and do not open **Enterprise applications**.
+This is not the SAML guide. SAML Entra ID is [Azure Active Directory (AAD)](../aad/). On the picker, use the **Entra ID** card, then choose **OpenID Connect**. Do not choose **SAML 2.0**, and do not open **Enterprise applications**.
+
+Users are matched by `preferred_username` (the Entra UPN), not by the `email` claim. The Entra user must already exist in IDmelon with that same username.
 
 ## Initialize IDmelon Configuration as SP
 
@@ -23,19 +25,21 @@ Log in to the IDmelon panel. In the left menu open **Authentication**, then **Ex
 
 Click **+ New Identity Provider**.
 
-![Entra OIDC IDmelon 1](/images/vendor/sso/entra_id_oidc/entra_id_oidc_11.png)
+The next screen is **Select an App**. Under **Featured Applications**, click the **Entra ID** card. It shows both **OIDC** and **SAML** tags.
 
-The next screen is **Select an App**. Under **Featured Applications**, click the **Entra ID** card whose tag is **OIDC**.
+![Entra OIDC IDmelon 1](/images/vendor/sso/entra_id_oidc/entra_id_oidc_12.png)
 
-![Entra OIDC IDmelon 2](/images/vendor/sso/entra_id_oidc/entra_id_oidc_12.png)
+**Choose Protocol** opens. Select **OpenID Connect**. The card is tagged **OIDC** and **Recommended**. Click **Select OIDC**. Do not click **Select SAML**.
 
-The wizard title is **Entra ID (OIDC) Integration**. The steps are **App Profile**, **OIDC Client Settings**, **Scopes**, and **App Attributes Mapping**.
+![Entra OIDC IDmelon 2](/images/vendor/sso/entra_id_oidc/entra_id_oidc_13.png)
 
-On **App Profile**, **Application Name** is already `Entra ID`. Leave it and click **Next**.
+The wizard title is **Entra ID Integration**. The steps are **App Profile**, **OIDC Client Settings**, **Scopes and claims**, and **App Attributes Mapping**.
+
+On **App Profile**, **Name** is already `Entra ID`. Leave it and click **Next**.
 
 ![Entra OIDC IDmelon 3](/images/vendor/sso/entra_id_oidc/entra_id_oidc_14.png)
 
-**OIDC Client Settings** opens. Copy **Callback URL** with the copy button. You will paste that exact value as the Web redirect URI in Entra. The host depends on your environment. The path is `/api/sso/oidc/sp/callback`. Leave this window open.
+**OIDC Client Settings** opens. Copy **Callback URL** with the copy button. You will paste that exact value as the Web redirect URI in Entra. The host depends on your environment. The path is `/api/oidc/sp/callback`. Leave this window open.
 
 **Discovery URL** is prefilled as `https://login.microsoftonline.com/{tenant}/v2.0/.well-known/openid-configuration`. Do not click fetch yet. `{tenant}` is still in the URL, and the endpoint fields below are empty until you replace it.
 
@@ -43,7 +47,7 @@ On **App Profile**, **Application Name** is already `Entra ID`. Leave it and cli
 
 ## Configuring Entra ID
 
-Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) and open **App registrations** (`Home > App registrations`).
+Sign in to the [Microsoft Entra admin center](https://entra.microsoft.com) or the [Azure portal](https://portal.azure.com) and open **App registrations** (`Home > App registrations`).
 
 Click **+ New registration**.
 
@@ -53,7 +57,7 @@ On **Register an application**:
 
 - **Name**: a display name, for example `IDmelon OIDC`.
 - **Supported account types**: **Single tenant only**. The line shows your directory name.
-- **Redirect URI**: in the platform dropdown choose **Web**, then paste the **Callback URL** copied from IDmelon. A green check means the URI format is accepted.
+- **Redirect URI**: in the platform dropdown choose **Web**, then paste the **Callback URL** copied from IDmelon.
 
 Click **Register**.
 
@@ -61,8 +65,8 @@ Click **Register**.
 
 The app **Overview** opens. Copy these two values. Do not click **Go to Enterprise applications**.
 
-- **Application (client) ID**. This is the IDmelon **Client ID**.
 - **Directory (tenant) ID**. This replaces `{tenant}` in the IDmelon discovery URL.
+- **Application (client) ID**. This is the IDmelon **Client ID**.
 
 **Redirect URIs** should read **1 web**. That is the callback you just registered.
 
@@ -88,17 +92,32 @@ The new row appears under **Client secrets**. Copy the **Value** column immediat
 Return to **OIDC Client Settings**.
 
 - In **Discovery URL**, replace `{tenant}` with the **Directory (tenant) ID** you copied. You can use the tenant domain instead, such as `contoso.onmicrosoft.com`. Fetch stays blocked while `{tenant}` is still in the URL.
-- Click the fetch button at the end of **Discovery URL**. IDmelon fills **Authorization endpoint**, **Token endpoint**, **JWKS URI**, and **UserInfo endpoint**. Do not type those by hand.
+- Click the fetch button at the end of **Discovery URL**. IDmelon fills **issuer**, **authorization_endpoint**, **token_endpoint**, **jwks_uri**, and **userinfo_endpoint**. Do not type those by hand.
 - Paste **Application (client) ID** into **Client ID**.
 - Paste the secret **Value** into **Client secret**.
 - Click **Next**.
 
-On **Scopes**, leave `openid`, `profile`, and `email`. The list is locked. Click **Next**.
+On **Scopes and claims**:
 
-On **App Attributes Mapping**, keep `email` → `email` and click **Confirm**. The Entra user must already exist in IDmelon with that email.
+- **Scopes**: leave `openid`, `profile`, and `email`. `"openid"` is always included.
+- **Requested claims**: leave empty. Entra sends the claims used here with the scopes.
 
-For that claim to be in the ID token, open the app registration, go to **Token configuration**, click **Add optional claim**, choose token type **ID**, check `email`, and add it. If Entra asks to turn on the Microsoft Graph `email` permission, turn it on.
+Click **Next**.
 
-Open **Authentication > Authentication Profile** and select **External** in **Identity Provider**.
+![Entra OIDC IDmelon 5](/images/vendor/sso/entra_id_oidc/entra_id_oidc_16.png)
+
+On **App Attributes Mapping**, keep the one row and click **Confirm**:
+
+| Claim | IDmelon user field |
+| --- | --- |
+| `preferred_username` | `username` |
+
+![Entra OIDC IDmelon 6](/images/vendor/sso/entra_id_oidc/entra_id_oidc_17.png)
+
+You return to **External Identity Providers**. The new row shows **Entra ID**, protocol **OIDC**, and status **Ready**.
+
+![Entra OIDC IDmelon 7](/images/vendor/sso/entra_id_oidc/entra_id_oidc_18.png)
+
+Open **Authentication > Authentication Profile** and select **External** in **Identity Provider**. Save if the control is enabled.
 
 Users can then sign in through Entra ID. After they authenticate, Entra sends the browser to the callback URL you registered.
