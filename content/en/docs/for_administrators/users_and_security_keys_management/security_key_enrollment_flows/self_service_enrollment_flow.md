@@ -21,17 +21,15 @@ Outline:
 3. Select identifiers
 4. Go through self-service
 
-Self-service enrollment allows for a user-led onboarding approach. Admins can find their workspace's self-service link by navigating to the Customization tab and clicking on the **Open in new tab** link 
+Self-service enrollment allows for a user-led onboarding approach. This approach will allow users to add their own security keys without requiring an admin's assistance, and it works best when set up in a kiosk. Admins can find their workspace's self-service link by navigating to the Customization tab and clicking on the **Open in new tab** link 
 
-This page describes how to build a self-service enrollment flow that supports user-driven provisioning.
-
-## Enrollment Flow Design
+The self-service enrollment process is divided into three main steps:
 
 {{< mermaid >}}
 flowchart LR
-    P1["Phase 1: Identify the User"]
-    P2["Phase 2: Verify the User"]
-    P3["Phase 3: Configure PIN"]
+    P1["Step 1: Identify the User"]
+    P2["Step 2: Verify the User"]
+    P3["Step 3: Configure PIN"]
 
     P1 --> P2 --> P3
 
@@ -42,9 +40,45 @@ flowchart LR
 
 In most deployments:
 
-- **Phase 1** uses one or more identifiers to uniquely match the user.
-- **Phase 2** confirms the matched user before the security key is provisioned.
-- **Phase 3** is shown only when the applied security key policy requires a PIN.
+- **Step 1** consists of presenting an identifier (e.g., card, smartphone, biometrics) to enroll for a user.
+- **Step 2** confirms that the matched user is who they say they are before the security key is provisioned.
+- **Step 3 (optional)** is shown only when the applied security key policy requires a PIN.
+
+## Self-Service Setup
+
+By default, self-service is available in all workspaces without a limit on how many security keys a user can enroll. To find your organization's self-service link, navigate to the **Customization** tab and clicking on the **Open in new tab** link. 
+
+If you would like to limit or block the use of self-service, please contact a member from IDmelon's support team.
+
+### Customizing the Self-Service Page
+
+Customize available languages, titles, text boxes, buttons, and images of your self-service page by navigating to **Customization** > **Web Pages** > **Self-Service**. After finishing your customizations, click on the **Save & Close** button in the bottom right corner.
+
+To upload images, please contact a member from IDmelon's support team, and send them the images that you would like to upload.
+
+### Pre-Provisioning Security Keys
+
+To target specific users for self-service, please follow these steps:
+
+1. Navigate to **Provisioning** > **New Request**
+2. Select the user or user groups to which target self-service for and click on Next
+3. Select the type of security key device to provision (including its Storage Type and Integrated RPs like Entra ID) and click on Next
+4. Select **Self-Service** as the provisioning strategy
+a. Users will receive an email if the **Send activation email** option is checked
+5. Review the selected information and click on Create Request
+6. Click on **Provision Now** to create **Pending** security keys for the selected users
+
+Now, these users will be allowed to use self-service.
+
+### Verification Step
+
+After users have presented the credential that they would like to enroll to IDmelon, users must verify that they are who they say they are. For this, you can set up your organization with one of the following methods:
+
+- Email OTP
+- SMS OTP
+- User attribute input (e.g., full name, employee ID, etc.)
+- Identity verification with Nametag
+- Entra ID Login
 
 ## Self-Service Enrollment Phases
 
