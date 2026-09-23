@@ -41,7 +41,7 @@ In most deployments:
 
 ## Self-Service Setup
 
-By default, self-service is available in all workspaces without a limit on how many security keys a user can enroll. To find your organization's self-service link, navigate to the **Customization** tab and clicking on the **Open in new tab** link. 
+By default, self-service is available in all workspaces without a limit on how many security keys a user can enroll. To find your organization's self-service link, navigate to the **Customization** tab and clicking on the **Open in new tab** link.
 
 If you would like to limit or block the use of self-service, please contact a member from IDmelon's support team.
 
