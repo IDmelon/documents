@@ -1,5 +1,5 @@
 ---
-title: "Self-Service Enrollment Flow"
+title: "Self-Service Enrollment"
 description: ""
 lead: ""
 date: 2026-05-26T00:00:00+00:00
@@ -14,15 +14,17 @@ toc: true
 mermaid: true
 ---
 
-This page describes how to build a self-service enrollment flow that supports user-driven provisioning.
+Self-service enrollment allows for a user-led onboarding approach. This approach will allow users to add their own security keys without requiring an admin's assistance, and it works best when set up in a kiosk. Admins can find their workspace's self-service link by navigating to the Customization tab and clicking on the **Open in new tab** link.
 
-## Enrollment Flow Design
+![Self-Service IDmelon 1](/images/vendor/self_service/self_service_1.png)
+
+The self-service enrollment process is divided into three main steps:
 
 {{< mermaid >}}
 flowchart LR
-    P1["Phase 1: Identify the User"]
-    P2["Phase 2: Verify the User"]
-    P3["Phase 3: Configure PIN"]
+    P1["Step 1: Identify the User"]
+    P2["Step 2: Verify the User"]
+    P3["Step 3: Configure PIN"]
 
     P1 --> P2 --> P3
 
@@ -33,28 +35,49 @@ flowchart LR
 
 In most deployments:
 
-- **Phase 1** uses one or more identifiers to uniquely match the user.
-- **Phase 2** confirms the matched user before the security key is provisioned.
-- **Phase 3** is shown only when the applied security key policy requires a PIN.
+- **Step 1** consists of presenting an identifier (e.g., card, smartphone, biometrics) to enroll for a user.
+- **Step 2** confirms that the matched user is who they say they are before the security key is provisioned.
+- **Step 3 (optional)** is shown only when the applied security key policy requires a PIN.
 
-## Self-Service Enrollment Phases
+## Self-Service Setup
 
-The self-service enrollment process can generally be divided into three phases:
+By default, self-service is available in all workspaces without a limit on how many security keys a user can enroll. To find your organization's self-service link, navigate to the **Customization** tab and clicking on the **Open in new tab** link.
 
-| Phase | Purpose | Available Options / Notes |
-| --- | --- | --- |
-| **Phase 1 - Identify the User** | Users provide information so the system can uniquely identify them. | User ID / UPN, Employee ID, Phone Number, First Name + Last Name, Additional Attributes, or a combination of these. The selected combination should uniquely identify a user and should be based on information users commonly know. |
-| **Phase 2 - Verify the User** | After identification, the system verifies that the matched user is correct. | Email verification code, SMS verification code, Automatic verification using Code/API, Self-confirmation, or None. |
-| **Phase 3 - Configure PIN** | Users configure their PIN if required by the security key policy. | PIN setup is controlled by the configured security key policy. If required, users will be prompted to create and confirm their PIN during enrollment. |
+If you would like to limit or block the use of self-service, please contact a member from IDmelon's support team.
 
-## Verification Options
+### Customizing the Self-Service Page
 
-Below is a summary of the verification options in Phase 2:
+Customize available languages, titles, text boxes, buttons, and images of your self-service page by navigating to **Customization** > **Web Pages** > **Self-Service**. After finishing your customizations, click on the **Save & Close** button in the bottom right corner.
 
-| Verification Option | Description | Example Use Case |
-| --- | --- | --- |
-| **Email Code** | Sends a verification code to the user's registered email address. | Useful when email is a trusted and accessible channel for users. |
-| **SMS Code** | Sends a verification code to the user's registered phone number. | Useful when mobile phone numbers are available and trusted. |
-| **Automatic using Code / API** | Uses an existing system or association table to verify the user automatically. | For example, if a PACS, badge system, HR system, or internal database already maps users to badge numbers, that data can be validated through API without migrating it into IDmelon. |
-| **Self-confirmation** | Shows the matched user information and asks the user to confirm it is correct. | Useful to prevent mistakes when users enter Employee ID, phone number, or other identifiers. |
-| **None** | Skips the verification step after the user is identified. | Useful when the customer decides identification alone is sufficient for the enrollment flow. |
+To upload images, please contact an IDmelon's support team member with the images that you would like to upload. They will review and whitelist them to be used for your self-service page.
+
+Moreover, by default, self-service is only available for card enrollment. If you wish to activate other identifiers, please contact a member from IDmelon's support team.
+
+### Pre-Provisioning Security Keys
+
+Before allowing users to use the self service, create a provisioning request with the type of identifiers that you would like
+
+1. Navigate to **Provisioning** > **New Request**
+2. Select the user or user groups to which target self-service for and click on Next
+3. Select the type of security key device to provision (including its Storage Type and Integrated RPs like Entra ID) and click on Next
+4. Select **Self-Service** as the provisioning strategy
+a. Users will receive an email if the **Send activation email** option is checked
+5. Review the selected information and click on Create Request
+6. Click on **Close**, no need to click on **Provision Now**
+
+Now, these users will be allowed to use self-service.
+
+### Verification Step
+
+After users have presented the credential that they would like to enroll to IDmelon, users must verify that they are who they say they are. For this, you can set up your organization with one of the following methods:
+
+- Email OTP
+- SMS OTP
+- User attribute input (e.g., full name, employee ID, etc.)
+- Identity verification with Nametag ([docs](/docs/for_administrators/authentication/identity_providers/nametag/))
+- Entra ID OIDC ([docs](/docs/for_administrators/authentication/identity_providers/entra_id_oidc/))
+- Custom OIDC ([docs](/docs/for_administrators/authentication/identity_providers/add_an_oidc/))
+
+## Using Self-Service
+
+Set up the self-service page in a workstation and users will follow the three simple steps set up to enroll their security key.
