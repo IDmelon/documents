@@ -48,5 +48,5 @@ feature completely you can turn off **Handle Passkey Requests** option in extens
 
 ## Workflow Automation
 
-Refer
-to [Automation Extension](https://docs.idmelon.com/docs/for_administrators/workflow_automation/automation_extension/)
+On shared computers, WebLogin can sign users in to your web apps, and out again, with a single tap of their card. See
+[Workflow Automation](/docs/software_and_hardware/browser_extensions/weblogin/workflow_automation/).
