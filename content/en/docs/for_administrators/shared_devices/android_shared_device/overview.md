@@ -97,7 +97,10 @@ ready for everyone who uses it afterwards.
    — install the app, create the API key, and apply the managed configuration, with a full reference of the supported
    configuration keys.
 
-3. **[Home Screen and Kiosk Experience](/docs/for_administrators/shared_devices/android_shared_device/home_screen_and_kiosk/)**
+3. **[Badge Readers and Cards](/docs/for_administrators/shared_devices/android_shared_device/badge_readers_and_cards/)**
+   — the readers and cards badge login supports, and how to set it up for the cards your site issues.
+
+4. **[Home Screen and Kiosk Experience](/docs/for_administrators/shared_devices/android_shared_device/home_screen_and_kiosk/)**
    — decide how the device presents its apps, and set up multi-app kiosk mode with Managed Home Screen.
 
 > If your devices are already enrolled in Intune, skip the first page and start at

@@ -26,7 +26,9 @@ Mode**, and it documents every configuration key the app supports.
 - An administrator account for the [IDmelon Panel](https://panel.idmelon.com), with permission to create API keys.
 - Administrative access to the [Microsoft Entra admin center](https://entra.microsoft.com/), if you use MSAL.
 - What your login method needs:
-  - **Badge** — devices with built-in NFC, or an IDmelon bridge (central hub) to read badges.
+  - **Badge** — a supported badge reader: the phone's built-in NFC, a USB smart card reader, a keyboard-wedge reader,
+    or an IDmelon Hub. See
+    [Badge Readers and Cards](/docs/for_administrators/shared_devices/android_shared_device/badge_readers_and_cards/).
   - **Face** — the base URL and API key of your Matcher Server.
 
 ## Step 1 — Add IDmelon Authenticator to Intune
@@ -144,8 +146,7 @@ your deployment.
 |------------------------|---------------|-------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `shared_device_mode`   | Boolean       | Yes         | Set to `true`. Enables multi-user optimization and session clearing.                                                                                                       |
 | `api_key`              | String        | Yes         | Your unique Shared Mobile API key for workspace authentication. See [Step 2](#step-2--create-the-shared-mobile-api-key).                                                   |
-| `shared_login_method`  | String (JSON) | No          | Defines how the shared-device user signs in — by badge or by face. See [Shared login method](#shared-login-method).                                                        |
-| `built_in_nfc`         | Boolean       | No          | Whether to use the device's built-in NFC to tap the badge. When `false`, only the bridge (central hub) can be used to read badges.                                         |
+| `shared_login_method`  | String (JSON) | No          | Defines how the shared-device user signs in — by badge or by face — and, for badge, which readers are accepted and which card identifier is read. See [Shared login method](#shared-login-method). |
 | `shortcut_list`        | String (JSON) | No          | App and website shortcuts displayed on the home screen. See [Home screen shortcuts](#home-screen-shortcuts).                                                               |
 | `open_url_after_login` | String        | No          | A URL that opens automatically as soon as a user signs in.                                                                                                                 |
 | `base_api_url`         | String        | No          | The base API address of your on-premise server.                                                                                                                            |
@@ -159,7 +160,8 @@ your deployment.
 
 The `shared_login_method` key defines how a user signs in on the shared device. Two methods are supported.
 
-**Badge** — the user signs in by tapping their badge:
+**Badge** — the user signs in by tapping their badge. On its own, this accepts every supported reader and reads the
+card serial:
 
 ```json
 {
@@ -167,8 +169,21 @@ The `shared_login_method` key defines how a user signs in on the shared device. 
 }
 ```
 
-Pair this with `built_in_nfc` to control whether the badge is read by the device's own NFC radio or only by the
-bridge.
+Add `model` to accept a single kind of reader, and `config` to read HID PACS identifiers instead of the card serial:
+
+```json
+{
+    "type": "badge",
+    "model": "smart_card",
+    "config": {
+        "type": "Seos",
+        "id_type": "PACSD"
+    }
+}
+```
+
+For every reader, card type, and identifier these settings support, see
+[Badge Readers and Cards](/docs/for_administrators/shared_devices/android_shared_device/badge_readers_and_cards/).
 
 **Face** — the user signs in with face authentication. Provide the connection details of your Matcher Server in
 `config`:
@@ -339,7 +354,7 @@ with
 | The app installs but does not start in shared mode     | `shared_device_mode` must be Boolean `true`, and the configuration policy must target the same device group as the app.                                                                    |
 | The app starts in shared mode but does not activate    | Check the **Shared Mobile** API key: correct type, not expired, and copied without stray whitespace.                                                                                        |
 | A permission prompt appears on the shared device       | Pre-set the permission to **Auto grant** in the configuration policy. The camera permission cannot be auto-granted on dedicated devices from Android 12, so accept it once during staging.  |
-| Badge taps are not detected                            | If users tap on the device itself, confirm the device has NFC hardware and that `built_in_nfc` is `true`. The bridge (central hub) is always available and needs no key of its own.        |
+| Badge taps are not detected, or show an error          | Check that `model` in `shared_login_method` accepts the reader in use, and that the reader and card are set up as described in [Badge Readers and Cards](/docs/for_administrators/shared_devices/android_shared_device/badge_readers_and_cards/). |
 | Face login fails to reach the Matcher Server           | Verify `base_url` and `api_key` inside `shared_login_method.config`, and that the device network can reach the Matcher Server.                                                              |
 | A tapped badge belongs to a user who is not enrolled   | Set `self_service_url` so the device opens your self-service enrollment page instead of failing.                                                                                            |
 | Microsoft apps ask for credentials again after sign-in | Verify `use_msal` is `true` and `azure_client_id` matches your own Entra app registration, including the package name and signature hash on the Android platform entry.                     |
