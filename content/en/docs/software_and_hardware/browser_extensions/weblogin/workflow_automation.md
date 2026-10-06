@@ -3,7 +3,7 @@ title: "Workflow Automation"
 description: "Sign users in and out of web apps on shared computers with a single tap of their card, using IDmelon WebLogin."
 lead: ""
 date: 2026-10-01T00:00:00+03:30
-lastmod: 2026-10-01T00:00:00+03:30
+lastmod: 2026-10-06T00:00:00+03:30
 draft: false
 images: [ ]
 menu:
@@ -98,14 +98,15 @@ The first tap opens a private window and signs the user in to My Apps. The next 
 
 ### Example 2: Microsoft sign-in wherever it's asked for
 
-When a web app sends the user to Microsoft's sign-in page, WebLogin shows a prompt. The user taps their card, WebLogin
-signs them in, and takes them back to where they were, so the web app finishes its own sign-in.
+When a web app sends the user to Microsoft's sign-in page, WebLogin shows a prompt. The user taps their card, and
+WebLogin opens that web app in a private window and signs the user in there. The next tap closes the private window.
+Because the `url` is empty, the same configuration works for every web app that signs in with Microsoft. See
+[An empty url](#an-empty-url).
 
 ```json
 {
-  "action": "login",
-  "window": "current",
-  "trigger": "tapOnHint",
+  "action": "loginlogout",
+  "window": "incognito",
   "hint": {
     "type": "prompt",
     "promptConfig": {
@@ -115,12 +116,15 @@ signs them in, and takes them back to where they were, so the web app finishes i
   },
   "urls": [
     {
-      "method": "msal",
+      "method": "passkey",
       "url": ""
     }
   ]
 }
 ```
+
+Keep `trigger` at its default, `tap`. With `tapOnHint`, the tap that signs the user out wouldn't count, because no
+prompt is shown inside the web app.
 
 ### Example 3: Microsoft 365 and a website with a saved password
 
@@ -152,7 +156,7 @@ Both open in the same private window, each in its own tab.
 - **`hint`**: what tells users to tap their card. Without it, WebLogin shows the pinned tap page. See [Hint](#hint).
 - **`trigger`**: `tap` (the default) or `tapOnHint`. Which taps start the automation. With `tapOnHint`, only a tap made
   while the prompt is shown, or while the pinned tap page is the active tab, starts it. It can't be used with the hint
-  type `none`.
+  type `none`, and with the pinned tap page, `passkey` and `password` need a `url`. See [An empty url](#an-empty-url).
 - **`urls`** (required): the websites to sign the user in to, handled in order. See [Websites](#websites).
 - **`msalConfig`**: the Entra app WebLogin uses for the `msal` method. See
   [Microsoft sign-in with MSAL](#microsoft-sign-in-with-msal).
@@ -164,11 +168,30 @@ Each entry in `urls` is one website:
 - **`method`**: `passkey`, `password` or `msal`. How WebLogin signs the user in. See [Sign-in methods](#sign-in-methods).
 - **`url`**: the website to open. `${UserId}` in the address is replaced with the user's ID, which is usually their
   sign-in name. `{UserId}` works too, and is easier to use in PowerShell, where `$` starts a variable. The address can be
-  left empty with the `current` window, and with the `msal` method in any window. See [Sign-in methods](#sign-in-methods).
+  left empty, see [An empty url](#an-empty-url).
 - **`coverFlow`**: `true` or `false`. When `true`, WebLogin covers Microsoft's sign-in pages while it signs the user in,
   so the user doesn't see the steps.
 
 The first website opens in the window you chose, and the others open in new tabs of the same window.
+
+### An empty url
+
+An empty `url` stands for the page in the current tab, the one in front when the user taps their card:
+
+- With the `current` window, `passkey` and `password` sign the user in on that tab.
+- With the `incognito` and `newTab` windows, `passkey` opens that page and signs the user in there. `password` needs an
+  address.
+- `msal`, in any window, signs the user in first, then goes back to that page.
+
+When the current tab is on Microsoft's sign-in page, WebLogin opens or goes back to the page before it instead: the web
+app that sent the user to sign in. Opened again, the web app starts its own sign-in in that window, so the user ends up
+signed in to it. This is how one configuration serves every web app, as in
+[Example 2](#example-2-microsoft-sign-in-wherever-its-asked-for).
+
+The current tab has to be on a website. If it's a browser page, such as the new tab page or the pinned tap page,
+`passkey` doesn't start, and `msal` takes the user to a new tab page after signing in. For the same reason, with the
+`tapOnHint` trigger and the pinned tap page, `passkey` and `password` need a `url`: those taps are made on the tap page,
+so WebLogin doesn't save the configuration without one.
 
 ### Hint
 
@@ -185,10 +208,11 @@ WebLogin doesn't save a configuration when:
 - `action`, `window`, `trigger` or a hint `type` has a value that isn't listed above.
 - `urls` doesn't list at least one website, or a website's `method` isn't listed above.
 - The hint is `prompt` and `promptConfig` is missing, has no position, or lists an address that isn't valid.
-- The window isn't `current` and a website's `url` is not a valid address. The only exception is an empty `url` with
-  the `msal` method.
+- The window isn't `current` and a website's `url` is not a valid address. An empty `url` is allowed with the
+  `passkey` and `msal` methods.
 - The action is `loginlogout`, the window isn't `incognito`, and none of the websites uses the `msal` method.
 - The trigger is `tapOnHint` and the hint type is `none`.
+- The trigger is `tapOnHint`, the hint is the pinned tap page, and a `passkey` or `password` website has an empty `url`.
 
 ## Actions and windows
 
@@ -224,7 +248,7 @@ With `loginlogout`, WebLogin decides for each tap whether to sign the user in or
 WebLogin opens the address and completes Microsoft's sign-in page with the passkey on the user's card. Use it for
 Microsoft 365 and other apps that sign in with Entra ID. Add `login_hint=${UserId}` to the address, as in the examples
 above, so Microsoft goes straight to the user's account. If the card is protected by a PIN, the user enters it when
-asked.
+asked. With an empty address, WebLogin uses the page in the current tab, see [An empty url](#an-empty-url).
 
 ### password
 
@@ -236,8 +260,7 @@ account.
 WebLogin opens Microsoft's sign-in page itself, for its Entra app (see
 [Microsoft sign-in with MSAL](#microsoft-sign-in-with-msal)). It asks for a fresh sign-in every time, with the user's
 account filled in, and completes it with the passkey on the card. Then it opens the address, or, when the address is
-empty, takes the user back to the page they were on when they tapped their card. If that page wasn't a website, for
-example the browser's new tab page, the user gets a new tab page instead.
+empty, takes the user back to the page in the current tab, see [An empty url](#an-empty-url).
 
 Because WebLogin knows when a user is signed in this way, `msal` is also what makes `loginlogout` work in normal
 windows, and what signs users out of Microsoft on logout.
@@ -378,6 +401,11 @@ the toolbar and select **Show Logs**).
   and running.
 
   ![Reader driver connection in WebLogin's popup, not connected](/images/vendor/weblogin/workflow_automation_reader_connection.png)
+
+- **A tap opens nothing, and the logs say "The url is blank and the current tab isn't on a website".** The
+  configuration uses `passkey` with an empty `url`, and the user tapped while a browser page was in front, such as the
+  new tab page or the pinned tap page. The user has to tap while the web app, or Microsoft's sign-in page, is in front.
+  See [An empty url](#an-empty-url).
 
 - **Save configuration shows an error.** The message names the field to fix. See
   [What WebLogin checks](#what-weblogin-checks).
