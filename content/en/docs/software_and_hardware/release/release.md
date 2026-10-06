@@ -14,7 +14,31 @@ toc: true
 
 ---
 
-### IDmelon Panel 2.
+### IDmelon Panel 2.198.3
+
+September 29, 2026
+
+#### Bug Fixes:
+
+- Small bug fixes and improvements were made to keep IDmelon running smoothly.
+
+### IDmelon Panel 2.198.0
+
+September 22, 2026
+
+#### New Features & Improvements
+
+- The self-service portal can now be used for face, fingerprint, smartphone, and hardware security keys. Contact IDmelon to add these options. To learn more about how to use these, check our [self-service documentation](/docs/for_administrators/users_and_security_keys_management/security_key_enrollment_flows/self_service_enrollment_flow/).
+- There are new options for the user identity verification step in the self-service. Nametag can be used for government ID verification [(docs)](/docs/for_administrators/authentication/identity_providers/nametag/), or Entra ID can be set up as a verfication step [(docs)](/docs/for_administrators/authentication/identity_providers/entra_id_oidc/).
+- Activate via email option for face and fingerprint security keys has been added
+- Now, Entra device groups can be used for conditional access policies without the need to use named lists.
+
+#### Bug Fixes
+
+- Updating devices imported from Entra ID would sometimes return an error. This has been fixed.
+- Fixes for IDmelon custom SAML SSO applications were made.
+
+### IDmelon Panel 2.193.2
 
 August 27, 2026
 
