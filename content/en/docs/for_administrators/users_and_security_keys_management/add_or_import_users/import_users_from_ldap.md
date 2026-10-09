@@ -213,7 +213,7 @@ SyncStream.exe healthcheck --log info --dump
 
 SyncStream makes two separate secure connections, and each one is handled by a different option.
 
-**Connection to the LDAP server**
+#### Connection to the LDAP server
 
 If you suspect a certificate or TLS problem with your domain controller, run a health check with `--ssl-debug-mode`. This forces SyncStream to connect to the LDAP server over SSL/TLS and skips validation of the server certificate:
 
@@ -225,7 +225,7 @@ Use this option together with `"LDAP_PORT": 636`, because it always connects ove
 
 > **Note** `--ssl-debug-mode` is intended for diagnosis only. Do not use it as a permanent configuration.
 
-**Connection to the API server**
+#### Connection to the API server
 
 If the IDmelon API is reached over HTTPS with a certificate that the machine does not trust, which usually happens in on-premises deployments, place the certificate of the issuing authority in a file named `cert.crt` next to **SyncStream.exe**. SyncStream detects and uses it automatically.
 
