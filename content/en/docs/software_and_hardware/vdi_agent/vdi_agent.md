@@ -3,7 +3,7 @@ title: "IDmelon Agent"
 description: "Deploying IDmelon Agent"
 lead: ""
 date: 2025-10-09T11:07:06+03:30
-lastmod: 2025-10-09T11:07:06+03:30
+lastmod: 2026-10-15T11:07:06+03:30
 draft: false
 images: []
 menu:
@@ -44,6 +44,8 @@ Changing the mode is possible from agent settings and the drop-down menu in conf
 ### Badge Reader Mode
 
 The agent can read badges directly from PC/SC NFC and rfIDEAS readers. If your reader sends badge IDs as keyboard input, enable **Keystroking Mode** from the app menu.
+
+On Windows, if IDmelon Accesskey is installed and running, the agent also receives badge taps from Accesskey. No configuration is needed.
 
 If the badge ID is read in the wrong order, enable **Reverse Byte Order**.
 
@@ -144,7 +146,7 @@ After the badge is verified, the agent completes the passkey sign-in flow and la
 ![Loading Screen - Establishing secure session](/images/vendor/vdi_agent/IDmelon_Agent/loading_screen_2.png)
 ![Loading Screen - Preparing Workspace](/images/vendor/vdi_agent/IDmelon_Agent/loading_screen_3.png)
 
-After the remote session is active, the user can tap the badge again to disconnect from the session.
+After the remote session is active, the user can tap the badge again to disconnect from the session. If an application in the virtual desktop is listening for badge taps through the IDmelon VDI Bridge, the tap is sent to that application instead and the session stays open. See [Badge Taps in the Virtual Desktop](#badge-taps-in-the-virtual-desktop).
 
 Alternatively, use **Disconnect** from the app menu.
 
@@ -157,6 +159,21 @@ On Omnissa Horizon, if the signed-in user is entitled to exactly one desktop, th
 If the user is entitled to more than one desktop, the Horizon client opens its desktop list as usual and the user picks one.
 
 This behavior is automatic and requires no configuration. It applies to Horizon only; Citrix sessions are not affected.
+
+### Badge Taps in the Virtual Desktop
+
+The IDmelon VDI Bridge is installed together with the agent on Windows, Linux, and IGEL OS. It carries badge taps from the endpoint into the Citrix or Horizon session, so applications running inside the virtual desktop can react to them.
+
+To receive taps, the virtual desktop must run the **IDmelon VDI Session** app, and at least one application in the session must be connected to it.
+
+After a successful sign-in, the agent waits for the session to start. As soon as an application in the session is connected to the IDmelon VDI Session app, the agent sends the badge used for sign-in into the session once.
+
+When the user taps a badge while the session is active:
+
+- **An application in the session is connected:** The tap is sent into the session and the session stays open.
+- **No application is connected, or the VDI Bridge is unavailable:** The tap disconnects the session, as in earlier versions.
+
+> **Note:** If the VDI Bridge is not installed or not reachable, the agent works as before. Sign-in and the second-tap disconnect are not affected.
 
 ### SSO Integration with IDmelon
 
