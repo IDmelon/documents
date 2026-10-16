@@ -104,7 +104,19 @@ Every app that appears in the kiosk — including Managed Home Screen itself —
 To leave the kiosk on a device, press the back button repeatedly until **Exit kiosk** appears, enter the PIN, and open
 **Managed Home Screen** again when you are done to relock the device.
 
-### Step 3 — Customize Managed Home Screen (optional)
+### Step 3 — Create the app data clearing profile
+
+Create a separate **Device restrictions** profile to choose which apps have their local data cleared when a user signs out of IDmelon Authenticator.
+
+1. Repeat substeps **1–3** in **Step 2** to create another **Device restrictions** profile.
+
+2. Give the policy a name such as `Shared Android - Clear App Data`, then continue to **Configuration settings**.
+
+3. Open **Applications** and scroll to the **Dedicated devices** section. Select **Add** next to  **Clear local data in apps not optimized for Shared device mode** and choose the apps whose local data should be cleared at sign-out.
+
+4. Assign the policy to the same **device group** used for the apps, then review and create.
+
+### Step 4 — Customize Managed Home Screen (optional)
 
 Managed Home Screen has settings of its own — grid size, wallpaper, screen saver, organization logo, and automatic
 sign-out. They live in an app configuration policy rather than the profile you just created:

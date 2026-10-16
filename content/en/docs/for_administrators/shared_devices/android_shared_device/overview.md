@@ -28,6 +28,7 @@ This section covers that deployment with **Microsoft Intune**, from an unenrolle
 - **Sign in to apps and websites** with their passkeys, or by autofilling their saved passwords.
 - **Shortcut tiles** for the apps and sites they need, published from Intune.
 - **Microsoft apps without a second sign-in**, if you enable MSAL.
+- **Clear local data from selected apps and browsers when users sign out of IDmelon Authenticator**, if MSAL is enabled.
 
 This is what it looks like on the device:
 
@@ -71,6 +72,14 @@ Once the device is set up, this cycle repeats for every person who picks it up. 
 user.
 
 ![The user session cycle: sign in to the device, sign in to apps and sites, sign out, session cleared, then the next user starts again](/images/vendor/shared_android/user_session_cycle.svg)
+
+1. **Sign in to the device** — The user taps a badge or completes face authentication in IDmelon Authenticator. Their shortcut tiles, passkeys, and passwords appear.
+
+2. **Sign in to apps and sites** — The user opens apps and websites from the shortcut tiles and signs in with passkeys or with saved passwords through autofill. If MSAL is enabled, Microsoft apps such as Teams and Outlook sign in automatically.
+
+3. **Sign out** — The user signs out of IDmelon Authenticator when finished. If configured, IDmelon signs the user out automatically after the specified time.
+
+4. **Session cleared** — IDmelon Authenticator clears the user's session. If MSAL is enabled, local data is also cleared from apps and browsers selected during setup. The device is then ready for the next user.
 
 ## How the deployment fits together
 

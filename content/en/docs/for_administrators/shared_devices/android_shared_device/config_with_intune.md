@@ -212,21 +212,26 @@ Android native application through its URL scheme. Provide a JSON array of objec
 ```json
 [
     {
-        "iconName": "teams",
+        "iconName": "teams.microsoft.com",
         "title": "Teams",
         "url": "msteams://"
     },
     {
-        "iconName": "github",
+        "iconName": "github.com",
         "title": "Github",
         "url": "https://github.com"
+    },
+    {
+        "iconName": "zoom.us",
+        "title": "Zoom",
+        "url": "launch://us.zoom.videomeetings"
     }
 ]
 ```
 
-- `iconName` — the icon shown for the shortcut.
+- `iconName` — the website domain or image URL.
 - `title` — the label shown under the icon.
-- `url` — a website URL (for example, `https://github.com`) or an Android app URL scheme (for example, `msteams://`).
+- `url` — a website URL (for example, `https://github.com`), an Android app URL scheme (for example, `msteams://`), or a package-based app launch URI using the `launch://` scheme (for example, `launch://us.zoom.videomeetings`).
 
 Any app you target with a shortcut must also be installed on the device. Assign it as **Required** to the same device
 group, the same way you assigned IDmelon Authenticator in [Step 1](#step-1--add-idmelon-authenticator-to-intune).
