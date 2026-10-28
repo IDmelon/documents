@@ -16,6 +16,11 @@ toc: true
 **IDmelon VDI Session**<br>
 IDmelon VDI Session runs inside the virtual desktop. It receives badge taps from the IDmelon Agent on the endpoint, through the IDmelon VDI Bridge, so applications in the virtual desktop can react to them. See [Badge Taps in the Virtual Desktop](/docs/software_and_hardware/vdi_agent/vdi_agent/#badge-taps-in-the-virtual-desktop).
 
+Use it to:
+
+- **Sign in with FIDO inside the remote session:** The badge tap signs the user in to applications and websites in the virtual desktop.
+- **Run automations:** The badge tap runs workflows from the [IDmelon Workflow Automation](/docs/software_and_hardware/workflow_automation/workflow_automation/) app in the virtual desktop.
+
 ## Installer Details
 
 Use these values in every deployment mode below.
