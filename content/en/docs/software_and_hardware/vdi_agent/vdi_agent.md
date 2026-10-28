@@ -215,7 +215,7 @@ This behavior is automatic and requires no configuration. It applies to Horizon 
 
 The IDmelon VDI Bridge is installed together with the agent on Windows, Linux, and IGEL OS. It carries badge taps from the endpoint into the Citrix or Horizon session, so applications running inside the virtual desktop can react to them.
 
-To receive taps, the virtual desktop must run the **IDmelon VDI Session** app, and at least one application in the session must be connected to it. See [Deploy VDI Session](/docs/software_and_hardware/vdi_agent/deploy_vdi_session/).
+To receive taps, the virtual desktop must run the **IDmelon VDI Session** app, and IDmelon Card Reader Driver must be connected to it within the session. See [Deploy VDI Session](/docs/software_and_hardware/vdi_agent/deploy_vdi_session/).
 
 > **Note:** If the VDI Bridge is not installed or not reachable, the agent works as before. Sign-in and the second-tap disconnect are not affected.
 
