@@ -16,8 +16,6 @@ toc: true
 **IDmelon VDI Session**<br>
 IDmelon VDI Session runs inside the virtual desktop. It receives badge taps from the IDmelon Agent on the endpoint, through the IDmelon VDI Bridge, so applications in the virtual desktop can react to them. See [Badge Taps in the Virtual Desktop](/docs/software_and_hardware/vdi_agent/vdi_agent/#badge-taps-in-the-virtual-desktop).
 
-It installs as a Windows service. Install it once on each Windows virtual desktop (Citrix VDA, Horizon desktop, or Remote Desktop host). The service is shared by all user sessions on that machine.
-
 ## Installer Details
 
 Use these values in every deployment mode below.
@@ -464,6 +462,8 @@ With Mode B, create the scheduled task in the golden image. A reset removes a ta
   ```text
   IDMLN,C:\Program Files\IDmelon\VDI Session\IDmelonVDISession.exe
   ```
+
+  Then restart the virtual desktops. They read the allow list when they start. To keep security key prompts inside the session, also set FIDO2 redirection to Prohibited. See [Citrix Policies](/docs/software_and_hardware/vdi_agent/vdi_agent/#citrix-policies).
 
 - **Omnissa Horizon:** No extra steps. The installer allows the app to use Horizon virtual channels automatically.
 - **Remote Desktop:** No extra steps.
