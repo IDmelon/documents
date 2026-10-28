@@ -64,12 +64,6 @@ Changing the card type restarts the app.
 - **Base URL:** Optional. Use this for on-premise environments.
 - **Self-Service URL:** Optional. The self-service enrollment portal opened in-app when a tapped badge is not enrolled yet. See [Self-Service Badge Enrollment](#self-service-badge-enrollment).
 
-### Collect Logs
-
-To send logs to support, open the app menu and select **Collect Logs**. Choose a folder and select **Save Here**. The agent saves all its logs there as one zip file.
-
-If the agent cannot write to the chosen folder, it saves the zip file in its own log folder and shows where.
-
 ## Self-Service Badge Enrollment
 
 When a user taps a badge that is not enrolled yet, the agent can open your self-service enrollment portal in an in-app window. The user enrolls the badge on the spot and then taps again to sign in.
@@ -222,18 +216,6 @@ This behavior is automatic and requires no configuration. It applies to Horizon 
 The IDmelon VDI Bridge is installed together with the agent on Windows, Linux, and IGEL OS. It carries badge taps from the endpoint into the Citrix or Horizon session, so applications running inside the virtual desktop can react to them.
 
 To receive taps, the virtual desktop must run the **IDmelon VDI Session** app, and at least one application in the session must be connected to it. See [Deploy VDI Session](/docs/software_and_hardware/vdi_agent/deploy_vdi_session/).
-
-After a successful sign-in, the agent waits for the session to start. As soon as an application in the session is connected to the IDmelon VDI Session app, the agent sends the badge used for sign-in into the session once.
-
-When the user taps a badge while the session is active:
-
-- **An application in the session is connected:** The tap is sent into the session. The application must confirm within 3 seconds whether it handled the tap.
-  - **Handled:** The session stays open.
-  - **Not handled, or no answer within 3 seconds:** The session ends, as with a normal second tap.
-- **Card Type is FIDO:** The tap is sent into the session and the session stays open. No confirmation is needed.
-- **No application is connected, or the VDI Bridge is unavailable:** The tap ends the session, as in earlier versions.
-
-The confirmation is an event sent from the session to the endpoint, so the VDI Bridge must accept session events. Otherwise every confirmed tap ends the session. On IGEL OS, this is **Accept Session Events**, which is on by default.
 
 > **Note:** If the VDI Bridge is not installed or not reachable, the agent works as before. Sign-in and the second-tap disconnect are not affected.
 
