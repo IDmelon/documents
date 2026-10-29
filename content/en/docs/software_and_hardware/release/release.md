@@ -20,7 +20,7 @@ October 27, 2026
 
 #### New Features & Improvements
 
-- Actions menus for security keys, workflows, provisioning, and bulk actions have been fully revamped! 
+- Actions menus for security keys, workflows, provisioning, and bulk actions have been fully revamped!
 - Enrollment for face security keys has been changed to mimic the same behavior as fingerprint enrollment. To use face security keys, please contact a member from IDmelon's team so they can provide the right driver and setup.
 
 #### Bug Fixes
