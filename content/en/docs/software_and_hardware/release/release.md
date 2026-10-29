@@ -14,13 +14,28 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.203.0
+
+October 15, 2026
+
+#### New Features & Improvements
+
+- Want users to change their PIN after their first usage? This feature has been added with the "Require PIN change on first use" action which can be found under the general **Security Keys** tab and the user's **Security Keys** tab as well. For this, it is required to have an Accesskey version 3.15.3.7 or higher.
+- Users are now able to access the IDmelon Panel with an email link instead of an OTP code. Activate this option by navigating to **Authentication** > **Authentication Profile** in the IDmelon Panel and checking the Magic Link option.
+- After registering a badge or face security key using the activate now option, admins can decide to assign them a PIN, choose their own PIN, or get a random PIN.
+- Automatic Microsoft Graph API permissions acceptance flow has been removed. Microsoft Graph API permissions are to be configured manually under **App Integrations** > **API**.
+
+#### Bug Fixes:
+
+- Users with no devices registered where not showing in the pie charts under the **Home** tab. This issue has been fixed.
+
 ### IDmelon Panel 2.198.3
 
 September 29, 2026
 
 #### Bug Fixes:
 
-- Small bug fixes and improvements were made to keep IDmelon running smoothly.
+- Small bug fixes and improvements to keep IDmelon running smoothly.
 
 ### IDmelon Panel 2.198.0
 
