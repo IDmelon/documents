@@ -14,6 +14,22 @@ toc: true
 
 ---
 
+### IDmelon Panel 2.204.0
+
+October 27, 2026
+
+#### New Features & Improvements
+
+- Actions menus for security keys, workflows, provisioning, and bulk actions have been fully revamped! 
+- Enrollment for face security keys has been changed to mimic the same behavior as fingerprint enrollment. To use face security keys, please contact a member from IDmelon's team so they can provide the right driver and setup.
+
+#### Bug Fixes
+
+- Non-admin users were not being able to reset their card's PIN from their personal Panel. They should be able to do so again.
+- Enrolling Crescendo cards as a hardware security key was not always going through smoothly. Smooth sailing from now on.
+- Deleting a pending security key was not automatically invalidating the registration link for that security key. This behavior has been fixed.
+- Users who were not receiving invitation emails for hardware security keys will be receiving them again.
+
 ### IDmelon Panel 2.203.0
 
 October 15, 2026
