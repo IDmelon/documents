@@ -15,6 +15,26 @@ toc: true
 
 The IDmelon Reader Driver, which is a combination of a Windows service and a driver, is designed and developed to enable users to leverage their card, fingerprint, or face as a FIDO security key.
 
+## Useful Commands
+
+To check the driver's status, connected readers, and other configurations (e.g., NFC, biometrics server, main server, and automations), run the following command:
+
+```shell
+accesskey status
+```
+
+To check if a security key is registered with IDmelon, the following command will show the user linked to the security key:
+
+```shell
+accesskeycli health-check
+```
+
+To find other commands that will help stop, restart, reset, or clear cache data, run the following command to find other commands:
+
+```shell
+accesskey -h
+```
+
 ## Configuration
 
 The IDmelon Reader Driver on Windows is configurable in many aspects. The most important configuration options are described below.
@@ -203,6 +223,44 @@ With this sequence, the Reader Driver behaves as follows:
 This priority-based configuration is useful in environments where multiple card technologies are used and the Reader Driver must support more than one card type on the same workstation.
 
 > Note: The FIDO card type will only work if the CCID driver is enabled and the plugged card reader CCID driver is supported in IDmelon Card Reader Driver
+
+### Automation Configurations
+
+Automation configurations activate tap to lock, tap to log out, and tap to activate transparent lock workflows. The latter workflow is useful for users that may require a specific screen to complete their work and do not want to continue interacting with the PC or authenticate several times.
+
+> Note: The card reader driver only allows for one tap to action workflow at a time, as taps are not be differentiable.
+
+Tap to lock with user switching enabled:
+
+```shell
+accesskeycli workflow-automation -s -t accesskey -a screen-lock --user-switching true
+```
+
+Tap to log out:
+
+```shell
+accesskeycli workflow-automation -s -a system-signout -t accesskey 
+```
+
+Tap to activate transparent lock:
+
+```shell
+accesskeycli workflow-automation -s -t accesskey -a transparent-lock
+```
+
+The transparent lock can be customized to turn off the transparency, change the icon shown on the bottom left, set up a custom screen, or activate after an idle period of time. To further explore these options, run the following command:
+
+```shell
+accesskey config transparent-lock set
+```
+
+To remove any of these configurations, run the following:
+
+```shell
+accesskeycli workflow-automation -r
+```
+
+For more workflow automation options, please refer to the [IDmelon Kiosk](/docs/software_and_hardware/idmelon_kiosk/deploy_idmelon_kiosk/), [Workflow Automation](/docs/software_and_hardware/workflow_automation/workflow_automation/), and [IDmelon WebLogin](/docs/software_and_hardware/browser_extensions/weblogin/workflow_automation/) documentation.
 
 ## Deployment
 
