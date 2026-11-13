@@ -39,8 +39,24 @@ for the username field instead.
   IDmelon Authenticator. If the user types a new password for an account that is already saved, IDmelon
   Authenticator updates it.
 
-If a sign-in page has a password field but no username field, IDmelon Authenticator asks the user to type the username
-before it saves the password. Passwords are encrypted before they are stored.
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin:1.5rem auto;max-width:540px;">
+  <figure style="flex:1 1 200px;margin:0;">
+    <img src="/images/vendor/shared_android/save_password_prompt.jpg" alt="Android asking the user to save their username and password to IDmelon after signing in to a website" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Saving a new password</figcaption>
+  </figure>
+  <figure style="flex:1 1 200px;margin:0;">
+    <img src="/images/vendor/shared_android/update_password_prompt.jpg" alt="Android asking the user to update their username and password in IDmelon" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Updating a changed password</figcaption>
+  </figure>
+</div>
+
+Users can see their saved passwords on the **Passwords** tab in IDmelon Authenticator.
+
+<figure style="max-width:222px;margin:1.5rem auto;">
+  <img src="/images/vendor/shared_android/idmelon_passwords.jpg" alt="The Passwords tab in IDmelon Authenticator, listing the signed-in user's saved passwords by website" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+  <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">The <strong>Passwords</strong> tab</figcaption>
+</figure>
+
 
 ## Before you start
 
@@ -65,13 +81,23 @@ If the **Tap here to complete setup** banner does not appear, setup is already c
 
 ### Step 2 — Allow autofill in Chrome
 
-By default, Chrome uses its own password manager and does not show suggestions from IDmelon Authenticator. To allow autofill in Chrome:
+To allow autofill in Chrome:
 
-1. Open Chrome and go to **Settings > Autofill services**.
+1. Open Chrome and go to **Settings > Autofill and passwords > Autofill services**.
 2. Select **Autofill using another service**.
 3. Restart Chrome if it asks you to.
 
-This setting is available in Chrome 135 and later.
+<div style="display:flex;flex-wrap:wrap;gap:1rem;margin:1.5rem auto;max-width:460px;">
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/chrome_autofill_and_passwords.jpg" alt="Chrome's Autofill and passwords settings page, with Autofill services listed last" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Tap <strong>Autofill services</strong></figcaption>
+  </figure>
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/chrome_autofill_services.jpg" alt="Chrome's Autofill services page with Autofill using another service selected" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Select <strong>Autofill using another service</strong></figcaption>
+  </figure>
+</div>
+
 
 ## What is supported
 
@@ -114,30 +140,17 @@ type the username again to save the password.
 - **Not every app is supported.** An app only gets suggestions if it is linked to its website. A password that works on
   a website may not be offered in that website's app.
 - **Not every sign-in page is recognized.** Pages that use custom or unusual fields may not show suggestions.
-- **One sign-in form per page.** IDmelon Authenticator uses the first username field and the first password field on
-  a page. Pages with several password fields, such as change-password forms, may not fill or save correctly.
 - **Saving needs a connection.** Saving fails if the device is offline or the user is not signed in to IDmelon
   Authenticator.
 - **Usernames and passwords only.** Password autofill does not fill one-time codes, payment cards, or addresses, and
   it does not generate new passwords. It also does not submit the sign-in form or complete multi-factor authentication
   for the user.
-
-## Validate on a test device
-
-1. In IDmelon Authenticator, confirm that a check mark appears next to **Autofill service**.
-2. Sign in to IDmelon Authenticator as a test user who has a saved password.
-3. Open the app or website for that password, tap the username field, and select the account. Confirm that the
-   username and password are filled in. Repeat this for each app and browser your users rely on.
-4. In a browser other than Edge, sign in to a website whose password is not saved yet. Confirm that Android offers to
-   save it, and that it is suggested the next time you sign in.
-5. Sign out, sign in as a different user, and confirm that the first user's accounts are not suggested.
-
 ## Troubleshooting
 
 | Symptom                                         | What to check                                                                                                                              |
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | No suggestions appear                           | IDmelon Authenticator must be set as the autofill service, and the user must be signed in with a password saved for that app or website. |
-| Chrome shows its own saved passwords instead    | In Chrome, go to **Settings > Autofill services** and select **Autofill using another service**.                                           |
+| Chrome shows its own saved passwords instead    | In Chrome, go to **Settings > Autofill and passwords > Autofill services** and select **Autofill using another service**.                  |
 | Suggestions appear on the website but not in the app | The app is not linked to its website. See [Apps and websites](#apps-and-websites).                                                   |
 | Suggestions disappear while typing              | Suggestions appear only while the field is empty. Clear the field and tap it again.                                                        |
 | Edge does not offer to save a password          | This is expected. Add the password in the IDmelon Panel instead.                                                                           |
