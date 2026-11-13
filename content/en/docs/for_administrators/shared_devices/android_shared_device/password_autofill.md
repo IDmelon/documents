@@ -29,6 +29,17 @@ with passkeys.
 4. The user selects a credential, and IDmelon Authenticator fills in the username and password.
 5. The user submits the sign-in form.
 
+<div style="display:flex;flex-wrap:wrap;gap:1rem;margin:1.5rem auto;max-width:460px;">
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/autofill_suggestions_github.jpg" alt="A saved GitHub account suggested below the username field on the GitHub sign-in page" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">GitHub sign-in</figcaption>
+  </figure>
+  <figure style="flex:1 1 130px;margin:0;">
+    <img src="/images/vendor/shared_android/autofill_suggestions_microsoft.jpg" alt="A saved Microsoft account suggested below the email field on the Microsoft sign-in page" style="width:100%;border:1px solid #e2e8f0;border-radius:8px;" />
+    <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Microsoft sign-in</figcaption>
+  </figure>
+</div>
+
 If the user has no saved password for that app or website, IDmelon Authenticator suggests the user's email address
 for the username field instead.
 
