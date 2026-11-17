@@ -128,6 +128,8 @@ You will use a PowerShell **platform script** in Intune to register the workflow
    exit 0
    ```
 
+   > **Note:** The script registers the workflow for all users. To register a workflow added with `automationcli` for a specific Windows user only, add `--user "NAME"` to the `automationcli workflows add` command.
+
 3. Create a PowerShell script policy in Intune:
    - Navigate: **Devices > Windows > Scripts and remediations > Platform Scripts**.
    - Select **Add**.
