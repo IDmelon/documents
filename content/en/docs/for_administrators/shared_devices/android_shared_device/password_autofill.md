@@ -116,11 +116,13 @@ To allow autofill in Chrome:
 
 | Where the user signs in                                       | Fill saved passwords        | Save new or changed passwords |
 |---------------------------------------------------------------|-----------------------------|-------------------------------|
-| Websites in Chrome and Firefox | Yes                         | Yes                           |
+| Websites in Chrome and other supported browsers               | Yes                         | Yes                           |
 | Websites in Microsoft Edge                                    | Yes, on Android 9 and later | No                            |
 | Android apps                                                  | Yes, if the app is linked to its website | Yes, if the app is linked to its website |
 
 <br />
+
+Password autofill is tested in Chrome, Firefox, Brave, Vivaldi, Opera Mini, and Microsoft Edge.
 
 **Websites.** A saved password is offered on every page of the same website. For example, a password saved for
 `example.com` is also offered on `login.example.com`. Some services sign users in across several domains — Microsoft,
