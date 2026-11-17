@@ -43,6 +43,12 @@ with passkeys.
 If the user has no saved password for that app or website, IDmelon Authenticator suggests the user's email address
 for the username field instead.
 
+Suggestions are tied to the user's session. They stop when the user signs out of IDmelon Authenticator, or when the
+session reaches the `auto_logout` time limit set in the
+[app configuration](/docs/for_administrators/shared_devices/android_shared_device/config_with_intune/), whichever
+comes first. To get suggestions back, the user signs in again. The next user who signs in sees only their own
+passwords.
+
 ### Where saved passwords come from
 
 - **Added by an administrator** — you add passwords for a user in the IDmelon Panel. The user never has to type them.
@@ -163,6 +169,7 @@ type the username again to save the password.
 | Symptom                                         | What to check                                                                                                                              |
 |-------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------|
 | No suggestions appear                           | IDmelon Authenticator must be set as the autofill service, and the user must be signed in with a password saved for that app or website. |
+| Suggestions stop appearing after a while        | The session has reached the `auto_logout` time limit. The user must sign in to IDmelon Authenticator again.                               |
 | Chrome shows its own saved passwords instead    | In Chrome, go to **Settings > Autofill and passwords > Autofill services** and select **Autofill using another service**.                  |
 | Suggestions appear on the website but not in the app | The app is not linked to its website. See [Apps and websites](#apps-and-websites).                                                   |
 | Suggestions disappear while typing              | Suggestions appear only while the field is empty. Clear the field and tap it again.                                                        |
