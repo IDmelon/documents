@@ -3,7 +3,7 @@ title: "Active Directory Federation Service (AD-FS)"
 description: "Integrate Active Directory Federation Service (AD-FS) with IDmelon"
 lead: ""
 date: 2025-02-05T09:15:00+03:30
-lastmod: 2025-02-05T09:15:00+03:30
+lastmod: 2026-11-18T09:00:00+03:30
 draft: false
 images: []
 menu:
@@ -17,7 +17,7 @@ In this document you are going to set up `AD-FS` as an external IdP to the IDmel
 
 ## Initialize IDmelon Configuration as SP
 
-Log in to the IDmelon panel, navigate to the **Authentication** section, and click **Integrate with a New Identity Provider**:
+Log in to the IDmelon panel, navigate to **Authentication** > **External Identity Providers**, and click **New Identity Provider**:
 
 ![AD-FS IDmelon 1](/images/vendor/sso/adfs/adfs_15.png)
 
@@ -31,7 +31,7 @@ You will need the values provided in the newly opened window to set up **ADFS** 
 
 ## Configuring AD-FS as external IDP
 
-Navigate to Server Manager > Tools > AD FS Management > right click on `Relying Party Trust` > Add Relying Party Trust
+Navigate to **Server Manager** > **Tools** > **AD FS Management**, then click **Add Relying Party Trust...** from the **Actions** pane on the right side.
 
 ![AD-FS Window 1](/images/vendor/sso/adfs/adfs_01.png)
 
@@ -129,10 +129,29 @@ Navigate to Server Manager > Tools > AD FS Management > right click on `Relying 
 On the AD FS server, open PowerShell and run the following command to retrieve the server name:\
 `(Get-AdfsProperties).Hostname`
 
+The **AD-FS certificate** required by IDmelon is the AD FS **Token-Signing** certificate. To export it in PEM (Base64) format, run the following commands in PowerShell on the AD FS server:
+
+```powershell
+$sign = (Get-AdfsCertificate -CertificateType Token-Signing).Certificate
+$b64 = "-----BEGIN CERTIFICATE-----`r`n" + [Convert]::ToBase64String($sign.RawData, 'InsertLineBreaks') + "`r`n-----END CERTIFICATE-----"
+Set-Content -Path C:\adfs-token-signing.cer -Value $b64 -Encoding Ascii
+```
+
+The certificate is saved to `C:\adfs-token-signing.cer`.
+
 Return to the **IDmelon Authentication Panel** and complete the required fields as shown in the images.
 
-1. AD-FS certificate
+1. AD-FS certificate (the content of `C:\adfs-token-signing.cer`)
 2. https://<ADFS_SERVER_NAME>/adfs/ls/
 3. http://<ADFS_SERVER_NAME>/adfs/services/trust
 
 ![AD-FS IDmelon 4](/images/vendor/sso/adfs/adfs_18.png)
+
+## Enabling External Authentication
+
+Finally, set the authentication profile to use the external identity provider. In the IDmelon panel, navigate to **Authentication** > **Authentication Profile**:
+
+1. **Select** External **as the identity provider**
+2. **Click on** Save
+
+![AD-FS IDmelon 5](/images/vendor/sso/adfs/adfs_19.png)
