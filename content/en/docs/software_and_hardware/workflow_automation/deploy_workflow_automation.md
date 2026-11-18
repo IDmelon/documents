@@ -49,27 +49,86 @@ The recommended approach is:
 
 ### Step 2: Distribute the workflow and register the automation command via Intune
 
-You will use a PowerShell **platform script** in Intune to copy the workflow file to a known location on each device and then register the automation command.
+> **Note:** The script does not copy the workflow file. Before it runs, copy the exported workflow file to `C:\ProgramData\IDmelon\Workflow Automation\Workflows` on each device, using the same file name as in the script.
 
-1. Place the exported workflow file where the script can reach it on the device (for example, package it alongside the script or copy it from a network share). In the example below, the workflow is expected at `C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json`.
+You will use a PowerShell **platform script** in Intune to register the workflow on each device. The script registers the workflow only when it is not registered yet, and refreshes the runner only when the file's hash has changed.
 
-2. Create the deployment script and save it as a `.ps1` file:
+1. Copy the exported workflow file to each device. In the example below, the workflow is expected at `C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json`.
+
+2. Create the deployment script, set `$registerWith` to match the workflow's [trigger condition](../workflow_automation/#trigger-condition), and save it as a `.ps1` file:
 
    ```bash
-   # Destination folder on each kiosk device
-   $workflowDir = "C:\ProgramData\IDmelon\Workflow Automation\Workflows"
-   $workflowPath = Join-Path $workflowDir "documentation_sample.json"
+   #region Configuration
+   # Update whenever the workflow file changes, so Intune runs this script again
+   $lastModified     = '2026-11-16T12:00:00Z'
+   $workflowFileName = 'documentation_sample.json'
+   $workflowDir      = 'C:\ProgramData\IDmelon\Workflow Automation\Workflows'
+   $markerDir        = 'C:\ProgramData\IDmelon\Workflow Automation\Deployment'
+   # 'automationcli': Application launch, Screen unlock/lock, User logon, Window appear
+   # 'accesskeycli' : Security key presence (card tap), Transparent unlock/lock
+   $registerWith     = 'accesskeycli'
+   #endregion
 
-   # Ensure the workflow file is present (copy it from the packaged location or a share)
-   if (-not (Test-Path $workflowDir)) {
-       New-Item -Path $workflowDir -ItemType Directory -Force | Out-Null
+   $workflowPath = Join-Path -Path $workflowDir -ChildPath $workflowFileName
+   $markerFile   = Join-Path -Path $markerDir -ChildPath "$workflowFileName.deployed"
+
+   if (-not (Test-Path -LiteralPath $workflowPath)) {
+       Write-Output "Workflow not found: $workflowPath"
+       exit 1
    }
-   # Example: copy the workflow shipped next to this script
-   Copy-Item -Path "$PSScriptRoot\documentation_sample.json" -Destination $workflowPath -Force
 
-   # Register the automation command so the workflow runs on the card-tap trigger
-   accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "$workflowPath"
+   $workflowVersion = (Get-FileHash -LiteralPath $workflowPath -Algorithm SHA256).Hash.Substring(0, 16)
+   Write-Output "Workflow version: $workflowVersion"
+
+   $list = automationcli workflows list
+   if ($LASTEXITCODE -ne 0) {
+       Write-Output "Could not list the registered workflows (exit code $LASTEXITCODE)."
+       exit 1
+   }
+   $registered = [bool]($list | Where-Object { $_ -match '^\d+\.\s+(.+)$' -and $Matches[1].Trim() -eq $workflowPath })
+
+   $changed  = $false
+   $recorded = if (Test-Path -LiteralPath $markerFile) { Get-Content -LiteralPath $markerFile -TotalCount 1 -ErrorAction SilentlyContinue }
+   if ($recorded -and $recorded.Trim() -eq $workflowVersion) {
+       Write-Output "Already at version $workflowVersion."
+   } else {
+       try {
+           New-Item -Path $markerDir -ItemType Directory -Force | Out-Null
+           Set-Content -LiteralPath $markerFile -Encoding UTF8 -Value @(
+               $workflowVersion
+               "DeployedUtc = $((Get-Date).ToUniversalTime().ToString('o'))"
+               "Target      = $workflowPath"
+           )
+           Write-Output "Recorded version $workflowVersion for: $workflowPath"
+           $changed = $true
+       } catch {
+           Write-Output "Failed to write the marker file: $_"
+           exit 1
+       }
+   }
+
+   if (-not $registered) {
+       if ($registerWith -eq 'automationcli') {
+           automationcli workflows add --path "$workflowPath"
+       } else {
+           # For Transparent unlock/lock, add: --trigger-condition onTransparentUnlock | onTransparentLock
+           accesskeycli workflow-automation -s -t automation-app --action execute --workflow-path "$workflowPath"
+       }
+       if ($LASTEXITCODE -ne 0) {
+           Write-Output "Registration with $registerWith failed (exit code $LASTEXITCODE)."
+           exit 1
+       }
+       Write-Output "Registered with ${registerWith}: $workflowPath"
+   } elseif ($changed) {
+       automationcli workflows refresh
+   } else {
+       Write-Output "Already registered."
+   }
+
+   exit 0
    ```
+
+   > **Note:** The script registers the workflow for all users. To register a workflow added with `automationcli` for a specific Windows user only, add `--user "NAME"` to the `automationcli workflows add` command.
 
 3. Create a PowerShell script policy in Intune:
    - Navigate: **Devices > Windows > Scripts and remediations > Platform Scripts**.
@@ -90,7 +149,19 @@ You will use a PowerShell **platform script** in Intune to copy the workflow fil
 ![Register Automation Command Intune - 3](/images/vendor/workflow_automation/automation_app/intune_platform_script_3.png)
 > **Figure:** Powershell script policy in intune.
 
-To remove the automation later, deploy a script that disables it:
+<!-- -->
+
+> **Note:** To roll out a new version of the workflow, replace the workflow file on the devices, update `$lastModified` in the deployment script, and upload the script again. Intune runs a platform script again only when its content changes. When the file's hash has changed, the script runs `automationcli workflows refresh` so the runner reloads it. Keep `$workflowFileName` and `$workflowDir` unchanged, since the registration points to that path.
+
+### Removing the workflow
+
+To remove the automation later, deploy a script that removes the registration. For a workflow registered with `automationcli`:
+
+```bash
+automationcli workflows remove --path "C:\ProgramData\IDmelon\Workflow Automation\Workflows\documentation_sample.json"
+```
+
+For a workflow registered through Accesskey:
 
 ```bash
 accesskeycli workflow-automation -t automation-app -r
