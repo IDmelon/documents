@@ -74,7 +74,6 @@ Users can see their saved passwords on the **Passwords** tab in IDmelon Authenti
   <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">The <strong>Passwords</strong> tab</figcaption>
 </figure>
 
-
 ## Before you start
 
 - Shared devices running **Android 8.0 or later**.
@@ -114,7 +113,6 @@ To allow autofill in Chrome:
     <figcaption style="font-size:0.85rem;text-align:center;margin-top:0.4rem;">Select <strong>Autofill using another service</strong></figcaption>
   </figure>
 </div>
-
 
 ## What is supported
 
@@ -164,6 +162,7 @@ type the username again to save the password.
 - **Usernames and passwords only.** Password autofill does not fill one-time codes, payment cards, or addresses, and
   it does not generate new passwords. It also does not submit the sign-in form or complete multi-factor authentication
   for the user.
+  
 ## Troubleshooting
 
 | Symptom                                         | What to check                                                                                                                              |
