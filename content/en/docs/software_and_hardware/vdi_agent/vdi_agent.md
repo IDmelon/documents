@@ -14,7 +14,7 @@ toc: true
 ---
 
 **IDmelon Agent**<br>
-IDmelon Agent delivers simple, fast, and secure sign-ins to virtual desktops and cloud apps using employee badges, smartphones, biometrics, or security keys. It automates sign-in, session launch, and user switching for Microsoft, Citrix, and VMware environments.
+IDmelon Agent delivers simple, fast, and secure sign-ins to virtual desktops and cloud apps using employee badges or security keys. On Windows, biometric sign-in is also available through [IDmelon Card Reader Driver](/docs/software_and_hardware/idmelon_reader_driver/reader-driver-on-windows/). It automates sign-in, session launch, and user switching for Microsoft, Citrix, and VMware environments.
 
 The agent supports two modes:
 
